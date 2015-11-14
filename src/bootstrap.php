@@ -86,12 +86,13 @@ class ApiWriter implements WriterInterface
     
     function sendToTracker($Myxml,$item){
         global $youtrack_url;
+        $authenticationAndSecurity = new authenticationAndSecurity;
         $getDataFromYoutrack = new getDataFromYoutrack;
         $project = $item['project'];
         $url = $youtrack_url . '/rest/import/'
             . $project
             .'/issues';
-        if(isset($_POST['test'])){
+        if(isset($authenticationAndSecurity->getPost('test'))){
             $url .= '?test=true';
         }
         $getDataFromYoutrack->rest($url,'put',['Content-Type'=>'application/xml'],$Myxml);
@@ -106,7 +107,7 @@ class ApiWriter implements WriterInterface
         $this->sendToTracker($Myxml,$item);
         //
         echo $item['project'].'-'.$numberInProject.':   '.$item['summary'];
-        echo $GLOBALS["newline"];
+        echo $authenticationAndSecurity->getGlobal("newline");
     }
         
     /**

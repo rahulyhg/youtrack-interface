@@ -6,7 +6,7 @@ class authenticationAndSecurity {
     }
     function encryptDecrypt($action, $string) {
         $output = false;
-        $key = $GLOBALS['cookieEncryptionKey'];
+        $key = $this->getGlobal('cookieEncryptionKey');
         // initialization vector
         $iv = md5(md5($key));
         if( $action == 'encrypt' ) {
@@ -23,7 +23,8 @@ class authenticationAndSecurity {
         return $this->encryptDecrypt( 'decrypt', $_COOKIE[$cookieName] );
     }
     function getBrowserCookies(){
-        if( !isset($_COOKIE['Set-Cookie0']) || $_COOKIE['Set-Cookie0']===null){
+        $authenticationAndSecurity = new authenticationAndSecurity;
+        if( !isset($authenticationAndSecurity->getCookie('Set-Cookie0')) || $authenticationAndSecurity->getCookie('Set-Cookie0')===null){
             $cookies = null;
         }else{
             $cookie0 = $this->getSingleCookie('Set-Cookie0');
@@ -52,34 +53,34 @@ class authenticationAndSecurity {
         setCookie($reporterCookieName, "", time() - 3600, '/');
     }
     function getAuthentication(){
-        if( !isset($GLOBALS['authenticationType']) ){
+        if( isset($this->getGlobal('authenticationType')) ){
             $authenticationType = 'cookie';
         }else{
-            $authenticationType = $GLOBALS['authenticationType'];
+            $authenticationType = $this->getGlobal('authenticationType');
         }
         switch ($authenticationType){
             case 'cookie':
                 $cookies = $this->getBrowserCookies();
                 if ($cookies === null){
-                    return ['type'=>'password', 'details'=>[ 'user'=>$_POST['user'], 'password'=>$_POST['password'] ]];
+                    return ['type'=>'password', 'details'=>[ 'user'=>$this->getPost('user'), 'password'=>$this->getPost('password') ]];
                 }else{
                     return ['type'=>'cookie',  'details'=>$cookies ];
                 }
                 break;
             case 'password':
-                return ['type'=>'password', 'details'=>[ 'user'=>$_POST['user'], 'password'=>$_POST['password'] ]];
+                return ['type'=>'password', 'details'=>[ 'user'=>$this->getPost('user'), 'password'=>$this->getPost('password') ]];
                 break;
             case 'file':
-                if($GLOBALS['user']){
-                    $user = $GLOBALS['user'];
+                if($this->getGlobal('user')){
+                    $user = $this->getGlobal('user');
                 }else{
-                    echo 'error: user not set in file and authentication set to file'.$GLOBALS['newline'];
+                    echo 'error: user not set in file and authentication set to file'.$this->getGlobal('newline');
                     die();
                 }
-                if($GLOBALS['password']){
-                    $password = $GLOBALS['password'];
+                if($this->getGlobal('password')){
+                    $password = $this->getGlobal('password');
                 }else{
-                    echo 'error: user not set in file and authentication set to file'.$GLOBALS['newline'];
+                    echo 'error: user not set in file and authentication set to file'.$this->getGlobal('newline');
                     die();
                 }
                 return ['type'=>'password','details'=>['user'=>$user, 'password'=>$password]];
@@ -92,5 +93,34 @@ class authenticationAndSecurity {
         $url = $_SERVER['HTTP_REFERER'];
         header( "Location: $url" );
         die();
+    }
+    
+    function filterInput($varName){
+        $var = (string)filter_input(INPUT_GET,$varName);
+        return $var;
+    }
+    function getPost($Name){
+        if(isset($_POST[$name])){
+            $varName = '_POST['.$name.']';
+            return $this->filterInput($varName);
+        }else{
+            return null;
+        }
+    }
+    function getGlobal($name){
+        if(isset($GLOBALS[$name])){
+            $varName = 'GLOBALS['.$name.']';
+            return $this->filterInput($varName);
+        }else{
+            return null;
+        }            
+    }
+    function getCookie($name){
+        if(isset($_COOKIE[$name])){
+            $varName = '_COOKIE['.$name.']';
+            return $this->filterInput($varName);
+        }else{
+            return null;
+        }            
     }
 }
