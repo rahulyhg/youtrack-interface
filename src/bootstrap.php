@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/getDataFromYoutrack.php';
+require_once __DIR__.'/authenticationAndSecurity.php';
 use Juno\Workflow;
 use Ddeboer\DataImport\Reader\CsvReader;
 use Ddeboer\DataImport\ItemConverter\MappingItemConverter;
@@ -99,6 +100,7 @@ class ApiWriter implements WriterInterface
     }
     
     function updateTracker(array $item){
+        $authenticationAndSecurity = new authenticationAndSecurity;
         list( $Myxml, $numberInProject ) = $this->createXML($item);
         //----------
         // form http://confluence.jetbrains.com/display/YTD6/Import+Issues

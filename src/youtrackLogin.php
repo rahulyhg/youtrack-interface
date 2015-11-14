@@ -14,7 +14,7 @@ function LoginToYouTrack(){
     global $authenticationAndSecurity;
     
     $url = $youtrack_url."/rest/user/login";
-    $response = $getDataFromYoutrack->restResponse($url,'post',null,["login"=>$_POST['user'],"password"=>$_POST['password']],array());
+    $response = $getDataFromYoutrack->restResponse($url,'post',null,["login"=>$authenticationAndSecurity->getPost("user"),"password"=>$authenticationAndSecurity->getPost("password")],array());
     $response = $response->getResponse();
     if ($response->getStatusCode() == 200) {
         $cookies = $response->getHeader('set-cookie');
@@ -22,7 +22,7 @@ function LoginToYouTrack(){
             $authenticationAndSecurity->setCookie("Set-Cookie".$key, $singleCookie, 0, '/');
         }
         $reporterCookieName = 'myCookie';
-        $authenticationAndSecurity->setCookie($reporterCookieName,$_POST['user'], 0, '/');
+        $authenticationAndSecurity->setCookie($reporterCookieName,$authenticationAndSecurity->getPost("user"), 0, '/');
         echo "Successfully logged in.\n";
     }else {
         echo "Unable to login, please try again.\n";

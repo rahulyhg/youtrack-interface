@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/bootstrap.php';
+require_once __DIR__.'/authenticationAndSecurity.php';
 
 ini_set('display_errors', true);
 
@@ -8,6 +9,8 @@ use Ddeboer\DataImport\Reader\CsvReader;
 use Ddeboer\DataImport\ItemConverter\MappingItemConverter;
 use Guzzle\Client;
 use Ddeboer\DataImport\Writer\WriterInterface;
+
+$authenticationAndSecurity = new authenticationAndSecurity;
 
 function file_upload($file_type){
     $currentdir = getcwd();
@@ -76,7 +79,8 @@ if( !isset($options['f']) ){
         $csv = new SplFileObject($options['f']);
     }
 }
-$newLine = $GLOBALS['newLine'];
+
+$newLine = $authenticationAndSecurity->getGlobal("newline");
 
 $reader = new CsvReader($csv);
 $reader->setHeaderRowNumber(0);
@@ -95,7 +99,7 @@ echo $newLine.$newLine.
 "    Youtrack csv importer     ".$newLine.
 "------------------------------".$newLine;
 
-if(isset($_POST['test'])){
+if(isset($authenticationAndSecurity->getPost("newline"))){
     echo "-- Testing progress --".$newLine;
 }else{
     echo "-- Progress --".$newLine;
@@ -106,7 +110,7 @@ $workflow->addItemConverter($mappingConverter)
     ->addWriter(new ApiWriter())
     ->process();
 
-if(isset($_POST['test'])){
+if(isset($authenticationAndSecurity->getPost("newline"))){
     echo $newLine."---- Test Finished -----".$newLine;
 }else{
     echo $newLine."---- Upload Finished -----".$newLine;

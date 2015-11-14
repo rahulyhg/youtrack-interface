@@ -43,8 +43,9 @@ class getDataFromYoutrack {
         return $request;
     }
     function rest($url, $postOrGet = 'get', $headers = null, $body = null, $options = null, $cachable = true ){
+        $authenticationAndSecurity = new authenticationAndSecurity;
         if( $cachable == true ){
-            if( $GLOBALS['cache'] && $postOrGet == 'get' ){
+            if( $authenticationAndSecurity->getGlobal('cache') && $postOrGet == 'get' ){
                 $cacheClass = new cache;
                 $cached = $cacheClass->getCached($url);
             }else{
@@ -57,7 +58,7 @@ class getDataFromYoutrack {
             $res = $this->restResponse($url, $postOrGet, $headers, $body, $options);
             $res = $res->getResponse();
             $response = $res->getBody();
-            if( $GLOBALS['cache'] && $postOrGet == 'get' ){
+            if( $authenticationAndSecurity->getGlobal('cache') && $postOrGet == 'get' ){
                 $cacheClass->createCache($url, $response);
             }
            return $response;

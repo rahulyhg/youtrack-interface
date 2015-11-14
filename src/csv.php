@@ -1,5 +1,6 @@
 <?php
 use Ddeboer\DataImport\Writer\CsvWriter;
+require_once __DIR__.'/authenticationAndSecurity.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
 class csvClass {
@@ -7,8 +8,9 @@ class csvClass {
      * returns false if unable to write to folder
      */
     function create_csv( $data, $output_file_location, $delimiter = ',', $header=[] ){
+        $authenticationAndSecurity = new authenticationAndSecurity;
         if ( ! is_writable(dirname($output_file_location))) {
-            echo 'Unable to create file '.$output_file_location.' . Please check write permissions for your web server (apache/nginx/..)'.$GLOBALS['newline'];
+            echo 'Unable to create file '.$output_file_location.' . Please check write permissions for your web server (apache/nginx/..)'.$authenticationAndSecurity->getGlobal("newline");
             return false;
         } else {
             $writer = new CsvWriter($delimiter);
@@ -21,7 +23,7 @@ class csvClass {
                $writer->writeItem($col);
             }
             $writer->finish();
-            $filePermissions = $GLOBALS['filePermissions'];
+            $filePermissions = $authenticationAndSecurity->getGlobal('filePermissions');
             chmod($output_file_location, $filePermissions);
         }
     }

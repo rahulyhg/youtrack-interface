@@ -2,7 +2,7 @@
 // <p>---------------------------------------------------------</p>
 // <p>          Error: Please allow phtml files to run php     </p>
 // <p>---------------------------------------------------------</p>
-$authenticationAndSecurity->getPost('newline') = '<br>'; // keep at the top needed by getCustomSettings
+$_POST['newline'] = '<br>'; // keep at the top needed by getCustomSettings
 require_once __DIR__ . '/src/getCustomSettings.php';
 require_once __DIR__ . '/src/getDataFromYoutrack.php';
 require_once __DIR__ . '/src/createByForm.php';

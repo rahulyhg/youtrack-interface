@@ -2,12 +2,14 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__.'/getCustomSettings.php';
 require_once __DIR__.'/getDataFromYoutrack.php';
+require_once __DIR__.'/authenticationAndSecurity.php';
 $getDataFromYoutrack = new getDataFromYoutrack;
+$authenticationAndSecurity = new authenticationAndSecurity;
 
-$filename = $_POST['filename'];
+$filename = $authenticationAndSecurity->getPost('filename');
 
 $url = $youtrack_url . '/rest/export/'
-    . $_POST["project"]
+    . $authenticationAndSecurity->getPost('project')
     .'/issues';
 $res = $getDataFromYoutrack->rest($url,'get');
 
@@ -16,7 +18,7 @@ $file = fopen($filepath, "w")  or die("Unable to open file!");
 fwrite($file, $res);
 fclose($file);
 
-chmod($file, $GLOBALS['filePermissions'] );
+chmod($file, $authenticationAndSecurity->getGlobal('filePermissions') );
 
 if (file_exists($filepath)) {
     header('Content-Description: File Transfer');

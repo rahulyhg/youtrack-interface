@@ -2,7 +2,9 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__.'/getCustomSettings.php';
 require_once __DIR__ . '/getDataFromYoutrack.php';
+require_once __DIR__.'/authenticationAndSecurity.php';
 $getYoutrackData = new getDataFromYoutrack;
+$authenticationAndSecurity = new authenticationAndSecurity;
 
 require_once __DIR__ . '/csv.php';
 $csvClass = new csvClass;
@@ -11,7 +13,7 @@ use Ddeboer\DataImport\Writer\CsvWriter;
 
 $youtrack_fields = [];
 
-$filename = $_POST['filename'];
+$filename = $authenticationAndSecurity->getPost('filename');
 
 list($youtrack_fields_list, $youtrack_fields) = $getYoutrackData->get_custom_fields_with_details();
 
