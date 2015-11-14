@@ -16,7 +16,7 @@ $response['assignee']=[
     'fieldType'=>'enum[1]',
     'innerHtml'=>''
 ]; 
-$projectAssignees = $getDataFromYoutrack->getProjectAssignees($project,$youtrack_url, $user, $password);
+$projectAssignees = $getDataFromYoutrack->getProjectAssignees($project);
 foreach( $projectAssignees as $assignee ){
     $response['assignee']['innerHtml'] .= '<option value="'.$assignee.'">'.$assignee.'</option>';
 }

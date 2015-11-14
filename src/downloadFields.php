@@ -16,7 +16,7 @@ $user = $_POST['user'];
 $password = $_POST['password'];
 $filename = $_POST['filename'];
 
-list($youtrack_fields_list, $youtrack_fields) = $getYoutrackData->get_custom_fields_with_details($youtrack_url, $user, $password);
+list($youtrack_fields_list, $youtrack_fields) = $getYoutrackData->get_custom_fields_with_details();
 
 $youtrack_fields['user'] = $getYoutrackData->get_users();
 array_push($youtrack_fields_list, 'user');

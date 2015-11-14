@@ -172,7 +172,8 @@ class getDataFromYoutrack {
         }
         return $youtrack_fields;
     }
-    function get_custom_fields_with_details($youtrack_url, $user, $password, $project=''){
+    function get_custom_fields_with_details($project=''){
+        global $youtrack_url;
         if( $project == '' ){
             $projectList = $this->getProjectsList();
             $project = $projectList[0];
@@ -192,7 +193,8 @@ class getDataFromYoutrack {
         list($youtrack_projects_list, $empty) = $this->extract_data_xml( $youtrack_projects_list_xml, 'project', 'id');
         return $youtrack_projects_list;
     }
-    function getProjectAssignees($project,$youtrack_url, $user, $password){
+    function getProjectAssignees($project){
+        global $youtrack_url;
         $url = $youtrack_url.'/rest/admin/project/'.$project.'/assignee'; 
         $youtrack_project_assignees_xml = $this->rest($url, 'get');
         list($youtrack_project_assignees, $empty) = $this->extract_data_xml( $youtrack_project_assignees_xml, 'assignee', 'login');

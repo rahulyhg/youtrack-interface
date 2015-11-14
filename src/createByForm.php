@@ -12,6 +12,6 @@ foreach( $customFieldListFull as $customField ):
     endif;   
 endforeach;
 $projectList = $getDataFromYoutrack->getProjectsList();
-$projectAssignees = $getDataFromYoutrack->getProjectAssignees($projectList[0],$youtrack_url, $user, $password);
+$projectAssignees = $getDataFromYoutrack->getProjectAssignees($projectList[0]);
 $customFieldTypeAndBundle = $getDataFromYoutrack->getCustomFieldTypeAndBundle($customFieldList, $projectList[0]);
 $customFieldDetails = $getDataFromYoutrack->get_custom_fields_details($customFieldList, $projectList[0], $customFieldTypeAndBundle);
