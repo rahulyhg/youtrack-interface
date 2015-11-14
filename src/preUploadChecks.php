@@ -11,8 +11,6 @@ $getDataFromYoutrack = new getDataFromYoutrack;
 //  =====================
 
 /* command line
- * -u user
- * -p password
  * -id project id
  */
 //get command line options
@@ -22,8 +20,7 @@ $options = getopt("u:p:i:");
 if (!isset($options['f'])) {
     $GLOBALS["newline"] = "<br/>\n";
 }
-$user       = $options['u'];
-$password   = $options['p'];
+
 $projectid  = $options['i'];
 
 //project	summary	description	reporterName	Ticket Type	Priority	Team	Assignee	State	Estimation	Due Date	Scheduled Date	Billing Type	Billing Status	Quote Id	permittedGroup
@@ -55,7 +52,7 @@ function nodeValueFromXml($node,$xmlCode){
     return $attributeData;
 }
 
-function getPojectAssignees($user,$password,$projectid){
+function getPojectAssignees($projectid){
     global $getDataFromYoutrack;
     global $youtrack_url;
     $url = $youtrack_url.'/rest/admin/project/'.$projectid.'/assignee';
@@ -63,14 +60,14 @@ function getPojectAssignees($user,$password,$projectid){
     return attributeFromXml('assignee','login',$response);
 }
     
-function getCustomFieldList($user,$password,$projectid){
+function getCustomFieldList($projectid){
     global $getDataFromYoutrack;
     global $youtrack_url;
     $url = $youtrack_url.'/rest/admin/project/'.$projectid.'/customfield';
     $response = $getDataFromYoutrack->rest($url,'get');   
     return attributeFromXml('projectCustomField','name',$response);
 }
-function getFieldData($fieldList,$user,$password,$projectid){
+function getFieldData($fieldList,$projectid){
     global $getDataFromYoutrack;
     global $youtrack_url;
     $dataArray = [];
@@ -97,12 +94,12 @@ function getFieldData($fieldList,$user,$password,$projectid){
 }
 
 var_dump(
-getPojectAssignees($user,$password,$projectid)
+getPojectAssignees($projectid)
 );
     
-$customFieldList = getCustomFieldList($user,$password,$projectid);
+$customFieldList = getCustomFieldList($projectid);
 
 var_dump(
-        getFieldData($customFieldList,$user,$password,$projectid)
+        getFieldData($customFieldList,$projectid)
 );
 ?>

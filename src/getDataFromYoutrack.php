@@ -173,7 +173,6 @@ class getDataFromYoutrack {
         return $youtrack_fields;
     }
     function get_custom_fields_with_details($project=''){
-        global $youtrack_url;
         if( $project == '' ){
             $projectList = $this->getProjectsList();
             $project = $projectList[0];

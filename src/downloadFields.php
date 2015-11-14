@@ -9,11 +9,8 @@ $csvClass = new csvClass;
 
 use Ddeboer\DataImport\Writer\CsvWriter;
 
-
 $youtrack_fields = [];
 
-$user = $_POST['user'];
-$password = $_POST['password'];
 $filename = $_POST['filename'];
 
 list($youtrack_fields_list, $youtrack_fields) = $getYoutrackData->get_custom_fields_with_details();

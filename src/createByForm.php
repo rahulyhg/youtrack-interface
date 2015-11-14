@@ -1,9 +1,6 @@
 <?php
 $getDataFromYoutrack = new getDataFromYoutrack;
 
-$user = '';
-$password = '';
-
 $customFieldList = [];
 $customFieldListFull = $getDataFromYoutrack->get_custom_fields();
 foreach( $customFieldListFull as $customField ):
