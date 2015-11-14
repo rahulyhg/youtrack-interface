@@ -139,7 +139,8 @@ class getDataFromYoutrack {
     /*
      * $customFieldTypeAndBundle array from getCustomFieldTypeAndBundle
      */
-    function get_custom_fields_details($youtrack_url, $user, $password, $youtrack_fields_list='', $project='', $customFieldTypeAndBundle='' ){
+    function get_custom_fields_details($youtrack_fields_list='', $project='', $customFieldTypeAndBundle='' ){
+        global $youtrack_url;
         if( $project == '' ){
             $projectList = $this->getProjectsList();
             $project = $projectList[0];
@@ -178,7 +179,7 @@ class getDataFromYoutrack {
         }
         $youtrack_fields_list = $this->get_custom_fields($project);
         $customFieldDetails = getCustomFieldTypeAndBundle($youtrack_fields_list, $project);
-        $youtrack_fields = $this->get_custom_fields_details($youtrack_url, $user, $password, $youtrack_fields_list, $project, $customFieldDetails);
+        $youtrack_fields = $this->get_custom_fields_details($youtrack_fields_list, $project, $customFieldDetails);
         return [$youtrack_fields_list, $youtrack_fields];
     }
    
