@@ -9,7 +9,7 @@ if(!isset($customFieldList)){
     $customFieldList = '';
 }
 
-$customFieldTypeAndBundle = $getDataFromYoutrack->getCustomFieldTypeAndBundle($youtrack_url, $user, $password, $customFieldList, $project);
+$customFieldTypeAndBundle = $getDataFromYoutrack->getCustomFieldTypeAndBundle($customFieldList, $project);
 $response = $customFieldTypeAndBundle;
 
 $response['assignee']=[
