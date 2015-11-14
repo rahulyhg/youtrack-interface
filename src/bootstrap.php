@@ -93,7 +93,7 @@ class ApiWriter implements WriterInterface
         $url = $youtrack_url . '/rest/import/'
             . $project
             .'/issues';
-        if(isset($authenticationAndSecurity->getPost('test'))){
+        if(null !== $authenticationAndSecurity->getPost('test')){
             $url .= '?test=true';
         }
         $getDataFromYoutrack->rest($url,'put',['Content-Type'=>'application/xml'],$Myxml);

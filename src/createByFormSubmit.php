@@ -38,11 +38,11 @@ class createByFormSubmit{
                     unset($singlePost[$key] );
                 }
             }
-            if( isset($authenticationAndSecurity->getPost("user")) ){
+            if( null !== $authenticationAndSecurity->getPost("user") ){
                 $singlePost['reporterName'] = $authenticationAndSecurity->getPost("user");
             }else{
                 $reporterCookieName = 'myCookie';
-                if(isset($authenticationAndSecurity->getcookie($reporterCookieName))){
+                if(null !== $authenticationAndSecurity->getcookie($reporterCookieName)){
                     $singlePost['reporterName'] =  $authenticationAndSecurity->getSingleCookie($reporterCookieName);
                 }else{
                     echo 'Error: no reporter cookie or user set in customSettings'.$authenticationAndSecurity->getGlobal("newline");
@@ -87,7 +87,7 @@ class createByFormSubmit{
          "    Youtrack csv importer     " . $newLine .
          "------------------------------" . $newLine;
 
-        if (isset($authenticationAndSecurity->getPost("newline"))) {
+        if (null !== $authenticationAndSecurity->getPost("newline")) {
             echo "-- Testing progress --" . $newLine;
         } else {
             echo "-- Progress --" . $newLine;
@@ -114,7 +114,7 @@ class createByFormSubmit{
             $csvClass->create_csv($posts, $csvLogFolder.'/'.$csvLogFileName);
         }
         
-        if (isset($authenticationAndSecurity->getPost("newline"))) {
+        if (null !== $authenticationAndSecurity->getPost("newline")) {
             echo $newLine . "---- Test Finished -----" . $newLine;
         } else {
             echo $newLine . "---- Upload Finished -----" . $newLine;

@@ -27,7 +27,7 @@ class authenticationAndSecurity {
     }
     function getBrowserCookies(){
         $authenticationAndSecurity = new authenticationAndSecurity;
-        if( !isset($authenticationAndSecurity->getCookie('Set-Cookie0')) || $authenticationAndSecurity->getCookie('Set-Cookie0')===null){
+        if( null === $authenticationAndSecurity->getCookie('Set-Cookie0') || $authenticationAndSecurity->getCookie('Set-Cookie0')===null){
             $cookies = null;
         }else{
             $cookie0 = $this->getSingleCookie('Set-Cookie0');
@@ -56,7 +56,7 @@ class authenticationAndSecurity {
         setCookie($reporterCookieName, "", time() - 3600, '/');
     }
     function getAuthentication(){
-        if( isset($this->getGlobal('authenticationType')) ){
+        if( null !== $this->getGlobal('authenticationType') ){
             $authenticationType = 'cookie';
         }else{
             $authenticationType = $this->getGlobal('authenticationType');
@@ -121,6 +121,7 @@ class authenticationAndSecurity {
     function getCookie($name){
         if(isset($_COOKIE[$name])){
             $varName = '_COOKIE['.$name.']';
+            $x = $this->filterInput($varName);
             return $this->filterInput($varName);
         }else{
             return null;

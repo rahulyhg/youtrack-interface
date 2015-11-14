@@ -99,7 +99,7 @@ echo $newLine.$newLine.
 "    Youtrack csv importer     ".$newLine.
 "------------------------------".$newLine;
 
-if(isset($authenticationAndSecurity->getPost("newline"))){
+if(null !== $authenticationAndSecurity->getPost("newline")){
     echo "-- Testing progress --".$newLine;
 }else{
     echo "-- Progress --".$newLine;
@@ -110,7 +110,7 @@ $workflow->addItemConverter($mappingConverter)
     ->addWriter(new ApiWriter())
     ->process();
 
-if(isset($authenticationAndSecurity->getPost("newline"))){
+if(null !== $authenticationAndSecurity->getPost("newline")){
     echo $newLine."---- Test Finished -----".$newLine;
 }else{
     echo $newLine."---- Upload Finished -----".$newLine;
