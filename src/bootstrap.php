@@ -11,7 +11,9 @@ class ApiWriter implements WriterInterface
 {
     protected $xml;
 
-    function createXML($item,$youtrack_url){
+    function createXML($item){
+        global $youtrack_url;
+
         $getDataFromYoutrack = new getDataFromYoutrack;
         //
         if( !isset($item['project']) || !isset($item['summary']) || !isset($item['reporterName']) ){
@@ -82,7 +84,8 @@ class ApiWriter implements WriterInterface
         return [$Myxml, $numberInProject];
     }
     
-    function sendToTracker($Myxml,$item,$youtrack_url){
+    function sendToTracker($Myxml,$item){
+        global $youtrack_url;
         $getDataFromYoutrack = new getDataFromYoutrack;
         $project = $item['project'];
         $url = $youtrack_url . '/rest/import/'
@@ -95,16 +98,12 @@ class ApiWriter implements WriterInterface
     }
     
     function updateTracker(array $item){
-        global $youtrack_url;
-        //
-        list( $Myxml, $numberInProject ) = $this->createXML($item,$youtrack_url);
-        //
+        list( $Myxml, $numberInProject ) = $this->createXML($item);
         //----------
         // form http://confluence.jetbrains.com/display/YTD6/Import+Issues
         // PUT /rest/import/{project}/issues?{assigneeGroup}&{test}
         //----------
-        //
-        $this->sendToTracker($Myxml,$item,$youtrack_url);
+        $this->sendToTracker($Myxml,$item);
         //
         echo $item['project'].'-'.$numberInProject.':   '.$item['summary'];
         echo $GLOBALS["newline"];

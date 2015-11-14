@@ -97,9 +97,10 @@ class getDataFromYoutrack {
     }
 
     
-    function get_custom_fields($youtrack_url, $user, $password, $project='' ){
+    function get_custom_fields($project='' ){
+        global $youtrack_url;
         if( $project == '' ){
-            $projectList = $this->getProjectsList($youtrack_url, $user, $password);
+            $projectList = $this->getProjectsList();
             $project = $projectList[0];
         }
         $url = $youtrack_url.'/rest/admin/project/'.$project.'/customfield'; 
@@ -113,11 +114,11 @@ class getDataFromYoutrack {
     }
     function getCustomFieldTypeAndBundle($youtrack_url, $user, $password, $youtrack_fields_list = '', $project=''){
         if( $project == '' ){
-            $projectList = $this->getProjectsList($youtrack_url, $user, $password);
+            $projectList = $this->getProjectsList();
             $project = $projectList[0];
         }
         if( $youtrack_fields_list == '' ){
-            $youtrack_fields_list = $this->get_custom_fields($youtrack_url, $user, $password, $project);
+            $youtrack_fields_list = $this->get_custom_fields($project);
         }
         foreach($youtrack_fields_list as $field){
             $url = $youtrack_url.'/rest/admin/project/'.$project.'/customfield/'.$field; 
@@ -139,11 +140,11 @@ class getDataFromYoutrack {
      */
     function get_custom_fields_details($youtrack_url, $user, $password, $youtrack_fields_list='', $project='', $customFieldTypeAndBundle='' ){
         if( $project == '' ){
-            $projectList = $this->getProjectsList($youtrack_url, $user, $password);
+            $projectList = $this->getProjectsList();
             $project = $projectList[0];
         }
         if( $youtrack_fields_list == '' ){
-            $youtrack_fields_list = $this->get_custom_fields($youtrack_url, $user, $password, $project);
+            $youtrack_fields_list = $this->get_custom_fields($project);
         }
         if( $customFieldTypeAndBundle == '' ){
             $customFieldTypeAndBundle = $this->getCustomFieldTypeAndBundle($youtrack_url, $user, $password, $youtrack_fields_list, $project);      
@@ -171,10 +172,10 @@ class getDataFromYoutrack {
     }
     function get_custom_fields_with_details($youtrack_url, $user, $password, $project=''){
         if( $project == '' ){
-            $projectList = $this->getProjectsList($youtrack_url, $user, $password);
+            $projectList = $this->getProjectsList();
             $project = $projectList[0];
         }
-        $youtrack_fields_list = $this->get_custom_fields($youtrack_url, $user, $password, $project);
+        $youtrack_fields_list = $this->get_custom_fields($project);
         $customFieldDetails = getCustomFieldTypeAndBundle($youtrack_url, $user, $password, $youtrack_fields_list, $project);
         $youtrack_fields = $this->get_custom_fields_details($youtrack_url, $user, $password, $youtrack_fields_list, $project, $customFieldDetails);
         return [$youtrack_fields_list, $youtrack_fields];
@@ -182,7 +183,8 @@ class getDataFromYoutrack {
    
 
     
-    function getProjectsList($youtrack_url, $user, $password){
+    function getProjectsList(){
+        global $youtrack_url;
         $url = $youtrack_url.'/rest/admin/project'; 
         $youtrack_projects_list_xml = $this->rest($url, 'get');
         list($youtrack_projects_list, $empty) = $this->extract_data_xml( $youtrack_projects_list_xml, 'project', 'id');
@@ -195,7 +197,8 @@ class getDataFromYoutrack {
         return $youtrack_project_assignees;
     }
     
-    function get_users($youtrack_url, $user, $password){
+    function get_users(){
+        global $youtrack_url;
         $user_list = [];
         $request_end = '';
         $loop = true;

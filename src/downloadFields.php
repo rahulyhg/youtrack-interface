@@ -18,7 +18,7 @@ $filename = $_POST['filename'];
 
 list($youtrack_fields_list, $youtrack_fields) = $getYoutrackData->get_custom_fields_with_details($youtrack_url, $user, $password);
 
-$youtrack_fields['user'] = $getYoutrackData->get_users($youtrack_url, $user, $password);
+$youtrack_fields['user'] = $getYoutrackData->get_users();
 array_push($youtrack_fields_list, 'user');
 
 function reorganise_array($array){
