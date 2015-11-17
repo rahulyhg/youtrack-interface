@@ -100,7 +100,6 @@ class ApiWriter implements WriterInterface
     }
     
     function updateTracker(array $item){
-        $authenticationAndSecurity = new authenticationAndSecurity;
         list( $Myxml, $numberInProject ) = $this->createXML($item);
         //----------
         // form http://confluence.jetbrains.com/display/YTD6/Import+Issues
@@ -109,7 +108,7 @@ class ApiWriter implements WriterInterface
         $this->sendToTracker($Myxml,$item);
         //
         echo $item['project'].'-'.$numberInProject.':   '.$item['summary'];
-        echo $authenticationAndSecurity->getGlobal("newline");
+        echo $GLOBALS["newline"];
     }
         
     /**

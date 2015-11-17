@@ -11,8 +11,13 @@ require_once __DIR__.'/authenticationAndSecurity.php';
 class createByFormSubmit{
 
     function organisePosts(){
-        $posts = [];
-        foreach($_POST as $inputName => $inputValue){
+        $authenticationAndSecurity = new authenticationAndSecurity;
+        
+        $postsArray = [];
+        $posts = $authenticationAndSecurity->getAllPosts();
+        
+        foreach($posts as $inputName => $Val){
+            $inputValue = $authenticationAndSecurity->getPost($inputName);
             if( $inputName != 'test' && $inputName != 'user' && $inputName != 'password' ){
                 $keyArray = [];
                 $explode = explode('-', $inputName); // split all parts
@@ -23,12 +28,12 @@ class createByFormSubmit{
                         $keyArray[0] = str_replace('¬', ' ', $keyArray[0] );
                     }
                 }
-                $posts[ $keyArray[1] ][ $keyArray[0] ] = $inputValue;
+                $postsArray[ $keyArray[1] ][ $keyArray[0] ] = $inputValue;
             }
         }
         // remove hidden inputs form
-        unset($posts[0]);
-        return $posts;
+        unset($postsArray[0]);
+        return $postsArray;
     }
     function sendPostData($posts){
         $authenticationAndSecurity = new authenticationAndSecurity;
@@ -45,7 +50,7 @@ class createByFormSubmit{
                 if(null !== $authenticationAndSecurity->getcookie($reporterCookieName)){
                     $singlePost['reporterName'] =  $authenticationAndSecurity->getSingleCookie($reporterCookieName);
                 }else{
-                    echo 'Error: no reporter cookie or user set in customSettings'.$authenticationAndSecurity->getGlobal("newline");
+                    echo 'Error: no reporter cookie or user set in customSettings'.$GLOBALS["newline"];
                 }
             }
             $workflow = new ApiWriter;
@@ -54,14 +59,14 @@ class createByFormSubmit{
                 $posts[$postskey] = array_merge( ['upload success' => 'success'] , $posts[$postskey] );
             } catch (Exception $e) {
                 error_log($e);
-                echo 'IMPORT ISSUE FAILED:: unable to import ticket to '.$singlePost['project'].' with summary "'.$singlePost['summary'].'"'.$authenticationAndSecurity->getGlobal("newline");
+                echo 'IMPORT ISSUE FAILED:: unable to import ticket to '.$singlePost['project'].' with summary "'.$singlePost['summary'].'"'.$GLOBALS["newline"];
                 $posts[$postskey] = array_merge( ['upload success' => 'failed'] , $posts[$postskey] );
             }
         }
         return $posts;
     } 
     function removeSuccessfulPosts($posts){
-        foreach( $posts as $singlePost){
+        foreach( $posts as $key => $singlePost){
             if( $singlePost['upload success'] === 'success'){
                 unset($posts[$key]);
             }
@@ -69,10 +74,9 @@ class createByFormSubmit{
         return $posts;
     }
     function createFolder($folder){
-        $authenticationAndSecurity = new authenticationAndSecurity;
         if (!file_exists($folder)) {
             mkdir($folder);
-            chmod($folder,$authenticationAndSecurity->getGlobal('folderPermissions'));
+            chmod($folder,$GLOBALS['folderPermissions']);
         }
     }
     function submit(){
@@ -80,14 +84,14 @@ class createByFormSubmit{
         $csvClass = new csvClass;
         
         $GLOBALS['newline'] = '<br/>';
-        $newLine = $authenticationAndSecurity->getGlobal("newline");
+        $newLine = $GLOBALS["newline"];
 
         echo $newLine . $newLine .
          "------------------------------" . $newLine .
          "    Youtrack csv importer     " . $newLine .
          "------------------------------" . $newLine;
 
-        if (null !== $authenticationAndSecurity->getPost("newline")) {
+        if (null !== $authenticationAndSecurity->getPost("test")) {
             echo "-- Testing progress --" . $newLine;
         } else {
             echo "-- Progress --" . $newLine;
@@ -99,22 +103,22 @@ class createByFormSubmit{
         $csvLogFileName = time().'.csv';
         
         // creates csv log before sending to guzzle as guzzle dosnt fail gracefully
-        if($authenticationAndSecurity->getGlobal('createByFormTransferLog')){
+        if($GLOBALS['createByFormTransferLog']){
             $this->createFolder($csvLogFolder);
             $csvClass->create_csv($posts, $csvLogFolder.'/'.$csvLogFileName);
         }
         
         $posts = $this->sendPostData($posts);
         
-        if($authenticationAndSecurity->getGlobal('createByFormTransferLog')){
+        if($GLOBALS['createByFormTransferLog']){
             $csvClass->create_csv($posts, $csvLogFolder.'/'.$csvLogFileName);
-        }elseif( $authenticationAndSecurity->getGlobal('createByFormTransferErrorLog') ){
+        }elseif( $GLOBALS['createByFormTransferErrorLog'] ){
             $posts = $this->removeSuccessfulPosts($posts);
             $this->createFolder($csvLogFolder);
             $csvClass->create_csv($posts, $csvLogFolder.'/'.$csvLogFileName);
         }
         
-        if (null !== $authenticationAndSecurity->getPost("newline")) {
+        if (null !== $authenticationAndSecurity->getPost("test")) {
             echo $newLine . "---- Test Finished -----" . $newLine;
         } else {
             echo $newLine . "---- Upload Finished -----" . $newLine;

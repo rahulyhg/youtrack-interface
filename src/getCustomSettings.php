@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__.'/authenticationAndSecurity.php';
-$authenticationAndSecurity = new authenticationAndSecurity;
 
 if( !file_exists( __DIR__.'/../customSettings.php' ) ){
     die('custom settings file missing: please copy customSettings.php.example to customSettings.php and update it with your settings');
@@ -13,11 +12,11 @@ if( $youtrack_url === 'http://example.com'){
 }
 
 if( substr($youtrack_url, 0, 7)  !== 'http://' ){
-    echo('invalid youtrack url: "http://" required at the start of your url. please update $youtrack_url in customSettings.php'.$authenticationAndSecurity->getGlobal("newline"));
+    echo('invalid youtrack url: "http://" required at the start of your url. please update $youtrack_url in customSettings.php'.$GLOBALS["newline"]);
     $die = true;
 }
 if(  substr($youtrack_url, -1) === '/' ){
-    echo('invalid youtrack url: dont finish your url with a "/" . please update $youtrack_url in customSettings.php'.$authenticationAndSecurity->getGlobal("newline"));
+    echo('invalid youtrack url: dont finish your url with a "/" . please update $youtrack_url in customSettings.php'.$GLOBALS["newline"]);
     $die = true;
 }
 if($die){

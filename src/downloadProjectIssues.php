@@ -18,7 +18,7 @@ $file = fopen($filepath, "w")  or die("Unable to open file!");
 fwrite($file, $res);
 fclose($file);
 
-chmod($file, $authenticationAndSecurity->getGlobal('filePermissions') );
+chmod($file, $GLOBALS['filePermissions'] );
 
 if (file_exists($filepath)) {
     header('Content-Description: File Transfer');

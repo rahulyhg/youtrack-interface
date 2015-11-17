@@ -80,7 +80,7 @@ if( !isset($options['f']) ){
     }
 }
 
-$newLine = $authenticationAndSecurity->getGlobal("newline");
+$newLine = $GLOBALS["newline"];
 
 $reader = new CsvReader($csv);
 $reader->setHeaderRowNumber(0);
