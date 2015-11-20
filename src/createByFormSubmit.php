@@ -6,7 +6,6 @@ require_once __DIR__.'/authenticationAndSecurity.php';
 
 use Guzzle\Client;
 use Ddeboer\DataImport\Writer\CsvWriter;
-require_once __DIR__.'/authenticationAndSecurity.php';
 
 class createByFormSubmit{
 

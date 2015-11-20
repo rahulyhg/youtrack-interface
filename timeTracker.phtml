@@ -1,0 +1,43 @@
+<?php require_once __DIR__.'/src/timeTracker.php'; ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <script src='js/jquery-1.10.2.min.js'></script>
+    <script src='js/timeTracker.js'></script>
+</head>
+<body>
+
+<h1 style="text-align:center">Time Tracker</h1>
+<form action="src/timeTracker.php" method="post" enctype="multipart/form-data">
+    <div class="projectheader">
+        <select class="projectselector" name="project-0" >
+            <?php foreach( $projectList as $project ){ ?>
+                <option value="<?php echo $project ?>"><?php echo $project ?></option>
+            <?php } ?>
+        </select>
+        <select class="ticketselector hidden">
+            <option value=""></option>
+        </select>
+        <div class="ticketdescription hidden"></div>
+        <div>test mode: <input type="checkbox" name="test" value="true"></div>
+        <div class="timertoggle play">play</div>
+        <input type="submit" value="Submit">
+    </div>
+    <table>
+        <tr class="current">
+            <td>Start: <input type="text" class='start' name="start-0"></td>
+            <td>End: <input type="text" class='end' name="end-0"></td>
+            <td>duration: <input type="text" class='duration' name="duration-0"></td>
+            <td>Description: <input type="text" class='description' name="description-0"></td>
+            <td>type:
+                <select class="type" name="type-0" >
+                    <option value=""></option>
+                </select>
+            </td>
+            <td>(x)</td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>

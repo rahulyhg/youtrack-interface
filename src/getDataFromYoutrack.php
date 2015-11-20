@@ -219,5 +219,7 @@ class getDataFromYoutrack {
         return $user_list;
     }
     
-    
+    function getTicktReferences($project){
+
+    }
 }
