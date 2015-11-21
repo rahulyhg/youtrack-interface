@@ -4,6 +4,12 @@
 <head>
     <script src='js/jquery-1.10.2.min.js'></script>
     <script src='js/timeTracker.js'></script>
+    <script src="js/1.11.4jquery-ui.js"></script>
+    <link rel="stylesheet" href="css/1.11.4jquery-ui.css">
+    <!-- time picker -->
+    <link href="js/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="js/clockpicker/dist/bootstrap-clockpicker.min.css">
+    <script type="text/javascript" src="js/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
 </head>
 <body>
 
@@ -15,19 +21,31 @@
                 <option value="<?php echo $project ?>"><?php echo $project ?></option>
             <?php } ?>
         </select>
-        <select class="ticketselector hidden">
-            <option value=""></option>
-        </select>
-        <div class="ticketdescription hidden"></div>
+        <input class="ticketnumber"/>
+        <div class="ticketsummary"></div>
         <div>test mode: <input type="checkbox" name="test" value="true"></div>
         <div class="timertoggle play">play</div>
         <input type="submit" value="Submit">
     </div>
     <table>
         <tr class="current">
-            <td>Start: <input type="text" class='start' name="start-0"></td>
-            <td>End: <input type="text" class='end' name="end-0"></td>
-            <td>duration: <input type="text" class='duration' name="duration-0"></td>
+            <td>
+                <div class="input-group clockpicker">
+                    <input type="text" class="start form-control" value="" name="start-0" placeholder="start">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                </div>
+            </td>
+            <td>
+                <div class="input-group clockpicker">
+                    <input type="text" class="end form-control" value="" name="end-0"placeholder="end">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                </div>
+            </td>
+            <td>duration: <input type="text" class='duration' name="duration-0" readonly="readonly"></td>
             <td>Description: <input type="text" class='description' name="description-0"></td>
             <td>type:
                 <select class="type" name="type-0" >

@@ -76,11 +76,15 @@ class getDataFromYoutrack {
             if ($reader->nodeType == XMLReader::ELEMENT) {
                 $exp = $reader->expand();
                 if ($exp->nodeName == $node){
-                    $continue = true;
-                    foreach ( $whereAttr as $attr => $val ){
-                        if( $exp->getAttribute($attribute) == $val ){
-                            $continue = false;
+                    if(count($whereAttr)>0){
+                        $continue = false;
+                        foreach ( $whereAttr as $attr => $val ){
+                            if( $exp->getAttribute($attr) == $val ){
+                                $continue = true;
+                            }
                         }
+                    }else{
+                        $continue = true;
                     }
                     if( $continue ){
                         if( $attribute === ''){
@@ -219,7 +223,11 @@ class getDataFromYoutrack {
         return $user_list;
     }
     
-    function getTicktReferences($project){
-
+    function getTicket($ticket){
+        global $youtrack_url;
+        $url = $youtrack_url . '/rest/issue/'.$ticket;
+        $ticketXml = $this->rest($url,'get');
+        list($ticketSummary, $empty) = $this->extract_data_xml( $ticketXml,'field', '',[], $whereAttr=['name'=>'summary']);
+        return $ticketSummary;
     }
 }
