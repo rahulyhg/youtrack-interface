@@ -48,12 +48,12 @@ $(document).ready(function(){
     }
     // update the difference field
     function updateDifference(form){
-            var startTime = $(form).find('table tr.current td input.start').val();
-            var endTime = $(form).find('table tr.current td input.end').val();
+            var startTime = $(form).find('table tr:first td input.start').val();
+            var endTime = $(form).find('table tr:first td input.end').val();
         
             var durationInMinutes = differenceinMinutes(startTime,endTime);
             var duration = convertTimeIntoHours(durationInMinutes);
-            $(form).find(' table tr.current td input.duration')
+            $(form).find(' table tr:first td input.duration')
                     .val(duration['hours'] +'h '+ duration['minutes']+'m');
     }
     // stop start the timer
@@ -62,7 +62,7 @@ $(document).ready(function(){
         if($(button).hasClass('play')){
             var time = new Date($.now());
             var startTime = timeAddZero(time.getHours())+":"+timeAddZero(time.getMinutes());
-            $(form).find('table tr.current td input.start')
+            $(form).find('table tr:first td input.start')
                 .val(startTime);
             $(button).html('stop')
                 .removeClass('play')
@@ -71,7 +71,7 @@ $(document).ready(function(){
             time = new Date($.now());
             var endTime = timeAddZero(time.getHours())+":"+timeAddZero(time.getMinutes());
     
-            $(form).find('table tr.current td input.end')
+            $(form).find('table tr:first td input.end')
                 .val(endTime);
             $(button).html('play')
                 .removeClass('stop')
@@ -95,7 +95,11 @@ $(document).ready(function(){
         autoclose: true,    // auto close when minute is selected
         vibrate: true        // vibrate the device when dragging clock hand
     });
-
+    
+    $('form table tr td input.datepicker').datepicker({
+      "dateFormat": 'd M, y' 
+    });
+    
     function updateProject(button){
         var form = $(button).parent().parent();
         var project = $(form).find('.projectheader .projectselector').val();
@@ -103,7 +107,12 @@ $(document).ready(function(){
         var ticket = project + '-' + ticketNo;
         $.ajax({url: "src/ticketAjax.php?ticket="+ticket, dataType: "json",
             success: function(result){
-                $(form).find('.projectheader .ticketsummary').html(result);
+                $(form).find('.projectheader .ticketsummary').html(result['summary']);
+                var html = '<option value=""></option>';
+                for (i = 0; i < result['workTypes'].length; i++){
+                    html += '<option value="'+result['workTypes'][i]+'">'+result['workTypes'][i]+'</option>';
+                }
+                $(form).find('table tr:first td select.type').html(html);
             },
             error: function(result){
             }

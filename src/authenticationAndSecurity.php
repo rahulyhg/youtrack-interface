@@ -102,7 +102,7 @@ class authenticationAndSecurity {
         $keys = array_keys($_POST);
         $post = array_map(
            function ($key) {
-               return filter_input(INPUT_GET, $key);
+               return filter_input(INPUT_POST, $key);
            },
            $keys
         );

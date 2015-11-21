@@ -10,28 +10,37 @@
     <link href="js/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="js/clockpicker/dist/bootstrap-clockpicker.min.css">
     <script type="text/javascript" src="js/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
+    <style>
+        .input-group .form-control {
+            z-index: 0;
+        }
+    </style>
 </head>
 <body>
 
 <h1 style="text-align:center">Time Tracker</h1>
-<form action="src/timeTracker.php" method="post" enctype="multipart/form-data">
+<form action="src/timeTrackerSubmit.php" method="post" enctype="multipart/form-data">
     <div class="projectheader">
-        <select class="projectselector" name="project-0" >
+        <select class="projectselector" name="0-project" >
+            <option value=""></option>
             <?php foreach( $projectList as $project ){ ?>
                 <option value="<?php echo $project ?>"><?php echo $project ?></option>
             <?php } ?>
         </select>
-        <input class="ticketnumber"/>
+        <input class="ticketnumber" name="0-ticketnumber"/>
         <div class="ticketsummary"></div>
-        <div>test mode: <input type="checkbox" name="test" value="true"></div>
+        <div>test mode: <input type="checkbox" name="0-test" value="true"></div>
         <div class="timertoggle play">play</div>
         <input type="submit" value="Submit">
     </div>
     <table>
         <tr class="current">
             <td>
+                <input type="text" class="form-control date datepicker" value="" name="0-0-date" placeholder="date">
+            </td>
+            <td>
                 <div class="input-group clockpicker">
-                    <input type="text" class="start form-control" value="" name="start-0" placeholder="start">
+                    <input type="text" class="start form-control" value="" name="0-0-start" placeholder="start">
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-time"></span>
                     </span>
@@ -39,20 +48,20 @@
             </td>
             <td>
                 <div class="input-group clockpicker">
-                    <input type="text" class="end form-control" value="" name="end-0"placeholder="end">
+                    <input type="text" class="end form-control" value="" name="0-0-end" placeholder="end">
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-time"></span>
                     </span>
                 </div>
             </td>
-            <td>duration: <input type="text" class='duration' name="duration-0" readonly="readonly"></td>
-            <td>Description: <input type="text" class='description' name="description-0"></td>
-            <td>type:
-                <select class="type" name="type-0" >
+            <td><input type="text" class='form-control duration' name="0-0-duration" placeholder="duration" readonly="readonly"></td>
+            <td><input type="text" class='form-control description' name="0-0-description" placeholder="description"></td>
+            <td>
+                <select class="form-control type" name="0-0-type" placeholder="type">
                     <option value=""></option>
                 </select>
             </td>
-            <td>(x)</td>
+            <td>delete row</td>
         </tr>
     </table>
 </form>

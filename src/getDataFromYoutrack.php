@@ -56,7 +56,7 @@ class getDataFromYoutrack {
         if( !$cached  ){
             $res = $this->restResponse($url, $postOrGet, $headers, $body, $options);
             $res = $res->getResponse();
-            $response = $res->getBody();
+            $response = trim($res->getBody());
             if( $GLOBALS['cache'] && $postOrGet == 'get' ){
                 $cacheClass->createCache($url, $response);
             }
@@ -223,11 +223,18 @@ class getDataFromYoutrack {
         return $user_list;
     }
     
-    function getTicket($ticket){
+    function getTicketSummary($ticket){
         global $youtrack_url;
         $url = $youtrack_url . '/rest/issue/'.$ticket;
         $ticketXml = $this->rest($url,'get');
         list($ticketSummary, $empty) = $this->extract_data_xml( $ticketXml,'field', '',[], $whereAttr=['name'=>'summary']);
         return $ticketSummary;
+    }
+    function getTicketWorkTypes($project){
+        global $youtrack_url;
+        $url = $youtrack_url . '/rest/admin/project/'.$project.'/timetracking/worktype';
+        $workTypeXml = $this->rest($url,'get');
+        list($workTypes, $empty) = $this->extract_data_xml( $workTypeXml,'name');
+        return $workTypes;
     }
 }
