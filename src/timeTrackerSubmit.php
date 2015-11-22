@@ -2,6 +2,9 @@
 require_once __DIR__.'/authenticationAndSecurity.php';
 require_once __DIR__ . '/getDataFromYoutrack.php';
 
+// --delete me : used for testing guzzle --
+require_once __DIR__ . '/../vendor/autoload.php';
+
 class timeTrackerSubmit{
     
     function organisePosts($posts){
@@ -89,14 +92,39 @@ class timeTrackerSubmit{
         global $youtrack_url;
         $authenticationAndSecurity = new authenticationAndSecurity;
         $getDataFromYoutrack = new getDataFromYoutrack;
-        $url = $youtrack_url . '/rest/issue/'
-            . $ticketId
-            .'/timetracking/workitem';
+//        $url = $youtrack_url . '/rest/issue/'
+//            . $ticketId
+//            .'/timetracking/workitem';
 //        if($test){
 //            $url .= '?test=true';
 //        }
-         $getDataFromYoutrack->rest($url,'post',['Content-Type'=>'application/xml'],$content);
-    }
+         //$getDataFromYoutrack->rest($url,'post',['Content-Type'=>'application/xml'],$content);
+         
+        
+        
+        
+        
+        ///////////////////////////////////////////////
+        $xml = ' 
+<workItem>
+<date>1353316956611</date>
+<duration>240</duration>
+<description>test</description>
+<worktype>
+<name>Development</name>
+</worktype>
+</workItem>'; 
+  
+        $resTwo = $getDataFromYoutrack->restResponse($youtrack_url . '/rest/issue/junointernal-294/timetracking/workitem','post',['Content-Type' => 'text/xml; charset=UTF8'],$xml);//, ['timeout' => 120]);
+
+        $resTwo2 = $resTwo->getResponse();
+         if($resTwo2->getStatusCode() == 201){
+             echo 'success';
+         }else{
+             echo 'fail';
+         }  
+        die();
+  }
     
     /*
      * post data to youtrack
@@ -105,7 +133,7 @@ class timeTrackerSubmit{
         $ticketId = $ticket['project'].'-'.$ticket['ticketnumber'];
         
         try {
-            $this->updateYoutrack($content, $ticketId,$ticket['test']);
+            $this->updateYoutrack($content, $ticketId);//,$ticket['test']);
             echo 'import success';
             return true;
         } catch (Exception $e) {

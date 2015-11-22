@@ -25,13 +25,13 @@ class getDataFromYoutrack {
         } elseif($postOrGet === 'post') {
            $request = $client->post($url, $headers , $body, $options );
         } elseif($postOrGet === 'put') {
-           $request = $client->put($url, null , $body, $options );
+           $request = $client->put($url, $headers , $body, $options );
         }
-        if( isset($headers) ){
-            foreach($headers as $key => $value){
-                $request->addHeader($key,$value);
-            }
-        }
+//        if( $postOrGet === 'put' && isset($headers) ){
+//            foreach($headers as $key => $value){
+//                $request->addHeader($key,$value);
+//            }
+//        }
         if($authentication['type'] === 'cookie'){
             foreach($authentication['details'] as $singleCookie){
                 foreach($singleCookie as $cookieName => $cookieValue){
