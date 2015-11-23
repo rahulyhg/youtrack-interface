@@ -1,42 +1,20 @@
 $(document).ready(function(){
     
-    // adds a 0 if value less than ten
-    function timeAddZero(i) {
-        if (i < 10) {
-            i = "0" + i;
-        }
-        return i;
-    }
-    // the difference between two hours 
-    function hoursDifference(startHour,endHour){
-        startHour = parseInt(startHour);
-        endHour = parseInt(endHour);
-        if(startHour <= endHour){
-            return endHour - startHour;
-        }else{
-            return endHour + 24 - startHour;
-        }
-    }
-    // the difference between two minutes
-    function minutesDifference(startMinute,endMinute){
-        startMinute = parseInt(startMinute);
-        endMinute = parseInt(endMinute);
-        if(startMinute <= endMinute){
-            return endMinute - startMinute;
-        }else{
-            return endMinute + 60 - startMinute;
-        }
-    }
     // the difference between two time values
-    function differenceinMinutes(start,end){
+    function differenceInMinutes(start,end){
         var startTime = start.split(':');
         var endTime = end.split(':');
-        var hrsDifference = hoursDifference(startTime[0],endTime[0]);
-        if( startTime[0]===endTime[0] && startTime[1] > endTime[1] ){
-            hrsDifference += 23;
+
+        var startTimeInMin = (startTime[0] *60 ) + startTime[1];
+        var endTimeInMin = (endTime[0] *60 ) + endTime[1];
+
+        if(startTimeInMin<=endTimeInMin) {
+            var totalDifferenceInMinutes = endTimeInMin - startTimeInMin;
+        }else{
+            var minutesInADay = 24 * 60 ;
+            var totalDifferenceInMinutes = endTimeInMin + (minutesInADay - startTimeInMin);
         }
-        var minDifference = minutesDifference(startTime[1],endTime[1]);
-        var totalDifferenceInMinutes = ( hrsDifference * 60 ) + minDifference; 
+
         return totalDifferenceInMinutes;
     }
     // converts minutes into hours and minutes associative array
@@ -51,10 +29,22 @@ $(document).ready(function(){
             var startTime = $(form).find('table tr:first td input.start').val();
             var endTime = $(form).find('table tr:first td input.end').val();
         
-            var durationInMinutes = differenceinMinutes(startTime,endTime);
+            var durationInMinutes = differenceInMinutes(startTime,endTime);
             var duration = convertTimeIntoHours(durationInMinutes);
             $(form).find(' table tr:first td input.duration')
                     .val(duration['hours'] +'h '+ duration['minutes']+'m');
+    }
+    $('form table tr td .clockpicker .form-control').click(function(){
+        var form = $(this).parents('form');
+        updateDifference(form);
+    });
+
+    // adds a 0 if value less than ten
+    function timeAddZero(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
     }
     // stop start the timer
     function timertoggle(button){
@@ -82,10 +72,6 @@ $(document).ready(function(){
     }
     $('form .projectheader .timertoggle').click(function(){
         timertoggle(this);
-    });
-    $('form table tr td .clockpicker .form-control').click(function(){
-        var form = $(this).parents('form');
-        updateDifference(form);
     });
 
     $('.clockpicker').clockpicker({
