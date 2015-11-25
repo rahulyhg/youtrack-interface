@@ -13,17 +13,13 @@ class timeTrackerSubmit{
             $explodedKey = explode('-', $key);
             if(array_key_exists(1, $explodedKey)){
                 $key0 = $explodedKey[0];
-                $key1 = $explodedKey[1];
                 if( !array_key_exists($key0,$organisedPosts) ){
                     $organisedPosts[$key0] = [];
                 }
-                if( !array_key_exists($key1,$organisedPosts[$key0]) ){
-                    $organisedPosts[$key0][$key1] = [];
-                }
-                if( isset($explodedKey[2]) ){
-                    $organisedPosts[$key0][$key1][$explodedKey[2]] = $value;
+                if( isset($explodedKey[1]) ){
+                    $organisedPosts[$key0][$explodedKey[1]] = $value;
                 }else{
-                    $organisedPosts[$key0][$key1] = $value;    
+                    $organisedPosts[$key0] = $value;    
                 }
             }
         }

@@ -111,6 +111,27 @@ $(document).ready(function(){
         updateProject(this);
     });
 
-
+    function addTimeRow(form){
+        var html = $('form.template').find('table tr:first').html();
+        $(form).find('table tbody').prepend('<tr>'+html+'</tr>');
+    }
+    $('.addTimeRow').click(function(){
+        var form = $(this).parent().parent();
+        addTimeRow(form);
+    });
+    
+    function removeTimeRow(row){
+        $(row).remove();
+        var table = $(row).parent();
+        var rowCount = $(table).children('tr').length;
+        var form = $(table).parent();
+        if(rowCount === 0){
+            addTimeRow(form);
+        }
+    }
+    $('.deleteTimeRow').click(function(){
+        var row = $(this).parent().parent();
+        removeTimeRow(row);
+    });
 
 });
