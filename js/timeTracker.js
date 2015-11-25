@@ -4,9 +4,9 @@ $(document).ready(function(){
     function differenceInMinutes(start,end){
         var startTime = start.split(':');
         var endTime = end.split(':');
-
-        var startTimeInMin = (startTime[0] *60 ) + startTime[1];
-        var endTimeInMin = (endTime[0] *60 ) + endTime[1];
+        
+        var startTimeInMin = ( parseInt(startTime[0]) * 60 ) + parseInt(startTime[1]);
+        var endTimeInMin = ( parseInt(endTime[0]) * 60 ) + parseInt(endTime[1]);
 
         if(startTimeInMin<=endTimeInMin) {
             var totalDifferenceInMinutes = endTimeInMin - startTimeInMin;
@@ -18,10 +18,10 @@ $(document).ready(function(){
         return totalDifferenceInMinutes;
     }
     // converts minutes into hours and minutes associative array
-    function convertTimeIntoHours(minutes){
+    function convertMinutesIntoHours(minutes){
         minutes = parseInt(minutes);
         var hours = Math.floor(minutes / 60);
-        var minutesLeft = minutes - (hours *60);
+        var minutesLeft = minutes - (hours * 60);
         return { 'hours':hours , 'minutes':minutesLeft};
     }
     // update the difference field
@@ -30,11 +30,11 @@ $(document).ready(function(){
             var endTime = $(form).find('table tr:first td input.end').val();
         
             var durationInMinutes = differenceInMinutes(startTime,endTime);
-            var duration = convertTimeIntoHours(durationInMinutes);
+            var duration = convertMinutesIntoHours(durationInMinutes);
             $(form).find(' table tr:first td input.duration')
                     .val(duration['hours'] +'h '+ duration['minutes']+'m');
     }
-    $('form table tr td .clockpicker .form-control').click(function(){
+    $('form table tr td .clockpicker .form-control').change(function(){
         var form = $(this).parents('form');
         updateDifference(form);
     });
