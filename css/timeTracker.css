@@ -1,0 +1,8 @@
+#wrapper{
+    margin:20px;
+}
+.forms > form {
+    border: 2px solid #0095dd;
+    margin: 50px auto;
+    padding: 10px;
+}

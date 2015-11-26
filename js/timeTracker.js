@@ -34,7 +34,7 @@ $(document).ready(function(){
             $(form).find('table tr:first td input.duration')
                     .val(duration['hours'] +'h '+ duration['minutes']+'m');
     }
-    $('form table tr td .clockpicker .form-control').change(function(){
+    $('.forms').on('change', 'form table tr td .clockpicker .form-control', function(){
         var form = $(this).parents('form');
         updateDifference(form);
     });
@@ -70,7 +70,7 @@ $(document).ready(function(){
             updateDifference(form);
         }
     }
-    $('form .projectheader .timertoggle').click(function(){
+    $('.forms').on('click', 'form .projectheader .timertoggle', function(){
         timertoggle(this);
     });
 
@@ -104,10 +104,10 @@ $(document).ready(function(){
             }
         });
     }
-    $('form .projectheader .projectselector').change(function(){
+    $('.forms').on('change', 'form .projectheader .projectselector', function(){
         updateProject(this);
     });
-    $('form .projectheader .ticketnumber').change(function(){
+    $('.forms').on('change', '.ticketnumber', function(){
         updateProject(this);
     });
 
@@ -115,7 +115,7 @@ $(document).ready(function(){
         var html = $('form.template').find('table tr:first').html();
         $(form).find('table tbody').prepend('<tr>'+html+'</tr>');
     }
-    $('.addTimeRow').click(function(){
+    $('.forms').on('click', 'form .addTimeRow', function(){
         var form = $(this).closest('form');
         addTimeRow(form);
     });
@@ -129,9 +129,17 @@ $(document).ready(function(){
             addTimeRow(form);
         }
     }
-    $('table').on('click', '.deleteTimeRow', function() {
+    $('.forms').on('click', '.deleteTimeRow', function() {
         var row = $(this).closest('tr');
         removeTimeRow(row);
     });
 
+    function addTicketForm(){
+        var html = $('form.template').html();
+        $('div.forms').prepend('<form action="src/timeTrackerSubmit.php" method="post" enctype="multipart/form-data">'+html+'</form>');
+    }
+    $('body').on('click','.addTicketForm',function(){
+       addTicketForm();
+    });
+    
 });

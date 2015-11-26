@@ -5,6 +5,7 @@
     <script src='js/jquery-1.10.2.min.js'></script>
     <script src='js/timeTracker.js'></script>
     <script src="js/1.11.4jquery-ui.js"></script>
+    <link rel="stylesheet" href="css/timeTracker.css">
     <link rel="stylesheet" href="css/1.11.4jquery-ui.css">
     <!-- time picker -->
     <link href="js/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
@@ -20,11 +21,17 @@
 
 <h1 style="text-align:center">Time Tracker</h1>
 
-<?php $hidden = true; ?>
-<?php require __DIR__ . '/timeTrackerForm.phtml'; ?>
+<div id="wrapper">
+    <button class="addTicketForm" type="button">Add Ticket</button>
 
-<?php $hidden = false; ?>
-<?php require __DIR__ . '/timeTrackerForm.phtml'; ?>
+    <?php $hidden = true; ?>
+    <?php require __DIR__ . '/timeTrackerForm.phtml'; ?>
+
+    <div class="forms">
+        <?php $hidden = false; ?>
+        <?php require __DIR__ . '/timeTrackerForm.phtml'; ?>
+    </div>
+</div>
 
 </body>
 </html>
