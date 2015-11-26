@@ -31,7 +31,7 @@ $(document).ready(function(){
         
             var durationInMinutes = differenceInMinutes(startTime,endTime);
             var duration = convertMinutesIntoHours(durationInMinutes);
-            $(form).find(' table tr:first td input.duration')
+            $(form).find('table tr:first td input.duration')
                     .val(duration['hours'] +'h '+ duration['minutes']+'m');
     }
     $('form table tr td .clockpicker .form-control').change(function(){
@@ -48,7 +48,7 @@ $(document).ready(function(){
     }
     // stop start the timer
     function timertoggle(button){
-        var form = $(button).parent().parent();
+        var form = $(button).closest('form');
         if($(button).hasClass('play')){
             var time = new Date($.now());
             var startTime = timeAddZero(time.getHours())+":"+timeAddZero(time.getMinutes());
@@ -87,7 +87,7 @@ $(document).ready(function(){
     });
     
     function updateProject(button){
-        var form = $(button).parent().parent();
+        var form = $(button).closest('form');
         var project = $(form).find('.projectheader .projectselector').val();
         var ticketNo = $(form).find('.projectheader .ticketnumber').val();
         var ticket = project + '-' + ticketNo;
@@ -116,21 +116,21 @@ $(document).ready(function(){
         $(form).find('table tbody').prepend('<tr>'+html+'</tr>');
     }
     $('.addTimeRow').click(function(){
-        var form = $(this).parent().parent();
+        var form = $(this).closest('form');
         addTimeRow(form);
     });
     
     function removeTimeRow(row){
+        var tbody = $(row).parent();
         $(row).remove();
-        var table = $(row).parent();
-        var rowCount = $(table).children('tr').length;
-        var form = $(table).parent();
+        var rowCount = $(tbody).children('tr').length;
+        var form = $(tbody).closest('form');
         if(rowCount === 0){
             addTimeRow(form);
         }
     }
-    $('.deleteTimeRow').click(function(){
-        var row = $(this).parent().parent();
+    $('table').on('click', '.deleteTimeRow', function() {
+        var row = $(this).closest('tr');
         removeTimeRow(row);
     });
 
