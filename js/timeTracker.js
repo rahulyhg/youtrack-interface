@@ -25,18 +25,18 @@ $(document).ready(function(){
         return { 'hours':hours , 'minutes':minutesLeft};
     }
     // update the difference field
-    function updateDifference(form){
-            var startTime = $(form).find('table tr:first td input.start').val();
-            var endTime = $(form).find('table tr:first td input.end').val();
-        
-            var durationInMinutes = differenceInMinutes(startTime,endTime);
-            var duration = convertMinutesIntoHours(durationInMinutes);
-            $(form).find('table tr:first td input.duration')
+    function updateDifference(timeRow){
+        var startTime = $(timeRow).find('td input.start').val();
+        var endTime = $(timeRow).find('td input.end').val();
+
+        var durationInMinutes = differenceInMinutes(startTime,endTime);
+        var duration = convertMinutesIntoHours(durationInMinutes);
+        $(timeRow).find('td input.duration')
                     .val(duration['hours'] +'h '+ duration['minutes']+'m');
     }
-    $('.forms').on('change', 'form table tr td .clockpicker .form-control', function(){
-        var form = $(this).parents('form');
-        updateDifference(form);
+    $('.forms').on('change', 'form table tr td .clockpicker', function(){
+        var timeRow = $(this).closest('tr');
+        updateDifference(timeRow);
     });
 
     // adds a 0 if value less than ten
@@ -67,7 +67,8 @@ $(document).ready(function(){
                 .removeClass('stop')
                 .addClass('play');
         
-            updateDifference(form);
+            var timeRow = $(form).find('table tr:first');
+            updateDifference(timeRow);
         }
     }
     $('.forms').on('click', 'form .projectheader .timertoggle', function(){
