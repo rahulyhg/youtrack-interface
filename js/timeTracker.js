@@ -1,5 +1,12 @@
 $(document).ready(function(){
-    
+    // stop enter submitting forms
+    $(window).keydown(function(event){
+        if(event.keyCode === 13) {
+          event.preventDefault();
+          return false;
+        }
+    });
+  
     // the difference between two time values
     function differenceInMinutes(start,end){
         var startTime = start.split(':');
@@ -50,6 +57,9 @@ $(document).ready(function(){
     function timertoggle(button){
         var form = $(button).closest('form');
         if($(button).hasClass('play')){
+            if($(form).find('table tr:first td input.start').val() !== ''){
+               addTimeRow(form);
+            }
             var time = new Date($.now());
             var startTime = timeAddZero(time.getHours())+":"+timeAddZero(time.getMinutes());
             $(form).find('table tr:first td input.start')
@@ -70,6 +80,7 @@ $(document).ready(function(){
             var timeRow = $(form).find('table tr:first');
             updateDifference(timeRow);
         }
+        storeFormData();
     }
     $('.forms').on('click', 'form .projectheader .timertoggle', function(){
         timertoggle(this);
@@ -91,10 +102,20 @@ $(document).ready(function(){
         });
     });
     
-    function updateProject(button){
-        var form = $(button).closest('form');
+    /*
+     * update the summary and work types drop down
+     * @param form
+     * @param callback - callback function (optional)
+     */
+    function updateProject(form,callback){
+        if (typeof (callback) === "undefined") {
+            var callback = function(){};
+        }
         var project = $(form).find('.projectheader .projectselector').val();
         var ticketNo = $(form).find('.projectheader .ticketnumber').val();
+        if( project === '' || ticketNo === '' ){
+            return;
+        }
         var ticket = project + '-' + ticketNo;
         $.ajax({url: "src/ticketAjax.php?ticket="+ticket, dataType: "json",
             success: function(result){
@@ -104,16 +125,19 @@ $(document).ready(function(){
                     html += '<option value="'+result['workTypes'][i]+'">'+result['workTypes'][i]+'</option>';
                 }
                 $(form).find('table tr td select.type').html(html);
+                callback();
             },
             error: function(result){
             }
         });
     }
     $('.forms').on('change', 'form .projectheader .projectselector', function(){
-        updateProject(this);
+        var form = $(this).closest('form');
+        updateProject(form);
     });
     $('.forms').on('change', '.ticketnumber', function(){
-        updateProject(this);
+        var form = $(this).closest('form');
+        updateProject(form);
     });
 
     function addTimeRow(form){
@@ -166,21 +190,57 @@ $(document).ready(function(){
         });
         return dataArray;
     }
-    $('.forms').on('click', 'form .createJson', function(){
+    /*
+     * saves form's data into local storage for later retrieval
+     */
+    function storeFormData(){
         if (typeof (Storage) !== "undefined") {
-            // Code for localStorage/sessionStorage.
             var array = createDataArray();
             var jsonString = JSON.stringify(array);
             // Store
             localStorage.setItem("json", jsonString);
- 
-            // Retrieve
-            var x = localStorage.getItem("json"); 
-            alert(x);
         } else {
-            // Sorry! No Web Storage support..
-            alert('no web storage availible');
+            alert('local storage feature unavailible with this browser');
         }
+    }
+    $('.forms').on('change', 'form', function(){
+        storeFormData();
     });
     
+    /*
+     * 
+     * e.g of json format required
+     * {"test-1":{"0":{"date":"17 Nov, 15","start":"10:10","end":"10:20","duration":"0h 10m","description":"test description","type":"Development"}}}
+     */
+    function dataIntoForm(){
+        var json = localStorage.getItem("json");
+        var data = JSON.parse(json);
+        var i = 0;
+        $.each(data, function(index, ticket) {
+            var ticketRef = index.split('-');
+            var project = ticketRef[0];
+            var ticketNo = ticketRef[1];
+            if(i>0){
+                addTicketForm();
+            }
+            var form = $('.forms form:first');
+            form.find('.projectheader .projectselector').val(project);
+            form.find('.projectheader .ticketnumber').val(ticketNo);
+            updateProject(form, function(){
+                $.each(ticket, function(index,timeRow) {
+                    if(index>0){
+                        addTimeRow(form);
+                    }
+                    form.find('table tr:first td .date').val(timeRow.date);
+                    form.find('table tr:first td .start').val(timeRow.start);
+                    form.find('table tr:first td .end').val(timeRow.end);
+                    form.find('table tr:first td .duration').val(timeRow.duration);
+                    form.find('table tr:first td .description').val(timeRow.description);
+                    form.find('table tr:first td .type').val(timeRow.type);
+                });
+            });
+            i++;
+        });
+    }
+    dataIntoForm();
 });
