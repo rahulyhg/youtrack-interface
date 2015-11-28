@@ -74,16 +74,20 @@ $(document).ready(function(){
         timertoggle(this);
     });
 
-    $('.clockpicker').clockpicker({
-        placement: 'bottom', // clock popover placement
-        align: 'left',       // popover arrow align
-        donetext: 'Done',     // done button text
-        autoclose: true,    // auto close when minute is selected
-        vibrate: true        // vibrate the device when dragging clock hand
+    $('.forms').on('focus','.clockpicker', function(){
+        $(this).clockpicker({
+            placement: 'bottom', // clock popover placement
+            align: 'left',       // popover arrow align
+            donetext: 'Done',     // done button text
+            autoclose: true,    // auto close when minute is selected
+            vibrate: true        // vibrate the device when dragging clock hand
+        });
     });
     
-    $('form table tr td input.datepicker').datepicker({
-      "dateFormat": 'd M, y' 
+    $('.forms').on('focus','form table tr td input.datepicker', function(){
+        $(this).datepicker({
+          "dateFormat": 'd M, y' 
+        });
     });
     
     function updateProject(button){
@@ -98,7 +102,7 @@ $(document).ready(function(){
                 for (i = 0; i < result['workTypes'].length; i++){
                     html += '<option value="'+result['workTypes'][i]+'">'+result['workTypes'][i]+'</option>';
                 }
-                $(form).find('table tr:first td select.type').html(html);
+                $(form).find('table tr td select.type').html(html);
             },
             error: function(result){
             }
@@ -114,6 +118,8 @@ $(document).ready(function(){
     function addTimeRow(form){
         var html = $('form.template').find('table tr:first').html();
         $(form).find('table tbody').prepend('<tr>'+html+'</tr>');
+        html = $(form).find('table tr:last td select.type').html();
+        $(form).find('table tr:first td select.type').html(html);
     }
     $('.forms').on('click', 'form .addTimeRow', function(){
         var form = $(this).closest('form');
