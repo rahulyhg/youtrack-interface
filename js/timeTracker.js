@@ -149,4 +149,38 @@ $(document).ready(function(){
        addTicketForm();
     });
     
+    function createDataArray(){
+        var dataArray = {};
+        $('.forms form').each(function(){
+            var ticketRef = $(this).find('.projectselector').val() + '-' + $(this).find('.ticketnumber').val();
+            dataArray[ticketRef] = {};
+            $(this).find('table tr').each(function(n){
+               dataArray[ticketRef][n] = {};
+               dataArray[ticketRef][n]['date'] = $(this).find('.date').val();
+               dataArray[ticketRef][n]['start'] = $(this).find('.start').val();
+               dataArray[ticketRef][n]['end'] = $(this).find('.end').val();
+               dataArray[ticketRef][n]['duration'] = $(this).find('.duration').val();
+               dataArray[ticketRef][n]['description'] = $(this).find('.description').val();
+               dataArray[ticketRef][n]['type'] = $(this).find('.type').val();
+            });
+        });
+        return dataArray;
+    }
+    $('.forms').on('click', 'form .createJson', function(){
+        if (typeof (Storage) !== "undefined") {
+            // Code for localStorage/sessionStorage.
+            var array = createDataArray();
+            var jsonString = JSON.stringify(array);
+            // Store
+            localStorage.setItem("json", jsonString);
+ 
+            // Retrieve
+            var x = localStorage.getItem("json"); 
+            alert(x);
+        } else {
+            // Sorry! No Web Storage support..
+            alert('no web storage availible');
+        }
+    });
+    
 });
