@@ -140,11 +140,20 @@ $(document).ready(function(){
         updateProject(form);
     });
 
+    function updateNames(form){
+        var nextRowNumber = parseInt( $(form).find('table').attr('nextRowNumber') );
+        $(form).find('tr:first td input, tr:first td select').each(function(){
+           var name = $(this).attr('name').split('-');
+           $(this).attr('name',nextRowNumber + '-' + name[1]);
+        });
+        $(form).find('table').attr('nextRowNumber',nextRowNumber+1);
+    }
     function addTimeRow(form){
         var html = $('form.template').find('table tr:first').html();
         $(form).find('table tbody').prepend('<tr>'+html+'</tr>');
         html = $(form).find('table tr:last td select.type').html();
         $(form).find('table tr:first td select.type').html(html);
+        updateNames(form);
     }
     $('.forms').on('click', 'form .addTimeRow', function(){
         var form = $(this).closest('form');

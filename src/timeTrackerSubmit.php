@@ -12,15 +12,10 @@ class timeTrackerSubmit{
         foreach($posts as $key => $value){
             $explodedKey = explode('-', $key);
             if(array_key_exists(1, $explodedKey)){
-                $key0 = $explodedKey[0];
-                if( !array_key_exists($key0,$organisedPosts) ){
-                    $organisedPosts[$key0] = [];
+                if( !array_key_exists($explodedKey[0],$organisedPosts) ){
+                    $organisedPosts[$explodedKey[0]] = [];
                 }
-                if( isset($explodedKey[1]) ){
-                    $organisedPosts[$key0][$explodedKey[1]] = $value;
-                }else{
-                    $organisedPosts[$key0] = $value;    
-                }
+                $organisedPosts[$explodedKey[0]][$explodedKey[1]] = $value;
             }
         }
        return $organisedPosts;
@@ -61,40 +56,38 @@ class timeTrackerSubmit{
      *   ]
      * 
      */   
-    function createXml($ticket){
+    function createXml($timeRow){
         $xml = '';
-        if(!$date = strtotime($ticket['date'])){
+        if(!$date = strtotime($timeRow['date'])){
             $date = time();
         }
         $date .= '000';
-        $duration = $this->convertDuration($ticket['duration']);
+        $duration = $this->convertDuration($timeRow['duration']);
         $xml .= '<workItem>'.
             '<date>'.$date.'</date>'.
             '<duration>'.$duration.'</duration>'.
-            '<description>'.$ticket['description'].'</description>'.
+            '<description>'.$timeRow['description'].'</description>'.
             '<worktype>'.
-                '<name>'.$ticket['type'].'</name>'.
+                '<name>'.$timeRow['type'].'</name>'.
             '</worktype>'.
         '</workItem>';
         return $xml;
     }
     
-    function updateYoutrack($content,$ticketId,$test=false){
+    function updateYoutrack($content,$ticketId){
         global $youtrack_url;
         $authenticationAndSecurity = new authenticationAndSecurity;
         $getDataFromYoutrack = new getDataFromYoutrack;
         $url = $youtrack_url . '/rest/issue/'
             . $ticketId
             .'/timetracking/workitem';
-        //$url=$youtrack_url . '/rest/issue/junointernal-296/timetracking/workitem??test=true';
         $res = $getDataFromYoutrack->restResponse($url,'post',['Content-Type' => 'text/xml; charset=UTF8'],$content);
         $res = $res->getResponse();
          if($res->getStatusCode() == 201){
-             echo 'success';
+             return true;
          }else{
-             echo 'fail';
-         }  
-        die();
+             return false;
+         }
   }
     
     /*
@@ -102,12 +95,16 @@ class timeTrackerSubmit{
      */
     function postData($content,$ticketId){
         try {
-            $this->updateYoutrack($content, $ticketId);
-            echo 'import success';
-            return true;
+            $success = $this->updateYoutrack($content, $ticketId);
+            if($success){
+                echo "work item import success <br>";
+            }else{
+                echo "work item import failed <br>";
+            }
+            return $success;
         } catch (Exception $e) {
             error_log($e);
-            echo 'IMPORT ISSUE FAILED:: unable to import timing to ticket '.$ticketId.$GLOBALS["newline"];
+            echo 'IMPORT ISSUE FAILED:: unable to import timing to ticket '.$ticketId."<br>";
             return false;
         }
     }
@@ -117,8 +114,8 @@ class timeTrackerSubmit{
         $posts = $authenticationAndSecurity->getAllPosts();
         $ticketId = $posts['project'].'-'.$posts['ticketnumber'];
         $organisedPosts = $this->organisePosts($posts);
-        foreach($organisedPosts as $key => $ticket){
-            $xml = $this->createXml($ticket);
+        foreach($organisedPosts as $key => $timeRow){
+            $xml = $this->createXml($timeRow);
             $organisedPosts[$key]['success'] = $this->postData($xml,$ticketId);
         }
     }
