@@ -185,17 +185,23 @@ $(document).ready(function(){
     function createDataArray(){
         var dataArray = {};
         $('.forms form').each(function(){
-            var ticketRef = $(this).find('.projectselector').val() + '-' + $(this).find('.ticketnumber').val();
-            dataArray[ticketRef] = {};
-            $(this).find('table tr').each(function(n){
-               dataArray[ticketRef][n] = {};
-               dataArray[ticketRef][n]['date'] = $(this).find('.date').val();
-               dataArray[ticketRef][n]['start'] = $(this).find('.start').val();
-               dataArray[ticketRef][n]['end'] = $(this).find('.end').val();
-               dataArray[ticketRef][n]['duration'] = $(this).find('.duration').val();
-               dataArray[ticketRef][n]['description'] = $(this).find('.description').val();
-               dataArray[ticketRef][n]['type'] = $(this).find('.type').val();
-            });
+            // if one or more timeRow not submitted
+            if($(this).find('tr [name]').length>0){
+                var ticketRef = $(this).find('.projectselector').val() + '-' + $(this).find('.ticketnumber').val();
+                dataArray[ticketRef] = {};
+                $(this).find('table tr').each(function(n){
+                    // if this timeRow not submitted
+                    if($(this).find('.date[name]').length>0){
+                        dataArray[ticketRef][n] = {};
+                        dataArray[ticketRef][n]['date'] = $(this).find('.date[name]').val();
+                        dataArray[ticketRef][n]['start'] = $(this).find('.start[name]').val();
+                        dataArray[ticketRef][n]['end'] = $(this).find('.end[name]').val();
+                        dataArray[ticketRef][n]['duration'] = $(this).find('.duration[name]').val();
+                        dataArray[ticketRef][n]['description'] = $(this).find('.description[name]').val();
+                        dataArray[ticketRef][n]['type'] = $(this).find('.type[name]').val();
+                    }
+                });
+            }
         });
         return dataArray;
     }
@@ -214,6 +220,59 @@ $(document).ready(function(){
     }
     $('.forms').on('change', 'form', function(){
         storeFormData();
+    });
+   
+    /*
+     * ajax submit & standard submit disbled
+     */
+    $('.ajaxSubmit').click(function(){
+        var form = $(this).closest('form');
+        form.submit(function (ev) {
+            ev.preventDefault();
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (data) {
+                    data = JSON.parse(data);
+                    $.each(data, function(index, timeRow) {
+                        if(timeRow.success){
+                            form.find('table tr td .date[name="'+index+'-date"]')
+                                    .addClass('submitSuccess')
+                                    .prop('readonly', true)
+                                    .removeAttr('name');
+                            form.find('table tr td .start[name="'+index+'-start"]')
+                                    .addClass('submitSuccess')
+                                    .prop('readonly', true)
+                                    .removeAttr('name');
+                            form.find('table tr td .end[name="'+index+'-end"]')
+                                    .addClass('submitSuccess')
+                                    .prop('readonly', true)
+                                    .removeAttr('name');
+                            form.find('table tr td .duration[name="'+index+'-duration"]')
+                                    .addClass('submitSuccess')
+                                    .prop('readonly', true)
+                                    .removeAttr('name');
+                            form.find('table tr td .description[name="'+index+'-description"]')
+                                    .addClass('submitSuccess')
+                                    .prop('readonly', true)
+                                    .removeAttr('name');
+                            form.find('table tr td .type[name="'+index+'-type"]')
+                                    .addClass('submitSuccess')
+                                    .prop('readonly', true)
+                                    .removeAttr('name');
+                        }
+                    });
+                    console.log(data);
+                    // backup old storage
+                    var jsonString = localStorage.getItem("json", jsonString);
+                    localStorage.setItem("BACKUP-json", jsonString);
+                    // create new json
+                    storeFormData();
+                }
+            });
+
+        });
     });
     
     /*
@@ -252,4 +311,5 @@ $(document).ready(function(){
         });
     }
     dataIntoForm();
+    
 });

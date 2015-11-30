@@ -6,3 +6,7 @@
     margin: 50px auto;
     padding: 10px;
 }
+.submitSuccess.form-control[readonly]{
+    background-color: #d9edf7;
+    text-decoration: line-through;
+}

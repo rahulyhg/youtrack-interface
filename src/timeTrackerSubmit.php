@@ -118,7 +118,9 @@ class timeTrackerSubmit{
             $xml = $this->createXml($timeRow);
             $organisedPosts[$key]['success'] = $this->postData($xml,$ticketId);
         }
+        return $organisedPosts;
     }
 }
 $timeTrackerSubmit = new timeTrackerSubmit;
-$timeTrackerSubmit->submit();
+$response = $timeTrackerSubmit->submit();
+echo json_encode($response);
