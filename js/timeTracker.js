@@ -114,7 +114,7 @@ $(document).ready(function(){
         var project = $(form).find('.projectheader .projectselector').val();
         var ticketNo = $(form).find('.projectheader .ticketnumber').val();
         if( project === '' || ticketNo === '' ){
-            return;
+            callback();
         }
         var ticket = project + '-' + ticketNo;
         $.ajax({url: "src/ticketAjax.php?ticket="+ticket, dataType: "json",
@@ -206,6 +206,19 @@ $(document).ready(function(){
         return dataArray;
     }
     /*
+     * saves form's data onto server for later retrieval
+     */
+    function storeFormDataOnServer(jsonString){
+        $.ajax({url: "src/timeJsonSaveAjax.php",
+            type: 'POST',
+            dataType: "json",
+            data: { json: jsonString },
+            success: function(result){
+                return result;
+            }
+        });
+    }
+    /*
      * saves form's data into local storage for later retrieval
      */
     function storeFormData(){
@@ -214,6 +227,7 @@ $(document).ready(function(){
             var jsonString = JSON.stringify(array);
             // Store
             localStorage.setItem("json", jsonString);
+            storeFormDataOnServer(jsonString);
         } else {
             alert('local storage feature unavailible with this browser');
         }
@@ -276,13 +290,29 @@ $(document).ready(function(){
     });
     
     /*
+     * returns a time json string from either local storage or from server file
+     * @returns json string 
+     */
+    function getJson(){
+        var json = localStorage.getItem("json");
+        if (typeof json !== 'undefined' && json !== '' && json !== null ) {
+            var data = JSON.parse(json);
+            return data;
+        } else {
+            $.ajax({url: "src/timeJsonGetAjax.php", dataType: "json",
+                success: function(result){
+                    dataIntoForm(result);
+                }
+            });
+        }
+    }
+    
+    /*
      * 
-     * e.g of json format required
+     * e.g of object format required
      * {"test-1":{"0":{"date":"17 Nov, 15","start":"10:10","end":"10:20","duration":"0h 10m","description":"test description","type":"Development"}}}
      */
-    function dataIntoForm(){
-        var json = localStorage.getItem("json");
-        var data = JSON.parse(json);
+    function dataIntoForm(data){
         var i = 0;
         $.each(data, function(index, ticket) {
             var ticketRef = index.split('-');
@@ -310,6 +340,6 @@ $(document).ready(function(){
             i++;
         });
     }
-    dataIntoForm();
+    getJson();
     
 });

@@ -95,13 +95,14 @@ class timeTrackerSubmit{
      */
     function postData($content,$ticketId){
         try {
-            $success = $this->updateYoutrack($content, $ticketId);
-            if($success){
-                echo "work item import success <br>";
-            }else{
-                echo "work item import failed <br>";
-            }
-            return $success;
+            return true;
+//            $success = $this->updateYoutrack($content, $ticketId);
+//            if($success){
+//                echo "work item import success <br>";
+//            }else{
+//                echo "work item import failed <br>";
+//            }
+//            return $success;
         } catch (Exception $e) {
             error_log($e);
             echo 'IMPORT ISSUE FAILED:: unable to import timing to ticket '.$ticketId."<br>";

@@ -43,7 +43,7 @@ class cache {
                     return false;
                 }
             }else{
-                error_log($this->cacheFolder.' folder is dosnt exists');
+                error_log($this->cacheFolder.' folder dosnt exists');
                 return false;
             }
         }
