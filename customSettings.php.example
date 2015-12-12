@@ -20,3 +20,8 @@ $filePermissions = 0660;
 //ticket successful transfer leg
 $createByFormTransferLog = false; // true or false
 $createByFormTransferErrorLog = true; //true or false
+
+// ---- time tracker ----
+//
+// number of time tracker form edits kept on server.
+$timeTrackerKeptEdits = 5 ; // use 0 for all edits

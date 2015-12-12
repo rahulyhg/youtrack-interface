@@ -1,6 +1,4 @@
 <?php
-require_once __DIR__.'/authenticationAndSecurity.php';
-
 class authenticationAndSecurity {
     function setCookie( $name, $value, $expire = 0, $path = '/'){
         $encryptedValue = $this->encryptDecrypt('encrypt', $value);

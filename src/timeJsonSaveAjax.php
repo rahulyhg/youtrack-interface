@@ -51,6 +51,21 @@ class timeJsonSaveAjax {
         }
     }
     
+    function removeOldFiles($reporterName){
+        $timeTrackerKeptEdits = $GLOBALS['timeTrackerKeptEdits'];
+        if($timeTrackerKeptEdits>0){
+            $folderName = $this->getFolderName($reporterName);
+            $this->createReporterFolder($folderName);
+            $files = scandir($folderName, SCANDIR_SORT_DESCENDING);
+            for($i=0;$i<$timeTrackerKeptEdits;$i++){
+                array_shift($files);
+            }
+            for($i=0;$i<sizeof($files);$i++){
+                unlink($folderName.'/'.$files[$i]);
+            }
+        }
+    }
+    
     function saveJson($json){
         $authenticationAndSecurity = new authenticationAndSecurity;
         
@@ -62,6 +77,7 @@ class timeJsonSaveAjax {
         }
         
         if( $this->createTimeJsonFile($reporterName, $json) ){
+            $this->removeOldFiles($reporterName);
             return true;
         }else{
             return false;
