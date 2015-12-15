@@ -297,7 +297,7 @@ $(document).ready(function(){
         var json = localStorage.getItem("json");
         if (typeof json !== 'undefined' && json !== '' && json !== null ) {
             var data = JSON.parse(json);
-            return data;
+            dataIntoForm(data);
         } else {
             $.ajax({url: "src/timeJsonGetAjax.php", dataType: "json",
                 success: function(result){
