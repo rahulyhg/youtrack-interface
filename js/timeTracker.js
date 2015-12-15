@@ -62,8 +62,11 @@ $(document).ready(function(){
             }
             var time = new Date($.now());
             var startTime = timeAddZero(time.getHours())+":"+timeAddZero(time.getMinutes());
+            var date =  $.datepicker.formatDate("d M, y", time);
             $(form).find('table tr:first td input.start')
                 .val(startTime);
+            $(form).find('table tr:first td input.date')
+                .val(date);
             $(button).html('stop')
                 .removeClass('play')
                 .addClass('stop');
