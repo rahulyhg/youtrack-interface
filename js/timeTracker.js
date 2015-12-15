@@ -116,8 +116,9 @@ $(document).ready(function(){
         }
         var project = $(form).find('.projectheader .projectselector').val();
         var ticketNo = $(form).find('.projectheader .ticketnumber').val();
-        if( project === '' || ticketNo === '' ){
+        if( project === "" || ticketNo === "" ){
             callback();
+            return;
         }
         var ticket = project + '-' + ticketNo;
         $.ajax({url: "src/ticketAjax.php?ticket="+ticket, dataType: "json",
@@ -187,21 +188,25 @@ $(document).ready(function(){
     
     function createDataArray(){
         var dataArray = {};
+        var i = 0;
         $('.forms form').each(function(){
+            i++;
             // if one or more timeRow not submitted
             if($(this).find('tr [name]').length>0){
                 var ticketRef = $(this).find('.projectselector').val() + '-' + $(this).find('.ticketnumber').val();
-                dataArray[ticketRef] = {};
+                dataArray[i] = {};
+                dataArray[i]['ticketRef'] = ticketRef;
                 $(this).find('table tr').each(function(n){
+                    var noOfTiming = $(this).find('.date[name]').length;
                     // if this timeRow not submitted
-                    if($(this).find('.date[name]').length>0){
-                        dataArray[ticketRef][n] = {};
-                        dataArray[ticketRef][n]['date'] = $(this).find('.date[name]').val();
-                        dataArray[ticketRef][n]['start'] = $(this).find('.start[name]').val();
-                        dataArray[ticketRef][n]['end'] = $(this).find('.end[name]').val();
-                        dataArray[ticketRef][n]['duration'] = $(this).find('.duration[name]').val();
-                        dataArray[ticketRef][n]['description'] = $(this).find('.description[name]').val();
-                        dataArray[ticketRef][n]['type'] = $(this).find('.type[name]').val();
+                    if(noOfTiming>0){
+                        dataArray[i][noOfTiming-n] = {};
+                        dataArray[i][noOfTiming-n]['date'] = $(this).find('.date[name]').val();
+                        dataArray[i][noOfTiming-n]['start'] = $(this).find('.start[name]').val();
+                        dataArray[i][noOfTiming-n]['end'] = $(this).find('.end[name]').val();
+                        dataArray[i][noOfTiming-n]['duration'] = $(this).find('.duration[name]').val();
+                        dataArray[i][noOfTiming-n]['description'] = $(this).find('.description[name]').val();
+                        dataArray[i][noOfTiming-n]['type'] = $(this).find('.type[name]').val();
                     }
                 });
             }
@@ -292,15 +297,55 @@ $(document).ready(function(){
         });
     });
     
+    
     /*
-     * returns a time json string from either local storage or from server file
-     * @returns json string 
+     * 
+     * e.g of object format required
+     * {"test-1":{"0":{"date":"17 Nov, 15","start":"10:10","end":"10:20","duration":"0h 10m","description":"test description","type":"Development"}}}
+    */
+    function dataIntoForm(data){
+        var i = 0;
+        $.each(data, function(index, ticket) {
+            var ticketRef = ticket.ticketRef.split('-');
+            delete ticket.ticketRef; 
+            var project = ticketRef[0];
+            var ticketNo = ticketRef[1];
+            // if not first ticket
+            if(i>0){
+                addTicketForm();
+            }
+            var form = $('.forms form:first');
+            form.find('.projectheader .projectselector').val(project);
+            form.find('.projectheader .ticketnumber').val(ticketNo);
+            updateProject(form, function(){
+                var ticketLength = Object.keys(ticket).length;
+                for( var j = ticketLength - 1; j >= 0 ; j-- ) {
+                    if( ticket[j] !== undefined ) {
+                        var timeRow = ticket[j];
+                        if( j < ticketLength - 1 ){
+                            addTimeRow(form);
+                        }
+                        form.find('table tr:first td .date').val(timeRow.date);
+                        form.find('table tr:first td .start').val(timeRow.start);
+                        form.find('table tr:first td .end').val(timeRow.end);
+                        form.find('table tr:first td .duration').val(timeRow.duration);
+                        form.find('table tr:first td .description').val(timeRow.description);
+                        form.find('table tr:first td .type').val(timeRow.type);
+                    };
+                }
+            });
+            i++;
+        });
+    }
+    
+    /*
+     * sets the form content from json from local storage or then from server file
      */
-    function getJson(){
+    function populateFormJson(){
         var json = localStorage.getItem("json");
         if (typeof json !== 'undefined' && json !== '' && json !== null ) {
-            var data = JSON.parse(json);
-            dataIntoForm(data);
+            var jsonData = JSON.parse(json);
+            dataIntoForm(jsonData);
         } else {
             $.ajax({url: "src/timeJsonGetAjax.php", dataType: "json",
                 success: function(result){
@@ -309,40 +354,6 @@ $(document).ready(function(){
             });
         }
     }
-    
-    /*
-     * 
-     * e.g of object format required
-     * {"test-1":{"0":{"date":"17 Nov, 15","start":"10:10","end":"10:20","duration":"0h 10m","description":"test description","type":"Development"}}}
-     */
-    function dataIntoForm(data){
-        var i = 0;
-        $.each(data, function(index, ticket) {
-            var ticketRef = index.split('-');
-            var project = ticketRef[0];
-            var ticketNo = ticketRef[1];
-            if(i>0){
-                addTicketForm();
-            }
-            var form = $('.forms form:first');
-            form.find('.projectheader .projectselector').val(project);
-            form.find('.projectheader .ticketnumber').val(ticketNo);
-            updateProject(form, function(){
-                $.each(ticket, function(index,timeRow) {
-                    if(index>0){
-                        addTimeRow(form);
-                    }
-                    form.find('table tr:first td .date').val(timeRow.date);
-                    form.find('table tr:first td .start').val(timeRow.start);
-                    form.find('table tr:first td .end').val(timeRow.end);
-                    form.find('table tr:first td .duration').val(timeRow.duration);
-                    form.find('table tr:first td .description').val(timeRow.description);
-                    form.find('table tr:first td .type').val(timeRow.type);
-                });
-            });
-            i++;
-        });
-    }
-    getJson();
+    populateFormJson();
     
 });
