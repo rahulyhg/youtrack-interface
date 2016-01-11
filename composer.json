@@ -1,0 +1,25 @@
+{
+    "name": "junomedia/youtrack-csv",
+    "description": "CSV Import tool for YouTrack Issues",
+    "require": {
+        "ddeboer/data-import": "~0.16",
+        "guzzle/guzzle": "~3.9",
+        "silex/silex": "~1.2"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "~1.5",
+        "phpunit/phpunit": "~4.3",
+        "fzaninotto/faker": "~1.4"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Paul Millband",
+            "email": "paul@junowebdesign.com"
+        }
+
+    ],
+    "autoload": {
+        "psr-4" : {"Juno\\" : "src/"}
+    }
+}

@@ -1,0 +1,60 @@
+<?php
+// <p>---------------------------------------------------------</p>
+// <p>          Error: Please allow phtml files to run php     </p>
+// <p>---------------------------------------------------------</p>
+$GLOBALS['newline'] = '<br>'; // keep at the top needed by getCustomSettings
+require_once __DIR__ . '/src/getCustomSettings.php';
+require_once __DIR__ . '/src/getDataFromYoutrack.php';
+require_once __DIR__ . '/src/createByForm.php';
+?>            
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src='js/jquery-1.10.2.min.js'></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <script src='js/createByForm.js'></script>
+        <link rel="stylesheet" href="css/createByForm.css">
+    </head>
+    <body>
+        <div id="loadingScreen"></div>
+        <h1>Juno Youtrack Create Tickets By Form</h1>
+        
+        <h3>Hide fields</h3>
+        <div id='HideFields'>
+            <?php foreach( $customFieldList as $customField ): ?>
+                    <label><input type="checkbox" name="<?php echo $customField ?>" value="<?php echo $customField ?>"><?php echo $customField ?></label>
+            <?php endforeach; ?>
+        </div>
+        <form id='toBeImported' action="src/createByFormSubmit.php" method="post" enctype="multipart/form-data">
+            <table>
+                <tr>
+                    <th>project</th>
+                    <th>Assignee</th>
+                    <th>summary</th>
+                    <th>description</th>
+                    <?php foreach( $customFieldList as $customField ): ?>
+                            <th class="<?php echo str_replace(' ','', $customField) ?>column"><?php echo $customField; ?></th>
+                    <?php endforeach; ?>
+                </tr>
+                <tr class="hidden" >
+                    <?php $row = 0; ?>
+                    <?php require __DIR__ . '/createByFormRow.phtml'; ?>
+                </tr>
+                <tr row="1" >
+                    <?php $row = 1; ?>
+                    <?php require __DIR__ . '/createByFormRow.phtml'; ?>
+                </tr>
+            </table>
+            <button type="button" id="addRowToTable">add line to table</button>
+            <?php if($authenticationType === 'password'): ?>
+                <div>login user: <input type="text" name="user"></div><br>
+                <div>login password: <input type="password" name="password"></div><br>
+            <?php endif; ?>
+            <div>test mode: <input type="checkbox" name="test" value="true"></div><br>
+            <input type="submit" value="Submit"> 
+        </form>
+    </body>
+</html>
+

@@ -1,0 +1,22 @@
+<?php
+$youtrack_url = 'http://example.com'; // e.g. 'http://example.com/example' or  'http://example.com'
+$user = 'user';
+$password = 'password';
+
+// cache ajax project custom field lookups
+$cache = true; // true or false
+
+$authenticationType = 'cookie'; // cookie/password/file
+
+// cookie encryption key -- change this
+$cookieEncryptionKey = '2Bg4IghaISDJBcjpwcechHEsvfz4maISfMAQdcuSRKRxRfiqG2HtFLKCZ1GOsqrIOPXU0hjsEqfaMFdntt5TyQvsJwtfJ41aVBAO2Bg4IghaISDJBcjpwcechHEsvfz4maISfMAQdcuSRKRxRfiqG2HtFLKCZ1GOsqrIOPXU0hjsEqfaMFdntt5TyQvsJwtfJ41aVBAO';
+
+// export and log file  and folder permissions
+$folderPermissions = 0775;
+$filePermissions = 0660;
+
+// ---- create by form ----
+// 
+//ticket successful transfer leg
+$createByFormTransferLog = false; // true or false
+$createByFormTransferErrorLog = true; //true or false

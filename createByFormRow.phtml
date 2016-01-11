@@ -1,0 +1,63 @@
+<td>
+    <select class="projectselector" name="project-<?php echo $row ?>" >
+        <?php foreach( $projectList as $project ){ ?>
+            <option value="<?php echo $project ?>"><?php echo $project ?></option>
+        <?php } ?>
+    </select>
+</td>
+<td>
+    <select name="assignee-<?php echo $row ?>" >
+        <?php foreach( $projectAssignees as $assignee ){ ?>
+            <option value="<?php echo $assignee ?>"><?php echo $assignee ?></option>
+        <?php } ?>
+    </select>
+</td>
+<td><input type="text" name="summary-<?php echo $row ?>"></td>
+<td><textarea rows="4" cols="50" type="text" name="description-<?php echo $row ?>"></textarea></td>
+<?php foreach( $customFieldList as $customField ): ?>
+    <td class='<?php echo str_replace(' ','', $customField) ?>column'>
+        <?php $CustomFieldtype = preg_replace("/\[.*\]/", '', $customFieldTypeAndBundle[$customField]['fieldType'] ); ?>
+        <?php switch ( $CustomFieldtype ):
+            case 'enum': 
+            case 'state':  ?>
+                <?php $name = str_replace(' ','¬', $customField) ?>
+                <select name="<?php echo $name.'-'.$row ?>" >
+                    <option value=""></option>
+                        <?php foreach( $customFieldDetails[$customField] as $option ): ?>
+                            <option value="<?php echo $option ?>"><?php echo $option ?></option>
+                        <?php endforeach; ?>
+                </select>
+            <?php break; ?>
+            <?php case 'user':  ?>
+                <?php $name = str_replace(' ','¬', $customField) ?>
+                <select name="<?php echo $name.'-'.$row ?>" ></select>
+                    <option value=""></option>
+                    <?php foreach( $projectAssignees as $option ): ?>
+                        <option value="<?php echo $option ?>"><?php echo $option ?></option>
+                    <?php endforeach; ?>
+                </select>
+            <?php break; ?>
+            <?php case 'period':  ?>
+                <fieldset class="spinnerFieldset">
+                    <?php $name = str_replace(' ','¬', $customField); ?>
+                    <input class="spinner weekSpinner" value="0" group='<?php echo $name.'-'.$row ?>' >
+                    <label class="spinnerLabel">w</label>
+                    <input class="spinner daySpinner" value="0"  group='<?php echo $name.'-'.$row ?>' >
+                    <label class="spinnerLabel">d</label>
+                    <input class="spinner hourSpinner" value="0" group='<?php echo $name.'-'.$row ?>' >
+                    <label class="spinnerLabel">h</label>
+                    <input class="spinner minSpinner" value="0"  group='<?php echo $name.'-'.$row ?>' >
+                    <label class="spinnerLabel">m</label>
+                    <input class="hidden spinnerInput" name="<?php echo $name.'-'.$row ?>" >
+                </fieldset>
+            <?php break; ?>
+            <?php case 'date':  ?>
+                <?php $name = str_replace(' ','¬', $customField) ?>
+                <input type="text" class="datepicker" size="30" name="<?php echo $name.'-'.$row ?>" >
+            <?php break; ?>
+            <?php default: ?>
+                <?php $name = str_replace(' ','¬', $customField) ?>
+                <input name="<?php echo $name.'-'.$row ?>"  >
+        <?php endswitch; ?>                    
+    </td>
+<?php endforeach; ?>

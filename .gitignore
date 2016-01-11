@@ -1,0 +1,10 @@
+/vendor/
+/nbproject/
+/cache/
+*.swp
+.idea
+/uploads
+/export
+/log
+/import
+/customSettings.php

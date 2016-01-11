@@ -1,0 +1,3 @@
+project,summary,description,reporterName,Ticket Type,Priority,Team,Assignee,State,Estimation,Due Date,Scheduled Date,Billing Type,Billing Status,Quote Id,permittedGroup
+junomodules,Testing,"test desription text, with more text, and commas, commas",adamp-juno,Bug,Normal,Magento,paul-juno,In Progress,600,1404432000000,1405432000000,Internal,Paid,123,Developers
+junomodules,"Testing2, labeled, with random commas",More test description text,adamp-juno,Task,Major,"Frontend,Design",adamp-juno,Open,2000,1415612095543,1404532000000,Retainer,Invoiced,guifg,All Users

@@ -1,0 +1,18 @@
+<?php require_once __DIR__.'/src/getCustomSettings.php'; ?>
+<!DOCTYPE html>
+<html>
+<body>
+
+<form action="src/downloadAllProjectIssues.php" method="post" enctype="multipart/form-data">
+	<h1 style="text-align:center">Youtrack xml Project export</h1>
+	<div>project code: <input type="text" name="project"></div><br>
+	<div>filename: <input type="text" name="filename"></div><br>
+        <?php if($authenticationType === 'password'): ?>
+            <div>login user: <input type="text" name="user"></div><br>
+            <div>login password: <input type="password" name="password"></div><br>
+        <?php endif; ?>
+	<input type="submit" value="Submit">
+</form>
+
+</body>
+</html>
