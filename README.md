@@ -1,5 +1,7 @@
 [![Circle CI](https://circleci.com/gh/juno-media/youtrack-csv/tree/master.svg?style=svg)](https://circleci.com/gh/juno-media/youtrack-csv/tree/master)
 
+>>>>>>>>>>still in development and definately not stable or ready yet<<<<<<<<<<<
+
 #### installation
 make sure the 'uploads' and 'export' folder in the root with apache read & write permissions
 make sure the 'import' folder in the root with apache read permissions
