@@ -6,6 +6,7 @@
 make sure the 'uploads' and 'export' folder in the root with apache read & write permissions
 make sure the 'import' folder in the root with apache read permissions
 fill in he details in customSettings.php
+run composer install
 
 #### notes
 custom fields may not have a ¬ in the name for custom fields form to work
