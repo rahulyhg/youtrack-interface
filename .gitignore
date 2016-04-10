@@ -3,6 +3,7 @@
 /cache/
 *.swp
 .idea
+composer.lock
 /uploads
 /export
 /log

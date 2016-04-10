@@ -153,7 +153,7 @@ class getDataFromYoutrack {
         }
         
         foreach($youtrack_fields_list as $field){
-           // if dropdown field
+            // if dropdown field
             if( strpos($customFieldTypeAndBundle[$field]['fieldType'], '[') !== false ){
                 $fieldTypeShort = explode('[',$customFieldTypeAndBundle[$field]['fieldType']) [0];
                 $fieldTypeShort = strtolower($fieldTypeShort);
@@ -161,6 +161,10 @@ class getDataFromYoutrack {
                     $url = $youtrack_url.'/rest/admin/customfield/bundle/'.$customFieldTypeAndBundle[$field]['bundle'];
                     $bundleXml = $this->rest($url, 'get');
                     list($youtrack_fields[$field], $empty) = $this->extract_data_xml( $bundleXml, 'value'); 
+                }elseif($fieldTypeShort == 'ownedfield'){
+                    $url = $youtrack_url.'/rest/admin/customfield/ownedFieldBundle/'.$customFieldTypeAndBundle[$field]['bundle'];
+                    $bundleXml = $this->rest($url, 'get');
+                    list($youtrack_fields[$field], $empty) = $this->extract_data_xml( $bundleXml, 'ownedField'); 
                 }else{
                     $url = $youtrack_url.'/rest/admin/customfield/'.$fieldTypeShort.'Bundle/'.$customFieldTypeAndBundle[$field]['bundle'];
                     $bundleXml = $this->rest($url, 'get');
