@@ -104,6 +104,7 @@ class ApiWriter implements WriterInterface
         //----------
         // form http://confluence.jetbrains.com/display/YTD6/Import+Issues
         // PUT /rest/import/{project}/issues?{assigneeGroup}&{test}
+        // requires admin level permissions
         //----------
         $this->sendToTracker($Myxml,$item);
         //

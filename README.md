@@ -8,5 +8,8 @@
 * fill in he details in customSettings.php
 * run composer install
 
+#### current limitations
+can only import issues using users with Youtrack admin permissions
+
 #### notes
 custom fields may not have a ¬ in the name for custom fields form to work
