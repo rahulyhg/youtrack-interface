@@ -55,9 +55,22 @@ class createByFormSubmit{
             }
             $workflow = new ApiWriter;
             try {
+                // requires youtrack admin permissions
                 $workflow->updateTracker($singlePost);
                 $posts[$postskey] = array_merge( ['upload success' => 'success'] , $posts[$postskey] );
             } catch (Exception $e) {
+                if( $e->getResponse() ) {
+                    $HTTPResponseStatusCode = $e->getResponse()->getStatusCode();
+                    // if previous ticket import permission issues, possibly not admin user
+                    if($HTTPResponseStatusCode === '403'){
+                        if(null !== $authenticationAndSecurity->getPost('test')){
+                            $workflow->stdUserUpdateTracker($singlePost);
+                        }else{
+                            echo 'Only admin upload testing mode is availible';
+                        }
+                    }
+                }
+                
                 error_log($e);
                 echo 'IMPORT ISSUE FAILED:: unable to import ticket to '.$singlePost['project'].' with summary "'.$singlePost['summary'].'"'.$GLOBALS["newline"];
                 $posts[$postskey] = array_merge( ['upload success' => 'failed'] , $posts[$postskey] );

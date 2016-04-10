@@ -36,6 +36,13 @@ class ApiWriter implements WriterInterface
         }else{
             $numberInProject = $item['numberInProject'];
         }
+        // remove date fields that are not set 
+        foreach($item as $key => $value ){
+            if($value == 'NaN'){
+                unset($item[$key]); 
+            }
+        }
+        
         // php xml writer documentation
         //http://board.phpbuilder.com/showthread.php?10356853-A-quick-PHP-XMLWriter-Class-Tutorial-%28XML-amp-RSS%29
         //
@@ -63,7 +70,7 @@ class ApiWriter implements WriterInterface
                         $this->xml->startElement('field');
                         $this->xml->writeAttribute( 'name', trim($key) );
                         //
-                        if($key == 'description' or $key == 'summary'){                       
+                        if($key == 'description' or $key == 'summary'){
                           $value_split = [$value];
                         }else{
                           $value_split = explode(',',$value);
@@ -111,7 +118,35 @@ class ApiWriter implements WriterInterface
         echo $item['project'].'-'.$numberInProject.':   '.$item['summary'];
         echo $GLOBALS["newline"];
     }
-        
+    
+    function stdUserCreateIssue($item){
+        global $youtrack_url;
+        $authenticationAndSecurity = new authenticationAndSecurity;
+        $getDataFromYoutrack = new getDataFromYoutrack;
+        //https://confluence.jetbrains.com/display/YTD65/Create+New+Issue
+        // PUT /rest/issue?{project}&{summary}&{description}&{attachments}&{permittedGroup}
+        $url = $youtrack_url.'/rest/issue?project='.$item["project"].'&summary='.$item['summary'].'&description='.$item['description'];
+        $getDataFromYoutrack->rest($url,'put');
+        echo 'created: '.$item['project'].'-'.$numberInProject.':   '.$item['summary'];
+        echo $GLOBALS["newline"];
+    }
+    
+    function stdUserUpdateIssue($item){
+        // https://confluence.jetbrains.com/display/YTD65/Apply+Command+to+an+Issue
+    }
+    
+    // update tracker if user, used only when the submiting user is not an admin
+    function stdUserUpdateTracker(array $item){
+        try {
+            stdUserCreateIssue($item);
+            stdUserUpdateIssue($item);
+        } catch (Exception $e) {   
+            error_log($e);
+            echo 'IMPORT ISSUE FAILED:: unable to import ticket to '.$singlePost['project'].' with summary "'.$singlePost['summary'].'"'.$GLOBALS["newline"];
+            $posts[$postskey] = array_merge( ['upload success' => 'failed'] , $posts[$postskey] );
+        }
+    }
+    
     /**
      * Prepare the writer before writing the items
      *
