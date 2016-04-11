@@ -114,6 +114,7 @@ $(document).ready(function(){
     }
     
     function updateProjectRowFromSelector(projectSelector){
+
         var name = $(projectSelector).attr('name');
         $('#loadingScreen').show();
         var project = $(projectSelector).val();
@@ -144,7 +145,7 @@ $(document).ready(function(){
                 }
                 updateField('#toBeImported table tr[row="' + row + '"] td select[name="assignee-'+row+'"', 'assignee', result);
 
-                updateUi('tr[row="' + row + '"]');
+               // updateUi('tr[row="' + row + '"]'); // not needed i dont think. needs testing
                 $('#loadingScreen').hide();
             },
             error: function(result){
@@ -187,6 +188,7 @@ $(document).ready(function(){
         $('input[name="'+group+'"]').val(val);
     }
     function updateUi(selector){
+
         var selector = selector || '';
         $("#toBeImported table "+selector+" .weekSpinner" ).spinner({
           spin: function( event, ui ) {
@@ -229,7 +231,7 @@ $(document).ready(function(){
             }
           }
         });
-        $("#toBeImported table "+selector+' .spinner').spinner({          
+        $("#toBeImported table "+selector+' .spinner').spinner({
             stop:function(e,ui){
                 updateSpinnerValue(this);
             }
@@ -277,7 +279,7 @@ $(document).ready(function(){
                     $("#toBeImported table .minSpinner[group='"+group+"']").spinner("value",m);
                     isValid = true;
                 }else{
-                    isValid = false;    
+                    isValid = false;
                 }
             }else{
                 isValid = false;
@@ -288,7 +290,7 @@ $(document).ready(function(){
         });
         $("#toBeImported table "+selector+" .datepicker" ).datepicker({dateFormat: 'yy-mm-dd' });
         $('#toBeImported table '+selector+' select.projectselector').change(function(){
-            updateProjectRowFromSelector(this);
+           updateProjectRowFromSelector(this);
             updateHiddenRow(this);
         });
     }
