@@ -180,7 +180,7 @@ $(document).ready(function(){
 
     function addTicketForm(){
         var html = $('form.template').html();
-        $('div.forms').prepend('<form action="src/timeTrackerSubmit.php" method="post" enctype="multipart/form-data">'+html+'</form>');
+        $('div.forms').append('<form action="src/timeTrackerSubmit.php" method="post" enctype="multipart/form-data">'+html+'</form>');
     }
     $('body').on('click','.addTicketForm',function(){
        addTicketForm();
@@ -314,7 +314,7 @@ $(document).ready(function(){
             if(i>0){
                 addTicketForm();
             }
-            var form = $('.forms form:first');
+            var form = $('.forms form:last');
             form.find('.projectheader .projectselector').val(project);
             form.find('.projectheader .ticketnumber').val(ticketNo);
             updateProject(form, function(){
