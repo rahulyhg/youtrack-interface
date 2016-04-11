@@ -225,16 +225,27 @@ class getDataFromYoutrack {
     
     function getTicketSummary($ticket){
         global $youtrack_url;
+        $ticketSummary = '';
         $url = $youtrack_url . '/rest/issue/'.$ticket;
-        $ticketXml = $this->rest($url,'get');
-        list($ticketSummary, $empty) = $this->extract_data_xml( $ticketXml,'field', '',[], $whereAttr=['name'=>'summary']);
+        try {
+            $ticketXml = $this->rest($url, 'get');
+            list($ticketSummary, $empty) = $this->extract_data_xml( $ticketXml,'field', '',[], $whereAttr=['name'=>'summary']);
+        } catch (Exception $e) {
+            error_log($e);
+        }
         return $ticketSummary;
     }
     function getTicketWorkTypes($project){
         global $youtrack_url;
+        $worktypes = '';
+
         $url = $youtrack_url . '/rest/admin/project/'.$project.'/timetracking/worktype';
-        $workTypeXml = $this->rest($url,'get');
-        list($workTypes, $empty) = $this->extract_data_xml( $workTypeXml,'name');
+        try {
+            $workTypeXml = $this->rest($url, 'get');
+            list($workTypes, $empty) = $this->extract_data_xml($workTypeXml, 'name');
+        } catch( Exception $e ){
+            error_log($e);
+        }
         return $workTypes;
     }
 }
