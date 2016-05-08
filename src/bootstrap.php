@@ -121,25 +121,72 @@ class ApiWriter implements WriterInterface
     
     function stdUserCreateIssue($item){
         global $youtrack_url;
-        $authenticationAndSecurity = new authenticationAndSecurity;
         $getDataFromYoutrack = new getDataFromYoutrack;
         //https://confluence.jetbrains.com/display/YTD65/Create+New+Issue
         // PUT /rest/issue?{project}&{summary}&{description}&{attachments}&{permittedGroup}
         $url = $youtrack_url.'/rest/issue?project='.$item["project"].'&summary='.$item['summary'].'&description='.$item['description'];
-        $getDataFromYoutrack->rest($url,'put');
-        echo 'created: '.$item['project'].'-'.$numberInProject.':   '.$item['summary'];
+        $res = $getDataFromYoutrack->restResponse($url, 'put');
+        $res = $res->getResponse();
+        $location = $res->getHeader('location') ;
+        foreach($location as $_location){
+           $singleLocation = $_location;
+        }
+        $ticketRef = explode('/',$singleLocation);
+        $ticketRef = $ticketRef[sizeof($ticketRef) - 1];
+        echo 'created: '.$ticketRef.':   '.$item['summary'];
         echo $GLOBALS["newline"];
+        return $ticketRef;
     }
-    
-    function stdUserUpdateIssue($item){
+    /**
+     * 
+     * @global type $youtrack_url
+     * @param string $issueRef
+     * @param array $item
+     */
+    function stdUserUpdateIssue($issueRef,$item){
+        global $youtrack_url;
+        $authenticationAndSecurity = new authenticationAndSecurity;
+        $getDataFromYoutrack = new getDataFromYoutrack;
+        $customFieldsDetails = $getDataFromYoutrack->getCustomFieldTypeAndBundle('',$item['project']);
         // https://confluence.jetbrains.com/display/YTD65/Apply+Command+to+an+Issue
+        // POST /rest/issue/{issue}/execute?{command}&{comment}&{group}&{disableNotifications}&{runAs} 
+        $cmd = '';
+        foreach($item as $key => $value){
+            switch (trim($key)){
+                case 'project':
+                case 'summary':
+                case 'description':
+                    break;
+                default:
+                    // convert into required date format from the xml's import required timestamp format ... youtrack api inconsistant
+                    if( !isset($customFieldsDetails[$key]) ){
+                        // for asssignee, Scheduled Date, Invoice Id, reporterName
+                      //  $cmd .= ' '.$key.' '.$value;
+                    }elseif($customFieldsDetails[$key]['fieldType'] === 'date' ){
+                        $value = substr($value, 0, -3);
+                        $value = date('Y-m-d', $value);
+                        $cmd .= ' '.$key.' '.$value;
+                    }elseif($customFieldsDetails[$key]['fieldType'] === 'string' ){
+                        $cmd .= ' '.$key.' "'.$value.'"';
+                    }else{
+                        $cmd .= ' '.$key.' '.$value;
+                    }
+                    break;
+            }
+        }
+        $url = $youtrack_url.'/rest/issue/'.$issueRef.'/execute?command='.$cmd;
+        
+       $url = 'http://tracker.juno.is/youtrack/rest/issue/test-40/execute?command=State Open';
+        $getDataFromYoutrack->rest($url,'post');//,['Content-Type'=>'application/x-www-form-urlencoded']);
+        echo 'updated: '.$issueRef;
+        echo $GLOBALS["newline"];
     }
     
     // update tracker if user, used only when the submiting user is not an admin
     function stdUserUpdateTracker(array $item){
         try {
-            stdUserCreateIssue($item);
-            stdUserUpdateIssue($item);
+            $issueRef = $this->stdUserCreateIssue($item);
+            $this->stdUserUpdateIssue($issueRef,$item);
         } catch (Exception $e) {   
             error_log($e);
             echo 'IMPORT ISSUE FAILED:: unable to import ticket to '.$singlePost['project'].' with summary "'.$singlePost['summary'].'"'.$GLOBALS["newline"];
