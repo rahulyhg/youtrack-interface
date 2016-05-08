@@ -156,19 +156,23 @@ class ApiWriter implements WriterInterface
                 case 'project':
                 case 'summary':
                 case 'description':
-                case 'spent time':
+                case 'Spent time':
+                case 'reporterName':
+                    break;
+                case 'assignee':
+                    $cmd .= ' '.$key.' '.$value;
                     break;
                 default:
                     // convert into required date format from the xml's import required timestamp format ... youtrack api inconsistant
                     if( !isset($customFieldsDetails[$key]) ){
-                        // for asssignee, Scheduled Date, Invoice Id, reporterName
+                        // for Scheduled Date, Invoice Id which dont seem to exist for this project so why is itg loading in form????
                       //  $cmd .= ' '.$key.' '.$value;
                     }elseif($customFieldsDetails[$key]['fieldType'] === 'date' ){
                         $value = substr($value, 0, -3);
                         $value = date('Y-m-d', $value);
-                     //   $cmd .= ' '.$key.' '.$value;
+                        $cmd .= ' '.$key.' '.$value;
                     }elseif($customFieldsDetails[$key]['fieldType'] === 'string' ){
-                       // $cmd .= ' '.$key.' "'.$value.'"';
+                        $cmd .= ' '.$key.' "'.$value.'"';
                     }else{
                         $cmd .= ' '.$key.' '.$value;
                     }
@@ -191,7 +195,7 @@ class ApiWriter implements WriterInterface
             $this->stdUserUpdateIssue($issueRef,$item);
         } catch (Exception $e) {   
             error_log($e);
-            echo 'IMPORT ISSUE FAILED:: unable to import ticket to '.$singlePost['project'].' with summary "'.$singlePost['summary'].'"'.$GLOBALS["newline"];
+            echo 'IMPORT ISSUE FAILED:: unable to import ticket to '.$item['project'].' with summary "'.$item['summary'].'"'.$GLOBALS["newline"];
             $posts[$postskey] = array_merge( ['upload success' => 'failed'] , $posts[$postskey] );
         }
     }

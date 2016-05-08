@@ -10,6 +10,7 @@ if(!isset($customFieldList)){
 }
 
 $customFieldTypeAndBundle = $getDataFromYoutrack->getCustomFieldTypeAndBundle($customFieldList, $project);
+unset($customFieldTypeAndBundle['Spent time']);
 $response = $customFieldTypeAndBundle;
 
 $response['assignee']=[
