@@ -156,6 +156,7 @@ class ApiWriter implements WriterInterface
                 case 'project':
                 case 'summary':
                 case 'description':
+                case 'spent time':
                     break;
                 default:
                     // convert into required date format from the xml's import required timestamp format ... youtrack api inconsistant
@@ -165,9 +166,9 @@ class ApiWriter implements WriterInterface
                     }elseif($customFieldsDetails[$key]['fieldType'] === 'date' ){
                         $value = substr($value, 0, -3);
                         $value = date('Y-m-d', $value);
-                        $cmd .= ' '.$key.' '.$value;
+                     //   $cmd .= ' '.$key.' '.$value;
                     }elseif($customFieldsDetails[$key]['fieldType'] === 'string' ){
-                        $cmd .= ' '.$key.' "'.$value.'"';
+                       // $cmd .= ' '.$key.' "'.$value.'"';
                     }else{
                         $cmd .= ' '.$key.' '.$value;
                     }
@@ -176,8 +177,8 @@ class ApiWriter implements WriterInterface
         }
         $url = $youtrack_url.'/rest/issue/'.$issueRef.'/execute?command='.$cmd;
         
-       $url = 'http://tracker.juno.is/youtrack/rest/issue/test-40/execute?command=State Open';
-        $getDataFromYoutrack->rest($url,'post');//,['Content-Type'=>'application/x-www-form-urlencoded']);
+     //  $url = 'http://tracker.juno.is/youtrack/rest/issue/test-57/execute?command= State Open';
+        $getDataFromYoutrack->rest($url,'post');
         echo 'updated: '.$issueRef;
         echo $GLOBALS["newline"];
     }
@@ -185,7 +186,8 @@ class ApiWriter implements WriterInterface
     // update tracker if user, used only when the submiting user is not an admin
     function stdUserUpdateTracker(array $item){
         try {
-            $issueRef = $this->stdUserCreateIssue($item);
+          //  $issueRef = $this->stdUserCreateIssue($item);
+            $issueRef = 'test-57';
             $this->stdUserUpdateIssue($issueRef,$item);
         } catch (Exception $e) {   
             error_log($e);

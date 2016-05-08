@@ -3,6 +3,8 @@ $getDataFromYoutrack = new getDataFromYoutrack;
 
 $customFieldList = [];
 $customFieldListFull = $getDataFromYoutrack->get_custom_fields();
+$key = array_search('Spent time', $customFieldListFull);
+unset($customFieldListFull[$key]);
 foreach( $customFieldListFull as $customField ):
     if( !isset($createByFormSettings['IgnoreCustomFields']) || !in_array($customField, $createByFormSettings['IgnoreCustomFields']) ):
         array_push( $customFieldList, $customField);
