@@ -230,22 +230,20 @@ $(document).ready(function(){
      * saves form's data into local storage for later retrieval
      */
     function storeFormData(){
+        var array = createDataArray();
+        var jsonString = JSON.stringify(array);
+        // Store
         if (typeof (Storage) !== "undefined") {
-            var array = createDataArray();
-            var jsonString = JSON.stringify(array);
-            // Store
             localStorage.setItem("json", jsonString);
-            storeFormDataOnServer(jsonString);
-        } else {
-            alert('local storage feature unavailible with this browser');
         }
+        storeFormDataOnServer(jsonString);
     }
     $('.forms').on('change', 'form', function(){
         storeFormData();
     });
    
     /*
-     * ajax submit & standard submit disbled
+     * ajax submit & standard submit
      */
     $('.ajaxSubmit').click(function(){
         var form = $(this).closest('form');
