@@ -253,8 +253,8 @@ $(document).ready(function(){
                 type: form.attr('method'),
                 url: form.attr('action'),
                 data: form.serialize(),
-                success: function (data) {
-                    data = JSON.parse(data);
+                success: function (rawData) {
+                    var data = JSON.parse(rawData);
                     $.each(data, function(index, timeRow) {
                         if(timeRow.success){
                             form.find('table tr td .date[name="'+index+'-date"]')
