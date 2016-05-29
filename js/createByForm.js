@@ -102,7 +102,9 @@ $(document).ready(function(){
     function removeUnwantedFields(customFieldData,row){
         var classList = [];
         $("#toBeImported table tr[row='" + row + "'] td").each(function(){
-            classList.push($(this).attr('class'));
+            if($(this).attr('class')){
+                classList.push($(this).attr('class'));
+            }
         });
         for ( var fieldName in customFieldData ){
             var fieldNameNoSpaces = fieldName.replace(/\ /g,'');
