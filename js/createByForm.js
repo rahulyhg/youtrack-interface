@@ -52,6 +52,31 @@ $(document).ready(function(){
     $('#HideFields input').change(function(){
         hideOrShowField( $(this) );
     });
+    $('#HideFields').bind('DOMNodeInserted DOMNodeRemoved', function() { 
+        $('#HideFields input').change(function(){
+            hideOrShowField( $(this) );
+        });
+    });
+
+    function updateHideFieldsCheckboxes(){
+        $('form#toBeImported th').each(function(){
+            var name = $(this).text();
+            
+            switch(name) {
+                case 'project':
+                case 'Assignee':
+                case 'summary':
+                case 'description': 
+                    return;
+                    break;
+            } 
+            
+            // if checkbox dosnt exist
+            if ( !$( '#HideFields input[name="'+name+'"]' ).length ) {
+                $('#HideFields').append('<label><input type="checkbox" name="'+name+'" value="'+name+'">'+name+'</label>');
+            }
+        });
+    }
     
     function elementExists(selector,children){
         if( children === true){
@@ -146,6 +171,7 @@ $(document).ready(function(){
                     }
                 }
                 updateField('#toBeImported table tr[row="' + row + '"] td select[name="assignee-'+row+'"', 'assignee', result);
+                updateHideFieldsCheckboxes();
 
                // updateUi('tr[row="' + row + '"]'); // not needed i dont think. needs testing
                 $('#loadingScreen').hide();
