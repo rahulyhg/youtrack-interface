@@ -247,8 +247,9 @@ $(document).ready(function(){
      */
     $('.ajaxSubmit').click(function(){
         var form = $(this).closest('form');
-        form.submit(function (ev) {
-            ev.preventDefault();
+        form.submit(function (e) {
+           e.preventDefault();
+           e.stopImmediatePropagation();
             $.ajax({
                 type: form.attr('method'),
                 url: form.attr('action'),

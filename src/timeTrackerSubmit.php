@@ -95,16 +95,10 @@ class timeTrackerSubmit{
      */
     function postData($content,$ticketId){
         try {
-            $success = $this->updateYoutrack($content, $ticketId);
-            if($success){
-                echo "work item import success <br>";
-            }else{
-                echo "work item import failed <br>";
-            }
-            return $success;
+            return $this->updateYoutrack($content, $ticketId);
         } catch (Exception $e) {
             error_log($e);
-            echo 'IMPORT ISSUE FAILED:: unable to import timing to ticket '.$ticketId."<br>";
+            error_log('IMPORT ISSUE FAILED:: unable to import timing to ticket '.$ticketId."<br>");
             return false;
         }
     }
@@ -121,6 +115,7 @@ class timeTrackerSubmit{
         return $organisedPosts;
     }
 }
+
 $timeTrackerSubmit = new timeTrackerSubmit;
 $response = $timeTrackerSubmit->submit();
 echo json_encode($response);
