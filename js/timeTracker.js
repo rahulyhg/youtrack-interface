@@ -316,23 +316,23 @@ $(document).ready(function(){
             var form = $('.forms form:last');
             form.find('.projectheader .projectselector').val(project);
             form.find('.projectheader .ticketnumber').val(ticketNo);
-            updateProject(form, function(){
-                var ticketLength = Object.keys(ticket).length;
-                for( var j = ticketLength - 1; j >= 0 ; j-- ) {
-                    if( ticket[j] !== undefined ) {
-                        var timeRow = ticket[j];
-                        if( j < ticketLength - 1 ){
-                            addTimeRow(form);
-                        }
-                        form.find('table tr:first td .date').val(timeRow.date);
-                        form.find('table tr:first td .start').val(timeRow.start);
-                        form.find('table tr:first td .end').val(timeRow.end);
-                        form.find('table tr:first td .duration').val(timeRow.duration);
-                        form.find('table tr:first td .description').val(timeRow.description);
-                        form.find('table tr:first td .type').val(timeRow.type);
-                    };
-                }
-            });
+            var j = 0;
+            for (var key in ticket) {
+                if( ticket[key] !== undefined ) {
+                    var timeRow = ticket[key];
+                    if( j > 0 ){
+                        addTimeRow(form);
+                    }
+                    form.find('table tr:first td .date').val(timeRow.date);
+                    form.find('table tr:first td .start').val(timeRow.start);
+                    form.find('table tr:first td .end').val(timeRow.end);
+                    form.find('table tr:first td .duration').val(timeRow.duration);
+                    form.find('table tr:first td .description').val(timeRow.description);
+                    form.find('table tr:first td .type').val(timeRow.type);
+                };
+                j++;
+            }
+            updateProject(form);
             i++;
         });
     }
