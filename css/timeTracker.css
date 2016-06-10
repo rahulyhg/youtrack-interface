@@ -1,0 +1,12 @@
+#wrapper{
+    margin:20px;
+}
+.forms > form {
+    border: 2px solid #0095dd;
+    margin: 50px auto;
+    padding: 10px;
+}
+.submitSuccess.form-control[readonly]{
+    background-color: #d9edf7;
+    text-decoration: line-through;
+}

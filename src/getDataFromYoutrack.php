@@ -25,13 +25,13 @@ class getDataFromYoutrack {
         } elseif($postOrGet === 'post') {
            $request = $client->post($url, $headers , $body, $options );
         } elseif($postOrGet === 'put') {
-           $request = $client->put($url, null , $body, $options );
+           $request = $client->put($url, $headers , $body, $options );
         }
-        if( isset($headers) ){
-            foreach($headers as $key => $value){
-                $request->addHeader($key,$value);
-            }
-        }
+//        if( $postOrGet === 'put' && isset($headers) ){
+//            foreach($headers as $key => $value){
+//                $request->addHeader($key,$value);
+//            }
+//        }
         if($authentication['type'] === 'cookie'){
             foreach($authentication['details'] as $singleCookie){
                 foreach($singleCookie as $cookieName => $cookieValue){
@@ -56,7 +56,7 @@ class getDataFromYoutrack {
         if( !$cached  ){
             $res = $this->restResponse($url, $postOrGet, $headers, $body, $options);
             $res = $res->getResponse();
-            $response = $res->getBody();
+            $response = trim($res->getBody());
             if( $GLOBALS['cache'] && $postOrGet == 'get' ){
                 $cacheClass->createCache($url, $response);
             }
@@ -76,11 +76,15 @@ class getDataFromYoutrack {
             if ($reader->nodeType == XMLReader::ELEMENT) {
                 $exp = $reader->expand();
                 if ($exp->nodeName == $node){
-                    $continue = true;
-                    foreach ( $whereAttr as $attr => $val ){
-                        if( $exp->getAttribute($attribute) == $val ){
-                            $continue = false;
+                    if(count($whereAttr)>0){
+                        $continue = false;
+                        foreach ( $whereAttr as $attr => $val ){
+                            if( $exp->getAttribute($attr) == $val ){
+                                $continue = true;
+                            }
                         }
+                    }else{
+                        $continue = true;
                     }
                     if( $continue ){
                         if( $attribute === ''){
@@ -223,5 +227,29 @@ class getDataFromYoutrack {
         return $user_list;
     }
     
-    
+    function getTicketSummary($ticket){
+        global $youtrack_url;
+        $ticketSummary = '';
+        $url = $youtrack_url . '/rest/issue/'.$ticket;
+        try {
+            $ticketXml = $this->rest($url, 'get');
+            list($ticketSummary, $empty) = $this->extract_data_xml( $ticketXml,'field', '',[], $whereAttr=['name'=>'summary']);
+        } catch (Exception $e) {
+            error_log($e);
+        }
+        return $ticketSummary;
+    }
+    function getTicketWorkTypes($project){
+        global $youtrack_url;
+        $worktypes = '';
+
+        $url = $youtrack_url . '/rest/admin/project/'.$project.'/timetracking/worktype';
+        try {
+            $workTypeXml = $this->rest($url, 'get');
+            list($workTypes, $empty) = $this->extract_data_xml($workTypeXml, 'name');
+        } catch( Exception $e ){
+            error_log($e);
+        }
+        return $workTypes;
+    }
 }

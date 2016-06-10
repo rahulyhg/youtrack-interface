@@ -1,0 +1,37 @@
+<?php require_once __DIR__.'/src/timeTracker.php'; ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <script src='js/jquery-1.10.2.min.js'></script>
+    <script src='js/timeTracker.js'></script>
+    <script src="js/1.11.4jquery-ui.js"></script>
+    <link rel="stylesheet" href="css/timeTracker.css">
+    <link rel="stylesheet" href="css/1.11.4jquery-ui.css">
+    <!-- time picker -->
+    <link href="js/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="js/clockpicker/dist/bootstrap-clockpicker.min.css">
+    <script type="text/javascript" src="js/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
+    <style>
+        .input-group .form-control {
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1 style="text-align:center">Time Tracker</h1>
+
+<div id="wrapper">
+    <button class="addTicketForm" type="button">Add Ticket</button>
+
+    <?php $hidden = true; ?>
+    <?php require __DIR__ . '/timeTrackerForm.phtml'; ?>
+
+    <div class="forms">
+        <?php $hidden = false; ?>
+        <?php require __DIR__ . '/timeTrackerForm.phtml'; ?>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,6 +1,4 @@
 <?php
-require_once __DIR__.'/authenticationAndSecurity.php';
-
 class authenticationAndSecurity {
     function setCookie( $name, $value, $expire = 0, $path = '/'){
         $encryptedValue = $this->encryptDecrypt('encrypt', $value);
@@ -102,7 +100,7 @@ class authenticationAndSecurity {
         $keys = array_keys($_POST);
         $post = array_map(
            function ($key) {
-               return filter_input(INPUT_GET, $key);
+               return filter_input(INPUT_POST, $key);
            },
            $keys
         );

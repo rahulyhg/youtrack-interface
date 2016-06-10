@@ -1,11 +1,12 @@
+*.swp
 /vendor/
 /nbproject/
 /cache/
-*.swp
-.idea
+/.idea
 composer.lock
 /uploads
 /export
 /log
 /import
+/timings
 /customSettings.php
