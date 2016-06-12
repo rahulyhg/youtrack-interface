@@ -124,19 +124,28 @@ $(document).ready(function(){
         }
     }
     
+    /**
+     * disables and puts a line through fields not valid for current project's tickets
+     * 
+     * @param {array} customFieldData field data from youtrack 
+     * @param {int} row row in the form
+     */
     function removeUnwantedFields(customFieldData,row){
         var classList = [];
         $("#toBeImported table tr[row='" + row + "'] td").each(function(){
             if($(this).attr('class')){
-                classList.push($(this).attr('class'));
+                classList[$(this).attr('class')]=$(this).attr('class');
             }
         });
+        // remove valid fields from remove list
         for ( var fieldName in customFieldData ){
             var fieldNameNoSpaces = fieldName.replace(/\ /g,'');
-            classList.splice(fieldNameNoSpaces, 1);
+            if(classList[fieldNameNoSpaces+'column']){
+                delete classList[fieldNameNoSpaces+'column'];
+            }
         }
-        for (i = 0; i < classList.length; i++){
-            $("#toBeImported table tr[row='" + row + "'] td."+classList[i]).html('<hr/>');
+        for ( var singleClass in classList){
+            $("#toBeImported table tr[row='" + row + "'] td."+singleClass).html('<hr/>');
         }
     }
     
