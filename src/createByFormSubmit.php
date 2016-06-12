@@ -68,11 +68,11 @@ class createByFormSubmit{
                             echo "Only admin upload testing mode is availible <br>";
                         }
                     }
-                }
-                
+                }else{
                 error_log($e);
-                echo 'IMPORT ISSUE FAILED:: unable to import ticket to '.$singlePost['project'].' with summary "'.$singlePost['summary'].'"'.$GLOBALS["newline"];
-                $posts[$postskey] = array_merge( ['upload success' => 'failed'] , $posts[$postskey] );
+                    echo 'IMPORT ISSUE FAILED:: unable to import ticket to '.$singlePost['project'].' with summary "'.$singlePost['summary'].'"'.$GLOBALS["newline"];
+                    $posts[$postskey] = array_merge( ['upload success' => 'failed'] , $posts[$postskey] );
+                }
             }
         }
         return $posts;

@@ -145,7 +145,6 @@ class ApiWriter implements WriterInterface
      */
     function stdUserUpdateIssue($issueRef,$item){
         global $youtrack_url;
-        $authenticationAndSecurity = new authenticationAndSecurity;
         $getDataFromYoutrack = new getDataFromYoutrack;
         $customFieldsDetails = $getDataFromYoutrack->getCustomFieldTypeAndBundle('',$item['project']);
         // https://confluence.jetbrains.com/display/YTD65/Apply+Command+to+an+Issue
@@ -170,7 +169,9 @@ class ApiWriter implements WriterInterface
                     }elseif($customFieldsDetails[$key]['fieldType'] === 'date' ){
                         $value = substr($value, 0, -3);
                         $value = date('Y-m-d', $value);
-                        $cmd .= ' '.$key.' '.$value;
+                        if($value){
+                            $cmd .= ' '.$key.' '.$value;
+                        }
                     }elseif($customFieldsDetails[$key]['fieldType'] === 'string' ){
                         $cmd .= ' '.$key.' "'.$value.'"';
                     }else{
@@ -190,8 +191,7 @@ class ApiWriter implements WriterInterface
     // update tracker if user, used only when the submiting user is not an admin
     function stdUserUpdateTracker(array $item){
         try {
-          //  $issueRef = $this->stdUserCreateIssue($item);
-            $issueRef = 'test-57';
+           $issueRef = $this->stdUserCreateIssue($item);
             $this->stdUserUpdateIssue($issueRef,$item);
         } catch (Exception $e) {   
             error_log($e);
