@@ -290,7 +290,7 @@ $(document).ready(function(){
                     localStorage.setItem("BACKUP-json", jsonString);
                     // create new json
                     storeFormData();
-                    alert('ajax finished: successful submitions are striked through');
+                    alert("ajax finished: successful submissions are striked through.\n Please note date,duration and type are required for a time to be submitted");
                 }
             });
         });
