@@ -124,7 +124,7 @@ $(document).ready(function(){
         $.ajax({url: "src/ticketAjax.php?ticket="+ticket, dataType: "json",
             success: function(result){
                 $(form).find('.projectheader .ticketsummary').html(result['summary']);
-                var html = '<option value=""></option>';
+                var html = '<option value="">type...</option>';
                 for (i = 0; i < result['workTypes'].length; i++){
                     html += '<option value="'+result['workTypes'][i]+'">'+result['workTypes'][i]+'</option>';
                 }
