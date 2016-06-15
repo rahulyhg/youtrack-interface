@@ -10,3 +10,12 @@
     background-color: #d9edf7;
     text-decoration: line-through;
 }
+.form-control.type{
+    color: #999;
+}
+.form-control.type > option:first-child{
+    color: #999;
+}
+.form-control.type > option{
+    color: black;
+}
