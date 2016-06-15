@@ -10,6 +10,10 @@
     background-color: #d9edf7;
     text-decoration: line-through;
 }
+.projectselector.form-control {
+    display: inline;
+    width: auto;
+}
 .form-control.type{
     color: #999;
 }

@@ -1,6 +1,6 @@
 <form <?php if($hidden){ echo 'class="hidden template" '; } ?> action="src/timeTrackerSubmit.php" method="post" enctype="multipart/form-data">
     <div class="projectheader">
-        <select class="projectselector"  autocomplete="off" name="project" >
+        <select class="projectselector form-control"  autocomplete="off" name="project" >
             <option value=""></option>
             <?php foreach( $projectList as $project ){ ?>
                 <option value="<?php echo $project ?>"><?php echo $project ?></option>
