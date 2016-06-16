@@ -23,3 +23,13 @@
 .form-control.type > option{
     color: black;
 }
+.buttonsWrapper {
+    margin: 5px 0;
+    padding: 5px 0;
+}
+.forms > form td {
+    padding: 0 5px 3px 0;
+}
+.deleteTimeRow {
+    margin: 0 -5px 0 0;
+}
