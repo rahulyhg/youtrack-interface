@@ -1,5 +1,6 @@
 <form <?php if($hidden){ echo 'class="hidden template" '; } ?> action="src/timeTrackerSubmit.php" method="post" enctype="multipart/form-data">
     <div class="projectheader">
+        <button class="deleteTimeForm" type="button">Remove</button>
         <select class="projectselector form-control"  autocomplete="off" name="project" >
             <option value=""></option>
             <?php foreach( $projectList as $project ){ ?>

@@ -186,6 +186,18 @@ $(document).ready(function(){
        addTicketForm();
     });
     
+    function removeTicketForm(form){
+        $(form).remove();
+        var formCount = $('.forms').children('form').length;
+        if(formCount === 0){
+            addTicketForm();
+        }
+    }
+    $('.forms').on('click', '.deleteTimeForm', function() {
+        var form = $(this).closest('form');
+        removeTicketForm(form);
+    });
+    
     function createDataArray(){
         var dataArray = {};
         var i = 0;
