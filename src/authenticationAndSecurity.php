@@ -54,7 +54,7 @@ class authenticationAndSecurity {
         setCookie($reporterCookieName, "", time() - 3600, '/');
     }
     function getAuthentication(){
-        if( null !== $GLOBALS['authenticationType'] ){
+        if( $GLOBALS['authenticationType'] === null ){
             $authenticationType = 'cookie';
         }else{
             $authenticationType = $GLOBALS['authenticationType'];
