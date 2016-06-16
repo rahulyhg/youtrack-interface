@@ -245,8 +245,8 @@ $(document).ready(function(){
     /*
      * ajax submit & standard submit
      */
-    $('.ajaxSubmit').click(function(){
-        var form = $(this).closest('form');
+    $('.forms').on('click', '.ajaxSubmit', function() {
+       var form = $(this).closest('form');
         form.submit(function (e) {
            e.preventDefault();
            e.stopImmediatePropagation();
