@@ -14,9 +14,6 @@
     display: inline;
     width: auto;
 }
-.form-control.type{
-    color: #999;
-}
 .form-control.type > option:first-child{
     color: #999;
 }
