@@ -114,9 +114,10 @@ $(document).ready(function(){
         if (typeof (callback) === "undefined") {
             var callback = function(){};
         }
-        var project = $(form).find('.projectheader .projectselector').val();
-        var ticketNo = $(form).find('.projectheader .ticketnumber').val();
+        var project = $(form).find('.projectheader .projectselector').val().trim();
+        var ticketNo = $(form).find('.projectheader .ticketnumber').val().trim();
         if( project === "" || ticketNo === "" ){
+            $(form).find('.projectheader .ticketsummary').html('');
             callback();
             return;
         }
