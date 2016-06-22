@@ -103,8 +103,18 @@ class timeTrackerSubmit{
         }
     }
     
+    function checkForCookie(){
+        $authenticationAndSecurity = new authenticationAndSecurity;
+        $authentication = $authenticationAndSecurity->getAuthentication();
+        if( $authentication['type']==='cookie' && $authentication['details'] === false ){
+            http_response_code(401); // set 'unauthorised' code
+            exit();
+        }
+    }
+    
     function submit(){
         $authenticationAndSecurity = new authenticationAndSecurity;
+        $this->checkForCookie();
         $posts = $authenticationAndSecurity->getAllPosts();
         $ticketId = $posts['project'].'-'.$posts['ticketnumber'];
         $organisedPosts = $this->organisePosts($posts);

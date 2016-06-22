@@ -1,5 +1,14 @@
 <?php
+
 class authenticationAndSecurity {
+    function redirectIfNotLoggedIn(){
+        $authentication = $this->getAuthentication();
+        if( $authentication['type']==='cookie' && $authentication['details'] === false ){
+            http_response_code(401); // set 'unauthorised' code
+            $this->redirectBackToIndex();
+        }
+    }
+    
     function setCookie( $name, $value, $expire = 0, $path = '/'){
         $encryptedValue = $this->encryptDecrypt('encrypt', $value);
         setCookie($name, $encryptedValue, $expire, $path);
@@ -66,8 +75,7 @@ class authenticationAndSecurity {
                     if( ! $this->getPost('user') ==='user' && ! $this->getPost('password') === 'password' && ! $this->getPost('user') ==='' && ! $this->getPost('password') === '' ) {
                         return ['type' => 'password','details' => ['user' => $this->getPost('user'), 'password' => $this->getPost('password')]];
                     } else {
-                        http_response_code(401); // set 'unauthorised' code
-                        die();
+                        return ['type'=>'cookie',  'details'=>false ];
                     }
                 }else{
                     return ['type'=>'cookie',  'details'=>$cookies ];
@@ -95,9 +103,9 @@ class authenticationAndSecurity {
                echo "Authentication type not recognised: Please update the customSettings.php file";
         }
     }
-    function redirectBackToPage(){
-        $url = $_SERVER['HTTP_REFERER'];
-        header( "Location: $url" );
+    function redirectBackToIndex(){
+        $url = (string)filter_input(INPUT_SERVER,'HTTP_REFERER');
+-       header( "Location: $url" );
         die();
     }
     

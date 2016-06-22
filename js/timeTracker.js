@@ -307,7 +307,7 @@ $(document).ready(function(){
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                     if(jqXHR['status'] === 401) {
-                        window.location.replace("../index.php");
+                        window.location.replace("index.php");
                     }else{
                         alert('request failed');
                     }
