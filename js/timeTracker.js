@@ -304,6 +304,13 @@ $(document).ready(function(){
                     // create new json
                     storeFormData();
                     alert("ajax finished: successful submissions are striked through.\n Please note date,duration and type are required for a time to be submitted");
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    if(jqXHR['status'] === 401) {
+                        window.location.replace("../index.php");
+                    }else{
+                        alert('request failed');
+                    }
                 }
             });
         });

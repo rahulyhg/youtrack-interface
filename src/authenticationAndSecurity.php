@@ -63,7 +63,12 @@ class authenticationAndSecurity {
             case 'cookie':
                 $cookies = $this->getBrowserCookies();
                 if ($cookies === null){
-                    return ['type'=>'password', 'details'=>[ 'user'=>$this->getPost('user'), 'password'=>$this->getPost('password') ]];
+                    if( ! $this->getPost('user') ==='user' && ! $this->getPost('password') === 'password' && ! $this->getPost('user') ==='' && ! $this->getPost('password') === '' ) {
+                        return ['type' => 'password','details' => ['user' => $this->getPost('user'), 'password' => $this->getPost('password')]];
+                    } else {
+                        http_response_code(401); // set 'unauthorised' code
+                        die();
+                    }
                 }else{
                     return ['type'=>'cookie',  'details'=>$cookies ];
                 }
