@@ -8,7 +8,9 @@ $response = [];
 
 $ticket = htmlspecialchars($authenticationAndSecurity->getGet("ticket"));
 
+$response['ticketRef'] = $ticket;
 $response['summary'] = $getDataFromYoutrack->getTicketSummary($ticket);
+$response['ticketUrl'] = $GLOBALS['youtrack_url']."/issue/".$ticket;
 
 $project = explode('-',$ticket)[0] ;
 $response['workTypes'] = $getDataFromYoutrack->getTicketWorkTypes($project);

@@ -124,7 +124,8 @@ $(document).ready(function(){
         var ticket = project + '-' + ticketNo;
         $.ajax({url: "src/ticketAjax.php?ticket="+ticket, dataType: "json",
             success: function(result){
-                $(form).find('.projectheader .ticketsummary').html(result['summary']);
+                var linkHthml = '<a href="'+result['ticketUrl']+'" target="_blank" >'+result['ticketRef']+' : '+result['summary']+'</a>';
+                $(form).find('.projectheader .ticketsummary').html(linkHthml);
                 var html = '<option value="">type...</option>';
                 for (i = 0; i < result['workTypes'].length; i++){
                     html += '<option value="'+result['workTypes'][i]+'">'+result['workTypes'][i]+'</option>';
