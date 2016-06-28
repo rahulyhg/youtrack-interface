@@ -104,7 +104,7 @@ $(document).ready(function(){
           "dateFormat": 'd M, y' 
         });
     });
-    
+
     /*
      * update the summary and work types drop down
      * @param form
@@ -132,7 +132,8 @@ $(document).ready(function(){
                 $(form).find('table tr td select.type').html(html);
                 callback();
             },
-            error: function(result){
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
             }
         });
     }
