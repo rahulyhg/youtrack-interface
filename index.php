@@ -6,14 +6,11 @@
 <html>
 <body>
 <h1 style="text-align:center">Youtrack Import</h1>
+<?php if($authenticationType === 'password'): ?>
 <header>
-    <a href="csvUploader.phtml">upload a csv</a><br>
-    <a href="createByForm.phtml">create multiple youtrack tickets by using online form</a><br/>
-    <a href="downloadProjectIssue.phtml">Download all issues in a project as xml</a><br>
-    <a href="downloadFields.phtml">Download all custom field options and users csv</a><br>
-    <a href="timeTracker.phtml">Time Tracker</a><br>
+    <?php require_once(__DIR__.'/header.phtml'); ?> 
 </header>
-<?php if($authenticationType !== 'password'): ?>
+<?php else: ?>
     <?php if ($cookies===null ) : ?>
         <form action="src/youtrackLogin.php" method="post" enctype="multipart/form-data">
                 <h1>Login</h1>
@@ -22,13 +19,12 @@
                 <input type="submit" value="Submit">
         </form>
     <?php else: ?>
-        <a href="csvUploader.phtml">upload a csv</a><br>
-        <a href="createByForm.phtml">create multiple youtrack tickets by using online form</a><br/>
-        <a href="downloadProjectIssue.phtml">Download all issues in a project as xml</a><br>
-        <a href="downloadFields.phtml">Download all custom field options and users csv</a><br>
-        <form action="src/youtrackLogout.php" method="post" enctype="multipart/form-data">
-            <button name="submit" value="Submit">logout</button>
-        </form>
+        <header>
+            <?php require_once(__DIR__.'/header.phtml'); ?>            
+            <form action="src/youtrackLogout.php" method="post" enctype="multipart/form-data">
+                <button name="submit" value="Submit">logout</button>
+            </form>
+        </header>
     <?php endif; ?>
 <?php endif; ?>
         

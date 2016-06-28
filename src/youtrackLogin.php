@@ -29,4 +29,4 @@ function LoginToYouTrack(){
     }
 }
 LoginToYouTrack();
-$authenticationAndSecurity->redirectBackToPage();
+$authenticationAndSecurity->redirectBackToIndex();

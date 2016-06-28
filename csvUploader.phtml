@@ -1,4 +1,15 @@
-<?php require_once __DIR__.'/src/getCustomSettings.php'; ?>
+<?php
+// <p>---------------------------------------------------------</p>
+// <p>          Error: Please allow phtml files to run php     </p>
+// <p>---------------------------------------------------------</p>
+
+// redirect to index.html if cookie not set and not using password verification
+require_once __DIR__ . '/src/authenticationAndSecurity.php';
+$authenticationAndSecurity = new authenticationAndSecurity;
+$authenticationAndSecurity->redirectIfNotLoggedIn();
+
+require_once __DIR__.'/src/getCustomSettings.php'; 
+?>
 <!DOCTYPE html>
 <html>
 <body>
