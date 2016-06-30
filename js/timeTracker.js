@@ -261,6 +261,7 @@ $(document).ready(function(){
      * ajax submit & standard submit
      */
     $('.forms').on('click', '.ajaxSubmit', function() {
+       $(this).prop('disabled', true);
        var form = $(this).closest('form');
         form.submit(function (e) {
            e.preventDefault();
@@ -315,7 +316,9 @@ $(document).ready(function(){
                     }
                 }
             });
+
         });
+        $(this).prop('disabled', false);
     });
     
     
