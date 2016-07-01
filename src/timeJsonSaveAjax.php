@@ -52,15 +52,16 @@ class timeJsonSaveAjax {
     }
     
     function removeOldFiles($reporterName){
-        $timeTrackerKeptEdits = $GLOBALS['timeTrackerKeptEdits'];
-        if($timeTrackerKeptEdits>0){
+        if( isset($GLOBALS['timeTrackerKeptEdits']) && is_numeric($GLOBALS['timeTrackerKeptEdits']) ){
+            $timeTrackerKeptEdits = $GLOBALS['timeTrackerKeptEdits'];
+        }else {
+            $timeTrackerKeptEdits = 10;
+        }
+        if( $timeTrackerKeptEdits > 0 ){
             $folderName = $this->getFolderName($reporterName);
             $this->createReporterFolder($folderName);
             $files = scandir($folderName, SCANDIR_SORT_DESCENDING);
-            for($i=0;$i<$timeTrackerKeptEdits;$i++){
-                array_shift($files);
-            }
-            for($i=0;$i<sizeof($files);$i++){
+            for($i=$timeTrackerKeptEdits;$i<sizeof($files)-2 ;$i++){
                 unlink($folderName.'/'.$files[$i]);
             }
         }
