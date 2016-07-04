@@ -110,7 +110,8 @@ class createByFormSubmit{
         }
 
         $posts = $this->organisePosts();
-        
+
+        date_default_timezone_set('Europe/London');
         $csvLogFolder = __DIR__.'/../log/createByForm/'.date("Y-m-d");
         $csvLogFileName = time().'.csv';
         

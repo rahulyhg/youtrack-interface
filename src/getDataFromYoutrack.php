@@ -57,7 +57,7 @@ class getDataFromYoutrack {
             $res = $this->restResponse($url, $postOrGet, $headers, $body, $options);
             $res = $res->getResponse();
             $response = trim($res->getBody());
-            if( $GLOBALS['cache'] && $postOrGet == 'get' ){
+            if( $cachable && $GLOBALS['cache'] && $postOrGet == 'get' ){
                 $cacheClass->createCache($url, $response);
             }
            return $response;

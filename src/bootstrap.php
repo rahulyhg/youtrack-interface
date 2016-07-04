@@ -168,6 +168,7 @@ class ApiWriter implements WriterInterface
                       //  $cmd .= ' '.$key.' '.$value;
                     }elseif($customFieldsDetails[$key]['fieldType'] === 'date' ){
                         $value = substr($value, 0, -3);
+                        date_default_timezone_set('Europe/London');
                         $value = date('Y-m-d', $value);
                         if($value){
                             $cmd .= ' '.$key.' '.$value;
