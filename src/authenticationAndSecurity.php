@@ -63,7 +63,7 @@ class authenticationAndSecurity {
         setCookie($reporterCookieName, "", time() - 3600, '/');
     }
     function getAuthentication(){
-        if( $GLOBALS['authenticationType'] === null ){
+        if( !isset($GLOBALS['authenticationType']) || $GLOBALS['authenticationType'] === null ){
             $authenticationType = 'cookie';
         }else{
             $authenticationType = $GLOBALS['authenticationType'];
@@ -105,7 +105,7 @@ class authenticationAndSecurity {
     }
     function redirectBackToIndex(){
         $url = (string)filter_input(INPUT_SERVER,'HTTP_REFERER');
--       header( "Location: $url" );
+       header( "Location: $url" );
         die();
     }
     
