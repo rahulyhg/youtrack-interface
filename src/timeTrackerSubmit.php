@@ -58,8 +58,7 @@ class timeTrackerSubmit{
      */   
     function createXml($timeRow){
         $xml = '';
-        $date = strtotime($timeRow['date']);
-        if(!$date){
+        if(!$date = strtotime($timeRow['date'])){
             $date = time();
         }
         $date .= '000';
