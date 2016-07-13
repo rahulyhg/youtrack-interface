@@ -58,7 +58,8 @@ class timeTrackerSubmit{
      */   
     function createXml($timeRow){
         $xml = '';
-        if(!$date = strtotime($timeRow['date'])){
+        $date = strtotime($timeRow['date']);
+        if(!$date){
             $date = time();
         }
         $date .= '000';
@@ -76,7 +77,6 @@ class timeTrackerSubmit{
     
     function updateYoutrack($content,$ticketId){
         global $youtrack_url;
-        $authenticationAndSecurity = new authenticationAndSecurity;
         $getDataFromYoutrack = new getDataFromYoutrack;
         $url = $youtrack_url . '/rest/issue/'
             . $ticketId

@@ -77,9 +77,9 @@ class ApiWriter implements WriterInterface
                         }
                         //
                         foreach($value_split as $value){
-                                    $this->xml->startElement('value');
-                                        $this->xml->text( trim($value) );
-                                    $this->xml->endElement();
+                            $this->xml->startElement('value');
+                                $this->xml->text( trim($value) );
+                            $this->xml->endElement();
                         }
                         $this->xml->endElement();
                     }
@@ -133,7 +133,7 @@ class ApiWriter implements WriterInterface
         }
         $ticketRef = explode('/',$singleLocation);
         $ticketRef = $ticketRef[sizeof($ticketRef) - 1];
-        echo 'created: '.$ticketRef.':   '.$item['summary'];
+        echo 'created: <a href="'.$youtrack_url.'/issue/'.$ticketRef.'">'.$ticketRef.':   '.$item['summary'].'</a>';
         echo $GLOBALS["newline"];
         return $ticketRef;
     }
@@ -185,7 +185,7 @@ class ApiWriter implements WriterInterface
         
      //  $url = 'http://tracker.juno.is/youtrack/rest/issue/test-57/execute?command= State Open';
         $getDataFromYoutrack->rest($url,'post');
-        echo 'updated: '.$issueRef;
+        echo 'updated : <a href="'.$youtrack_url.'/issue/'.$issueRef.'">'.$issueRef.'</a>';
         echo $GLOBALS["newline"];
     }
     

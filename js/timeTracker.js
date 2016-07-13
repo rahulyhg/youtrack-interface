@@ -62,7 +62,7 @@ $(document).ready(function(){
             }
             var time = new Date($.now());
             var startTime = timeAddZero(time.getHours())+":"+timeAddZero(time.getMinutes());
-            var date =  $.datepicker.formatDate("d M, y", time);
+            var date =  $.datepicker.formatDate("d M y", time);
             $(form).find('table tr:first td input.start')
                 .val(startTime);
             $(form).find('table tr:first td input.date')
@@ -101,7 +101,7 @@ $(document).ready(function(){
     
     $('.forms').on('focus','form table tr td input.datepicker', function(){
         $(this).datepicker({
-          "dateFormat": 'd M, y' 
+          "dateFormat": 'd M y'
         });
     });
 
