@@ -158,7 +158,7 @@ class getDataFromYoutrack {
         
         foreach($youtrack_fields_list as $field){
             // if dropdown field
-            if( strpos($customFieldTypeAndBundle[$field]['fieldType'], '[') !== false ){
+            if( isset($customFieldTypeAndBundle[$field]) && strpos($customFieldTypeAndBundle[$field]['fieldType'], '[') !== false ){
                 $fieldTypeShort = explode('[',$customFieldTypeAndBundle[$field]['fieldType']) [0];
                 $fieldTypeShort = strtolower($fieldTypeShort);
                 if($fieldTypeShort == 'enum'){
@@ -186,7 +186,7 @@ class getDataFromYoutrack {
             $project = $projectList[0];
         }
         $youtrack_fields_list = $this->get_custom_fields($project);
-        $customFieldDetails = getCustomFieldTypeAndBundle($youtrack_fields_list, $project);
+        $customFieldDetails = $this->getCustomFieldTypeAndBundle($youtrack_fields_list, $project);
         $youtrack_fields = $this->get_custom_fields_details($youtrack_fields_list, $project, $customFieldDetails);
         return [$youtrack_fields_list, $youtrack_fields];
     }
@@ -202,9 +202,10 @@ class getDataFromYoutrack {
     }
     function getProjectAssignees($project){
         global $youtrack_url;
-        $url = $youtrack_url.'/rest/admin/project/'.$project.'/assignee'; 
+        $url = $youtrack_url.'/rest/admin/project/'.$project.'/assignee';
         $youtrack_project_assignees_xml = $this->rest($url, 'get');
         list($youtrack_project_assignees, $empty) = $this->extract_data_xml( $youtrack_project_assignees_xml, 'assignee', 'login');
+        natcasesort($youtrack_project_assignees);
         return $youtrack_project_assignees;
     }
     
