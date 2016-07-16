@@ -32,7 +32,16 @@ require_once __DIR__.'/src/timeTracker.php';
 <body>
 
 <h1 style="text-align:center">Time Tracker</h1>
-
+<form id="ticketSearch" action="src/querySearchAjax.php" method="post" enctype="multipart/form-data">
+    <input type="text" name="query"/>
+    <select class="projectselector" name="project" >
+        <?php foreach( $projectList as $project ){ ?>
+            <option value="<?php echo $project ?>"><?php echo $project ?></option>
+        <?php } ?>
+    </select>
+    <button class="ajaxSubmit" >search</button>
+    <div id="searchResponse"></div>
+</form>
 <div id="wrapper">
     <button class="addTicketForm" type="button">Add Ticket</button>
 

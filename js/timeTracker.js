@@ -122,7 +122,8 @@ $(document).ready(function(){
             return;
         }
         var ticket = project + '-' + ticketNo;
-        $.ajax({url: "src/ticketAjax.php?ticket="+ticket, dataType: "json",
+        $.ajax({url: "src/ticketAjax.php?ticket="+ticket,
+            dataType: "json",
             success: function(result){
                 var linkHthml = '<a href="'+result['ticketUrl']+'" target="_blank" >'+result['ticketRef']+' : '+result['summary']+'</a>';
                 $(form).find('.projectheader .ticketsummary').html(linkHthml);
@@ -380,4 +381,33 @@ $(document).ready(function(){
     }
     populateFormJson();
     
+    $('#ticketSearch').on('click', '.ajaxSubmit', function (){
+        $(this).prop('disabled', true);
+        var form = $(this).closest('form');
+        form.submit(function (e) {
+           e.preventDefault();
+           e.stopImmediatePropagation();
+            $.ajax({dataType: "json",
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function(result){
+                    var html = '<ul>';
+                    var keys = Object.keys(result['tickets']);
+                    for (var i = 0, len = keys.length; i < len; i++) {
+                        html += '<li>'+keys[i]+': '+result['tickets'][keys[i]]+'</li>';
+                    }
+                    if(result['partialSet']){
+                        html += '<li class="partialSet">...</li>';
+                    }
+                    html += '</ul>';
+                    $('#ticketSearch #searchResponse').html(html);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        });
+        $(this).prop('disabled', false);
+    });
 });
