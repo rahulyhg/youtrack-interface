@@ -380,7 +380,10 @@ $(document).ready(function(){
         }
     }
     populateFormJson();
-    
+
+
+
+
     $('#ticketSearch').on('click', '.ajaxSubmit', function (){
         $(this).prop('disabled', true);
         var form = $(this).closest('form');
@@ -392,7 +395,7 @@ $(document).ready(function(){
                 url: form.attr('action'),
                 data: form.serialize(),
                 success: function(result){
-                    var html = '<ul>';
+                    var html = '<h3>Results</h3><ul>';
                     var keys = Object.keys(result['tickets']);
                     for (var i = 0, len = keys.length; i < len; i++) {
                         html += '<li><a href="#">play</a><span>'+keys[i]+'</span>: '+result['tickets'][keys[i]]+'</li>';
@@ -402,6 +405,7 @@ $(document).ready(function(){
                     }
                     html += '</ul>';
                     $('#ticketSearch #searchResponse').html(html);
+                    $( "#ticketSearch #searchResponse" ).accordion({collapsible: true});
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(textStatus, errorThrown);
