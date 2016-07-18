@@ -395,7 +395,7 @@ $(document).ready(function(){
                     var html = '<ul>';
                     var keys = Object.keys(result['tickets']);
                     for (var i = 0, len = keys.length; i < len; i++) {
-                        html += '<li>'+keys[i]+': '+result['tickets'][keys[i]]+'</li>';
+                        html += '<li><a href="#">play</a><span>'+keys[i]+'</span>: '+result['tickets'][keys[i]]+'</li>';
                     }
                     if(result['partialSet']){
                         html += '<li class="partialSet">...</li>';
@@ -409,5 +409,14 @@ $(document).ready(function(){
             });
         });
         $(this).prop('disabled', false);
+    });
+
+    $('#ticketSearch').on('click', '#searchResponse ul li a', function (){
+        var ticketRef = $(this).siblings( "span").first().html();
+        ticketRef = ticketRef.split('-');
+        addTicketForm();
+        var TicketElement = $('.forms form .projectheader').last();
+        TicketElement.children('.projectselector').val(ticketRef[0]);
+        TicketElement.children('.ticketnumber').val(ticketRef[1]);
     });
 });
