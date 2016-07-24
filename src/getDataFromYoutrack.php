@@ -273,10 +273,10 @@ class getDataFromYoutrack {
      * @param type $query
      * @param type $maximumReturned maximum returned tickets
      */
-    function getTicketsFromSearch($projectId,$query,$maximumReturned=100){
+    function getTicketsFromSearch($projectId,$query,$maximumReturned=100,$after=0){
         global $youtrack_url;
         $filter = urlencode('project:{'.$projectId.'} ');
-        $url = $youtrack_url . '/rest/issue?filter='.$filter.$query.'&max='.$maximumReturned;
+        $url = $youtrack_url . '/rest/issue?filter='.$filter.$query.'&max='.$maximumReturned.'&after='.$after;
         try {
             $ticketXml = $this->rest($url, 'get');
             $explodedTicketXml = preg_split('/<\s*\/\s*issue\s*>/i',$ticketXml);

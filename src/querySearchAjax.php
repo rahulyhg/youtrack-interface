@@ -6,5 +6,6 @@ $authenticationAndSecurity = new authenticationAndSecurity;
 
 $project = htmlspecialchars($authenticationAndSecurity->getPost("project"));
 $query = htmlspecialchars($authenticationAndSecurity->getPost("query"));
+$after = htmlspecialchars($authenticationAndSecurity->getPost("after"));
 
-echo json_encode($getDataFromYoutrack->getTicketsFromSearch($project,$query));
+echo json_encode($getDataFromYoutrack->getTicketsFromSearch($project,$query,$maximumReturned=100,$after));
