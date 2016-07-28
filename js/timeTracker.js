@@ -1,3 +1,9 @@
+function addTicketForm(){
+    var html = $('form.template').html();
+    $('div.forms').append('<form action="src/timeTrackerSubmit.php" method="post" enctype="multipart/form-data">'+html+'</form>');
+}
+
+
 $(document).ready(function(){
     // stop enter submitting forms
     $(window).keydown(function(event){
@@ -182,10 +188,6 @@ $(document).ready(function(){
         removeTimeRow(row);
     });
 
-    function addTicketForm(){
-        var html = $('form.template').html();
-        $('div.forms').append('<form action="src/timeTrackerSubmit.php" method="post" enctype="multipart/form-data">'+html+'</form>');
-    }
     $('body').on('click','.addTicketForm',function(){
        addTicketForm();
     });
