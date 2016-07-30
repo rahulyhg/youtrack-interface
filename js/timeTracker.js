@@ -1,3 +1,9 @@
+function addTicketForm(){
+    var html = $('form.template').html();
+    $('div.forms').append('<form action="src/timeTrackerSubmit.php" method="post" enctype="multipart/form-data">'+html+'</form>');
+}
+
+
 $(document).ready(function(){
     // stop enter submitting forms
     $(window).keydown(function(event){
@@ -122,7 +128,8 @@ $(document).ready(function(){
             return;
         }
         var ticket = project + '-' + ticketNo;
-        $.ajax({url: "src/ticketAjax.php?ticket="+ticket, dataType: "json",
+        $.ajax({url: "src/ticketAjax.php?ticket="+ticket,
+            dataType: "json",
             success: function(result){
                 var linkHthml = '<a href="'+result['ticketUrl']+'" target="_blank" >'+result['ticketRef']+' : '+result['summary']+'</a>';
                 $(form).find('.projectheader .ticketsummary').html(linkHthml);
@@ -181,10 +188,6 @@ $(document).ready(function(){
         removeTimeRow(row);
     });
 
-    function addTicketForm(){
-        var html = $('form.template').html();
-        $('div.forms').append('<form action="src/timeTrackerSubmit.php" method="post" enctype="multipart/form-data">'+html+'</form>');
-    }
     $('body').on('click','.addTicketForm',function(){
        addTicketForm();
     });
@@ -379,5 +382,4 @@ $(document).ready(function(){
         }
     }
     populateFormJson();
-    
 });
