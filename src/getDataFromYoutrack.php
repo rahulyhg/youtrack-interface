@@ -75,7 +75,7 @@ class getDataFromYoutrack {
      * @param string $keyAttribute [optional] uses this attrbute as the key for storing the data in the return array
      * @return array data requested
      */
-    function extract_data_xml( $xml, $node, $attribute='', $whereAttr=[],$keyAttribute='' ){
+    function extract_data_xml( $xml, $node, $attribute='', $whereAttr=[]){
         $return_data = [];
         $reader = new XMLReader();
         $reader->xml($xml);
@@ -83,27 +83,43 @@ class getDataFromYoutrack {
             if ($reader->nodeType == XMLReader::ELEMENT) {
                 $exp = $reader->expand();
                 if ($exp->nodeName == $node){
-                    if(count($whereAttr)>0){
-                        $continue = false;
-                        foreach ( $whereAttr as $attr => $val ){
-                            if( $exp->getAttribute($attr) == $val ){
-                                $continue = true;
-                            }
-                        }
-                    }else{
-                        $continue = true;
-                    }
-                    if( $continue ){
-                        if($keyAttribute){
-                            $return_data[$exp->getAttribute($keyAttribute)] = ($attribute) ? $exp->getAttribute($attribute) : $exp->nodeValue;
-                        }else{
-                            $return_data[] = ($attribute) ? $exp->getAttribute($attribute) : $exp->nodeValue;
-                        }
-                    }
+                   $data = $this->extract_data_xml_use_node($exp,$attribute,$whereAttr);
+                   if($data){ 
+                       $return_data[] = $data;
+                   }
                 }
             }
         }
         return $return_data;
+    }
+    /**
+     * extract data from xml node
+     * @param DOMNode $exp xml node
+     * @param array|string $attribute
+     * @param string $whereAttr array of required attribute value pairs  for desired node e.g. [ 'attr'=>'value', 'attr2'=>'value2' ]
+     * @return array|string
+     */
+    function extract_data_xml_use_node($exp,$attribute='',$whereAttr=[]){
+        if(count($whereAttr)>0){
+            $continue = false;
+            foreach ( $whereAttr as $attr => $val ){
+                if( $exp->getAttribute($attr) == $val ){
+                    $continue = true;
+                }
+            }
+        }else{
+            $continue = true;
+        }
+        if( $continue ){
+            if(is_array($attribute)){
+                foreach($attribute as $singleAttribute){
+                    $attributeData[$singleAttribute] = $exp->getAttribute($singleAttribute);
+                }
+                return $attributeData;
+            }else {
+                return ($attribute) ? $exp->getAttribute($attribute) : $exp->nodeValue;
+            }
+        }
     }
 
     
@@ -298,5 +314,19 @@ class getDataFromYoutrack {
         $partialSet =  ($maximumReturned<count($explodedTicketXml)) ? true : false;
         
         return ['tickets'=>$tickets, 'partialSet'=>$partialSet];
+    }
+    
+    
+   /**
+    * get list of ticket links types e.g. "depends"
+    * @global type $youtrack_url
+    * @return type
+    */
+    function getLinkTypes(){
+        global $youtrack_url;
+        $url = $youtrack_url.'/rest/admin/issueLinkType';
+        $youtrackLinkTypesXml = $this->rest($url, 'get');
+        $youtrackLinkTypes = $this->extract_data_xml( $youtrackLinkTypesXml, 'issueLinkType', ['name','outwardName','inwardName']);
+        return $youtrackLinkTypes;
     }
 }

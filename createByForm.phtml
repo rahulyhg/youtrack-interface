@@ -22,6 +22,7 @@ require_once __DIR__ . '/src/createByForm.php';
         <script src='js/jquery-1.10.2.min.js'></script>
         <script src="js/1.12.0jquery-ui.js"></script>
         <script src='js/createByForm.js'></script>
+        <script src='js/createByFormTicketLinks.js'></script>
         <link rel="stylesheet" href="css/jquery/1.12.0jquery-ui.css">
         <link rel="stylesheet" href="css/createByForm.css">
     </head>
@@ -42,6 +43,7 @@ require_once __DIR__ . '/src/createByForm.php';
                     <th>Assignee</th>
                     <th>summary</th>
                     <th>description</th>
+                    <th></th>
                     <?php foreach( $customFieldList as $customField ): ?>
                             <th class="<?php echo str_replace(' ','', $customField) ?>column"><?php echo $customField; ?></th>
                     <?php endforeach; ?>
@@ -60,7 +62,8 @@ require_once __DIR__ . '/src/createByForm.php';
                 <div>login user: <input type="text" name="user"></div><br>
                 <div>login password: <input type="password" name="password"></div><br>
             <?php endif; ?>
-            <div>test mode: <input type="checkbox" name="test" value="true"></div><br>
+                <!-- test mode cant work for standard users -->
+<!--            <div>test mode: <input type="checkbox" name="test" value="true"></div><br>-->
             <input type="submit" value="Submit"> 
         </form>
     </body>

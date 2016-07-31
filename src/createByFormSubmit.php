@@ -62,14 +62,11 @@ class createByFormSubmit{
                     $HTTPResponseStatusCode = $e->getResponse()->getStatusCode();
                     // if previous ticket import permission issues, possibly not admin user
                     if($HTTPResponseStatusCode = 403){
-                        if(null === $authenticationAndSecurity->getPost('test')){
-                            $workflow->stdUserUpdateTracker($singlePost);
-                        }else{
-                            echo "Only admin upload testing mode is availible <br>";
-                        }
+                        $workflow->stdUserUpdateTracker($singlePost);
+                        $posts[$postskey] = array_merge( ['upload success' => 'success'] , $posts[$postskey] );
                     }
                 }else{
-                error_log($e);
+                    error_log($e);
                     echo 'IMPORT ISSUE FAILED:: unable to import ticket to '.$singlePost['project'].' with summary "'.$singlePost['summary'].'"'.$GLOBALS["newline"];
                     $posts[$postskey] = array_merge( ['upload success' => 'failed'] , $posts[$postskey] );
                 }
@@ -87,7 +84,7 @@ class createByFormSubmit{
     }
     function createFolder($folder){
         if (!file_exists($folder)) {
-            mkdir($folder);
+            mkdir($folder,0777,true);
             chmod($folder,$GLOBALS['folderPermissions']);
         }
     }

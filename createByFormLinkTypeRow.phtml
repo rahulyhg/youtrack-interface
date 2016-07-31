@@ -1,0 +1,15 @@
+<select class="linkType dontClear" >
+    <?php for( $i=0;$i<count($linkTypes);$i++){ ?>
+        <option value="<?php echo $linkTypes[$i]['inwardName'] ?>"><?php echo $linkTypes[$i]['inwardName'] ?></option>
+        <option value="<?php echo $linkTypes[$i]['outwardName'] ?>"><?php echo $linkTypes[$i]['outwardName'] ?></option>
+    <?php } ?>
+</select>
+<select class="linkProjectSelector dontClear" >
+    <option value="">project...</option>
+    <?php foreach( $projectList as $project ){ ?>
+        <option value="<?php echo $project ?>"><?php echo $project ?></option>
+    <?php } ?>
+</select>
+<input type="text" size="30" class="linkTicketNumber" >
+<div class="ticketsummary"></div>
+<button class="deleteLinkType" type="button">Remove</button>
