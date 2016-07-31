@@ -144,6 +144,7 @@ $(document).ready(function(){
                 delete classList[fieldNameNoSpaces+'column'];
             }
         }
+        delete classList['ticketLinkscolumn'];
         for ( var singleClass in classList){
             $("#toBeImported table tr[row='" + row + "'] td."+singleClass).html('<hr/>');
         }
@@ -156,7 +157,7 @@ $(document).ready(function(){
         var project = $(projectSelector).val();
         var explodedName = name.split('-');
         var row = explodedName[1];
-        $("#toBeImported table tr[row='" + row + "'] select:not(.projectselector)").html('<option value=""></option>');
+        $("#toBeImported table tr[row='" + row + "'] select:not(.dontClear)").html('<option value=""></option>');
         $.ajax({url: "src/createByFormAjax.php?project="+project, dataType: "json",
             success: function(result){
                 removeUnwantedFields(result,row);
@@ -332,12 +333,35 @@ $(document).ready(function(){
         });
     }
     updateUi("tr:last");  
- 
+    
+    // before submit
      $('#toBeImported').submit(function() {
-        $('#toBeImported input.datepicker').each(function(){
+        // format datepicker data
+         $('#toBeImported table tr:not(.hidden) input.datepicker').each(function(){
             var val = $(this).val();
             var date = new Date( val );
-            $(this).val( date.getTime() );
+            var time = date.getTime(date);
+            if(time){
+                $(this).val( time );
+            }else{
+                $(this).val( '' );
+            }
+        });
+        // format ticket links 
+        $('#toBeImported table tr:not(.hidden) .ticketLinkscolumn').each(function(){
+           var linkCommand = '';
+           $(this).find('.ticketLinks .singleLink').each(function(){
+                var linkType = $(this).find('.linkType').first().val();
+                var linkProjectSelector = $(this).find('.linkProjectSelector').first().val();
+                var linkTicketNumber = $(this).find('.linkTicketNumber').first().val();
+                if(linkType && linkProjectSelector && linkTicketNumber){
+                   linkCommand = linkCommand + ' '
+                       + linkType + ' '
+                       + linkProjectSelector + '-'
+                       + linkTicketNumber;
+                }
+           });
+           $(this).find('.linkInputField').val(linkCommand);
         });
     });
 });

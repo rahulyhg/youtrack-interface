@@ -1,5 +1,5 @@
 <td>
-    <select class="projectselector" name="project-<?php echo $row ?>" >
+    <select class="projectselector dontClear" name="project-<?php echo $row ?>" >
         <?php foreach( $projectList as $project ){ ?>
             <option value="<?php echo $project ?>"><?php echo $project ?></option>
         <?php } ?>
@@ -14,6 +14,18 @@
 </td>
 <td><input type="text" name="summary-<?php echo $row ?>"></td>
 <td><textarea rows="4" cols="50" type="text" name="description-<?php echo $row ?>"></textarea></td>
+<td class="ticketLinkscolumn" >
+    <div class="ticketLinks">
+        <div class="hidden hiddenSingleLink" >
+               <?php require __DIR__ . '/createByFormLinkTypeRow.phtml'; ?>
+            </div>
+        <div class="singleLink">
+               <?php require __DIR__ . '/createByFormLinkTypeRow.phtml'; ?>
+        </div>
+    </div>
+    <button class="addLinkType" type="button">Add</button>
+    <input type="text" size="30" class="hidden linkInputField" name="links-<?php echo $row; ?>" >
+</td>
 <?php foreach( $customFieldList as $customField ): ?>
     <td class='<?php echo str_replace(' ','', $customField) ?>column'>
         <?php $CustomFieldtype = preg_replace("/\[.*\]/", '', $customFieldTypeAndBundle[$customField]['fieldType'] ); ?>

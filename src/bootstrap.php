@@ -100,9 +100,10 @@ class ApiWriter implements WriterInterface
         $url = $youtrack_url . '/rest/import/'
             . $project
             .'/issues';
-        if(null !== $authenticationAndSecurity->getPost('test')){
-            $url .= '?test=true';
-        }
+        // test mode cant work for standard users, so being depreciated
+//        if(null !== $authenticationAndSecurity->getPost('test')){
+//            $url .= '?test=true';
+//        }
         $getDataFromYoutrack->rest($url,'put',['Content-Type'=>'application/xml'],$Myxml);
     }
     
@@ -161,6 +162,9 @@ class ApiWriter implements WriterInterface
                 case 'assignee':
                     $cmd .= ' '.$key.' '.$value;
                     break;
+                case 'links':
+                    $cmd .= ' '.$value;
+                    break;
                 default:
                     // convert into required date format from the xml's import required timestamp format ... youtrack api inconsistant
                     if( !isset($customFieldsDetails[$key]) ){
@@ -181,9 +185,8 @@ class ApiWriter implements WriterInterface
                     break;
             }
         }
-        $url = $youtrack_url.'/rest/issue/'.$issueRef.'/execute?command='.$cmd;
-        
      //  $url = 'http://tracker.juno.is/youtrack/rest/issue/test-57/execute?command= State Open';
+        $url = $youtrack_url.'/rest/issue/'.$issueRef.'/execute?command='.$cmd;        
         $getDataFromYoutrack->rest($url,'post');
         echo 'updated : <a href="'.$youtrack_url.'/issue/'.$issueRef.'">'.$issueRef.'</a>';
         echo $GLOBALS["newline"];

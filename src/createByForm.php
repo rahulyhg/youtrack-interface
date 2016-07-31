@@ -15,3 +15,4 @@ $projectList = $getDataFromYoutrack->getProjectsList();
 $projectAssignees = $getDataFromYoutrack->getProjectAssignees($projectList[0]);
 $customFieldTypeAndBundle = $getDataFromYoutrack->getCustomFieldTypeAndBundle($customFieldList, $projectList[0]);
 $customFieldDetails = $getDataFromYoutrack->get_custom_fields_details($customFieldList, $projectList[0], $customFieldTypeAndBundle);
+$linkTypes = $getDataFromYoutrack->getLinkTypes();

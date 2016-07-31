@@ -131,7 +131,11 @@ $(document).ready(function(){
         $.ajax({url: "src/ticketAjax.php?ticket="+ticket,
             dataType: "json",
             success: function(result){
-                var linkHthml = '<a href="'+result['ticketUrl']+'" target="_blank" >'+result['ticketRef']+' : '+result['summary']+'</a>';
+                if(result['summary']){
+                    var linkHthml = '<a href="'+result['ticketUrl']+'" target="_blank" >'+result['ticketRef']+' : '+result['summary']+'</a>';
+                }else{
+                    var linkHthml = 'ticket not found';
+                }
                 $(form).find('.projectheader .ticketsummary').html(linkHthml);
                 var html = '<option value="">type...</option>';
                 for (i = 0; i < result['workTypes'].length; i++){
