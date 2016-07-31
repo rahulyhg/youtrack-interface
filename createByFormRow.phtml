@@ -14,7 +14,7 @@
 </td>
 <td><input type="text" name="summary-<?php echo $row ?>"></td>
 <td><textarea rows="4" cols="50" type="text" name="description-<?php echo $row ?>"></textarea></td>
-<td class="ticketLinkscolumn" >
+<td class="ticketLinkscolumn linkscolumn" >
     <div class="ticketLinks">
         <div class="hidden hiddenSingleLink" >
                <?php require __DIR__ . '/createByFormLinkTypeRow.phtml'; ?>
@@ -26,9 +26,10 @@
     <button class="addLinkType" type="button">Add</button>
     <input type="text" size="30" class="hidden linkInputField" name="links-<?php echo $row; ?>" >
 </td>
-<td>
+<td class="attachmentscolumn">
   <input name="attachmentFiles-<?php echo $row ?>[]" type="file" multiple="" />
 </td>
+   
 <?php foreach( $customFieldList as $customField ): ?>
     <td class='<?php echo str_replace(' ','', $customField) ?>column'>
         <?php $CustomFieldtype = preg_replace("/\[.*\]/", '', $customFieldTypeAndBundle[$customField]['fieldType'] ); ?>

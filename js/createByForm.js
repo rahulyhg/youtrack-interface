@@ -37,13 +37,15 @@ $(document).ready(function(){
         updateUi("tr:last");
     });
     
-   
+   $('#HideFields').accordion({collapsible: true});
     function hideOrShowField(checkbox){
         var name = checkbox.attr('name');
         if( checkbox.is(':checked') ){
             $('#toBeImported table tr th.'+name.replace(/\ /g,'')+'column').hide();
+            $('#toBeImported table tr td.'+name.replace(/\ /g,'')+'column').hide();
         }else{
             $('#toBeImported table tr th.'+name.replace(/\ /g,'')+'column').show();
+            $('#toBeImported table tr td.'+name.replace(/\ /g,'')+'column').show();
         }
     };
     $('#HideFields input').each(function(){

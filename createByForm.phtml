@@ -31,11 +31,15 @@ require_once __DIR__ . '/src/createByForm.php';
         <div id="loadingScreen"></div>
         <h1>Youtrack Create Tickets By Form</h1>
         
-        <h3>Hide fields</h3>
         <div id='HideFields'>
-            <?php foreach( $customFieldList as $customField ): ?>
-                    <label><input type="checkbox" name="<?php echo $customField ?>" value="<?php echo $customField ?>"><?php echo $customField ?></label>
-            <?php endforeach; ?>
+            <h3>Hide fields</h3>
+            <div>
+                <label><input type="checkbox" name="links" value="links">Links</label>
+                <label><input type="checkbox" name="attachments" value="attachments">Attachments</label>
+                <?php foreach( $customFieldList as $customField ): ?>
+                        <label><input type="checkbox" name="<?php echo $customField ?>" value="<?php echo $customField ?>"><?php echo $customField ?></label>
+                <?php endforeach; ?>
+            </div>
         </div>
         <form id='toBeImported' action="src/createByFormSubmit.php" method="post" enctype="multipart/form-data">
             <table>
@@ -44,8 +48,8 @@ require_once __DIR__ . '/src/createByForm.php';
                     <th>Assignee</th>
                     <th>summary</th>
                     <th>description</th>
-                    <th></th>
-                    <th></th>
+                    <th class="linkscolumn"></th>
+                    <th class="attachmentscolumn"></th>
                     <?php foreach( $customFieldList as $customField ): ?>
                             <th class="<?php echo str_replace(' ','', $customField) ?>column"><?php echo $customField; ?></th>
                     <?php endforeach; ?>
