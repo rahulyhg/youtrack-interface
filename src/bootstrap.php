@@ -214,32 +214,20 @@ class ApiWriter implements WriterInterface
     function stdUserUpdateAttachments($issueRef,$item){
         global $youtrack_url;
         $getDataFromYoutrack = new getDataFromYoutrack;
-        if($count = count($_FILES['attachmentFiles-1']['name'])) {
-//            for($i=0;$i<$count;$i++) {
-            $i = 0;
-                $file = $_FILES['attachmentFiles-1'];
-                // POST /rest/issue/{issue}/attachment
-                //$content = fopen($file['tmp_name'][$i], 'r');
-                $filename = $file['tmp_name'][$i];
-                $body = ['file' => '@'.$filename];
-                
+        $files = $item['attachmentFiles'];
+        if($count = count($files['name'])) {
+            for($i=0;$i<$count;$i++) {
                 $header = ['Content-Type' => 'multipart/form-data'];
-
+                $body = [
+                    'name' => $files['name'][$i],
+                    'file' => '@'.$files['tmp_name'][$i],
+                    'Content-Type' => $files['type'][$i]
+                ];
                 
-//                $header = ['multipart' => [
-//                    [
-//                        'name'     => $file['name'][$i],
-//                        'contents' => fopen($file['tmp_name'][$i], 'r')
-//                    ]
-//                ]];
+                // POST /rest/issue/{issue}/attachment
                 $url = $youtrack_url.'/rest/issue/'.$issueRef.'/attachment';
                 $getDataFromYoutrack->rest($url,'post',$header,$body);
-//                $newname = date('YmdHis',time()).mt_rand().'.jpg';
-//                move_uploaded_file($val['tmp_name'],'./uploads/'.$newname);
-                
-                
-                
-//            }
+            }
         }
         
     }

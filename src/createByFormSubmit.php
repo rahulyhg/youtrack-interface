@@ -34,6 +34,18 @@ class createByFormSubmit{
         unset($postsArray[0]);
         return $postsArray;
     }
+    
+    function organiseAttachments($posts){
+        $keys = array_keys($_FILES);
+        for($i=0;$i<count($keys);$i++){
+            $singleKey = explode('-',$keys[$i]);
+            if($singleKey[1] > 0){
+                $posts[$singleKey[1]]['attachmentFiles'] = $_FILES['attachmentFiles-'.$singleKey[$i]];
+            }
+        }
+        return $posts;
+    }
+    
     function sendPostData($posts){
         $authenticationAndSecurity = new authenticationAndSecurity;
         foreach($posts as $postskey => $singlePost){
@@ -107,6 +119,7 @@ class createByFormSubmit{
         }
 
         $posts = $this->organisePosts();
+        $posts = $this->organiseAttachments($posts);
 
         date_default_timezone_set('Europe/London');
         $csvLogFolder = __DIR__.'/../log/createByForm/'.date("Y-m-d");
