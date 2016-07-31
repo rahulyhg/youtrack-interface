@@ -197,11 +197,51 @@ class ApiWriter implements WriterInterface
         try {
            $issueRef = $this->stdUserCreateIssue($item);
             $this->stdUserUpdateIssue($issueRef,$item);
+            $this->stdUserUpdateAttachments($issueRef,$item);
         } catch (Exception $e) {   
             error_log($e);
             echo 'IMPORT ISSUE FAILED:: unable to import ticket to '.$item['project'].' with summary "'.$item['summary'].'"'.$GLOBALS["newline"];
             $posts[$postskey] = array_merge( ['upload success' => 'failed'] , $posts[$postskey] );
         }
+    }
+    
+    /**
+     * send attachment files to the youtrack
+     * @global type $youtrack_url
+     * @param string $issueRef
+     * @param array $item
+     */
+    function stdUserUpdateAttachments($issueRef,$item){
+        global $youtrack_url;
+        $getDataFromYoutrack = new getDataFromYoutrack;
+        if($count = count($_FILES['attachmentFiles-1']['name'])) {
+//            for($i=0;$i<$count;$i++) {
+            $i = 0;
+                $file = $_FILES['attachmentFiles-1'];
+                // POST /rest/issue/{issue}/attachment
+                //$content = fopen($file['tmp_name'][$i], 'r');
+                $filename = $file['tmp_name'][$i];
+                $body = ['file' => '@'.$filename];
+                
+                $header = ['Content-Type' => 'multipart/form-data'];
+
+                
+//                $header = ['multipart' => [
+//                    [
+//                        'name'     => $file['name'][$i],
+//                        'contents' => fopen($file['tmp_name'][$i], 'r')
+//                    ]
+//                ]];
+                $url = $youtrack_url.'/rest/issue/'.$issueRef.'/attachment';
+                $getDataFromYoutrack->rest($url,'post',$header,$body);
+//                $newname = date('YmdHis',time()).mt_rand().'.jpg';
+//                move_uploaded_file($val['tmp_name'],'./uploads/'.$newname);
+                
+                
+                
+//            }
+        }
+        
     }
     
     /**

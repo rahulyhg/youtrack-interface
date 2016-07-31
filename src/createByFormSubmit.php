@@ -53,24 +53,24 @@ class createByFormSubmit{
                 }
             }
             $workflow = new ApiWriter;
-            try {
-                // requires youtrack admin permissions to import with xml content
-                $workflow->updateTracker($singlePost);
-                $posts[$postskey] = array_merge( ['upload success' => 'success'] , $posts[$postskey] );
-            } catch (Exception $e) {
-                if( $e->getResponse() ) {
-                    $HTTPResponseStatusCode = $e->getResponse()->getStatusCode();
+//            try {
+//                // requires youtrack admin permissions to import with xml content
+//                $workflow->updateTracker($singlePost);
+//                $posts[$postskey] = array_merge( ['upload success' => 'success'] , $posts[$postskey] );
+//            } catch (Exception $e) {
+                //if( $e->getResponse() ) {
+//                    $HTTPResponseStatusCode = $e->getResponse()->getStatusCode();
                     // if previous ticket import permission issues, possibly not admin user
-                    if($HTTPResponseStatusCode = 403){
+//                    if($HTTPResponseStatusCode = 403){
                         $workflow->stdUserUpdateTracker($singlePost);
                         $posts[$postskey] = array_merge( ['upload success' => 'success'] , $posts[$postskey] );
-                    }
-                }else{
-                    error_log($e);
-                    echo 'IMPORT ISSUE FAILED:: unable to import ticket to '.$singlePost['project'].' with summary "'.$singlePost['summary'].'"'.$GLOBALS["newline"];
-                    $posts[$postskey] = array_merge( ['upload success' => 'failed'] , $posts[$postskey] );
-                }
-            }
+//                    }
+//                }else{
+//                    error_log($e);
+//                    echo 'IMPORT ISSUE FAILED:: unable to import ticket to '.$singlePost['project'].' with summary "'.$singlePost['summary'].'"'.$GLOBALS["newline"];
+//                    $posts[$postskey] = array_merge( ['upload success' => 'failed'] , $posts[$postskey] );
+//                }
+//            }
         }
         return $posts;
     } 
