@@ -197,11 +197,39 @@ class ApiWriter implements WriterInterface
         try {
            $issueRef = $this->stdUserCreateIssue($item);
             $this->stdUserUpdateIssue($issueRef,$item);
+            $this->stdUserUpdateAttachments($issueRef,$item);
         } catch (Exception $e) {   
             error_log($e);
             echo 'IMPORT ISSUE FAILED:: unable to import ticket to '.$item['project'].' with summary "'.$item['summary'].'"'.$GLOBALS["newline"];
             $posts[$postskey] = array_merge( ['upload success' => 'failed'] , $posts[$postskey] );
         }
+    }
+    
+    /**
+     * send attachment files to the youtrack
+     * @global type $youtrack_url
+     * @param string $issueRef
+     * @param array $item
+     */
+    function stdUserUpdateAttachments($issueRef,$item){
+        global $youtrack_url;
+        $getDataFromYoutrack = new getDataFromYoutrack;
+        $files = $item['attachmentFiles'];
+        if($count = count($files['name'])) {
+            for($i=0;$i<$count;$i++) {
+                $header = ['Content-Type' => 'multipart/form-data'];
+                $body = [
+                    'name' => $files['name'][$i],
+                    'file' => '@'.$files['tmp_name'][$i],
+                    'Content-Type' => $files['type'][$i]
+                ];
+                
+                // POST /rest/issue/{issue}/attachment
+                $url = $youtrack_url.'/rest/issue/'.$issueRef.'/attachment';
+                $getDataFromYoutrack->rest($url,'post',$header,$body);
+            }
+        }
+        
     }
     
     /**
