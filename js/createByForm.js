@@ -75,7 +75,7 @@ $(document).ready(function(){
             
             // if checkbox dosnt exist
             if ( !$( '#HideFields input[name="'+name+'"]' ).length ) {
-                $('#HideFields').append('<label><input type="checkbox" name="'+name+'" value="'+name+'">'+name+'</label>');
+                $('#HideFields #HideFieldsCheckBoxContainer').append('<label><input type="checkbox" name="'+name+'" value="'+name+'">'+name+'</label>');
             }
         });
     }
