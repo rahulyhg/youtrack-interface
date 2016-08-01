@@ -74,7 +74,7 @@ $(document).ready(function(){
             } 
             
             // if checkbox dosnt exist
-            if ( !$( '#HideFields input[name="'+name+'"]' ).length ) {
+            if ( !$( '#HideFields input[name="'+name+'"]' ).length && name.length !== 0) {
                 $('#HideFields #HideFieldsCheckBoxContainer').append('<label><input type="checkbox" name="'+name+'" value="'+name+'">'+name+'</label>');
             }
         });
@@ -146,9 +146,10 @@ $(document).ready(function(){
                 delete classList[fieldNameNoSpaces+'column'];
             }
         }
-        delete classList['ticketLinkscolumn'];
+        delete classList['ticketLinkscolumn linkscolumn'];
         delete classList['attachmentscolumn'];
         for ( var singleClass in classList){
+            singleClass = singleClass.replace(' ','.');
             $("#toBeImported table tr[row='" + row + "'] td."+singleClass).html('<hr/>');
         }
     }
