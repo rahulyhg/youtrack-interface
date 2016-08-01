@@ -147,6 +147,7 @@ $(document).ready(function(){
             }
         }
         delete classList['ticketLinkscolumn'];
+        delete classList['attachmentscolumn'];
         for ( var singleClass in classList){
             $("#toBeImported table tr[row='" + row + "'] td."+singleClass).html('<hr/>');
         }
