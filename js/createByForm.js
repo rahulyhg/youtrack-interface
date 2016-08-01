@@ -199,7 +199,7 @@ $(document).ready(function(){
         var explodedName = name.split('-');
         var row = explodedName[1];
         $('#toBeImported table tr.hidden select.projectselector').val( $(projectSelector).val() );
-        $("#toBeImported table tr[row='" + row + "'] select:not(.projectselector)").each(function(){
+        $("#toBeImported table tr[row='" + row + "'] select:not(.dontClear)").each(function(){
             var name = $(this).attr('name');
             var explodedName = name.split('-');
             var variableName = explodedName[0];
