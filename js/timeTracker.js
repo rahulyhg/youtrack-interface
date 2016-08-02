@@ -1,8 +1,48 @@
 function addTicketForm(){
-    var html = $('form.template').html();
+    var form = $('form.template');
+    var html = form.html();
     $('div.forms').append('<form action="src/timeTrackerSubmit.php" method="post" enctype="multipart/form-data">'+html+'</form>');
+    updateProject(form);
 }
 
+/*
+ * update the summary and work types drop down
+ * @param form
+ * @param callback - callback function (optional)
+ */
+function updateProject(form,callback){
+    if (typeof (callback) === "undefined") {
+        var callback = function(){};
+    }
+    var project = $(form).find('.projectheader .projectselector').val().trim();
+    var ticketNo = $(form).find('.projectheader .ticketnumber').val().trim();
+    if( project === "" || ticketNo === "" ){
+        $(form).find('.projectheader .ticketsummary').html('');
+        callback();
+        return;
+    }
+    var ticket = project + '-' + ticketNo;
+    $.ajax({url: "src/ticketAjax.php?ticket="+ticket,
+        dataType: "json",
+        success: function(result){
+            if(result['summary']){
+                var linkHthml = '<a href="'+result['ticketUrl']+'" target="_blank" >'+result['ticketRef']+' : '+result['summary']+'</a>';
+            }else{
+                var linkHthml = 'ticket not found';
+            }
+            $(form).find('.projectheader .ticketsummary').html(linkHthml);
+            var html = '<option value="">type...</option>';
+            for (i = 0; i < result['workTypes'].length; i++){
+                html += '<option value="'+result['workTypes'][i]+'">'+result['workTypes'][i]+'</option>';
+            }
+            $(form).find('table tr td select.type').html(html);
+            callback();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+        }
+    });
+}
 
 $(document).ready(function(){
     // stop enter submitting forms
@@ -111,44 +151,6 @@ $(document).ready(function(){
         });
     });
 
-    /*
-     * update the summary and work types drop down
-     * @param form
-     * @param callback - callback function (optional)
-     */
-    function updateProject(form,callback){
-        if (typeof (callback) === "undefined") {
-            var callback = function(){};
-        }
-        var project = $(form).find('.projectheader .projectselector').val().trim();
-        var ticketNo = $(form).find('.projectheader .ticketnumber').val().trim();
-        if( project === "" || ticketNo === "" ){
-            $(form).find('.projectheader .ticketsummary').html('');
-            callback();
-            return;
-        }
-        var ticket = project + '-' + ticketNo;
-        $.ajax({url: "src/ticketAjax.php?ticket="+ticket,
-            dataType: "json",
-            success: function(result){
-                if(result['summary']){
-                    var linkHthml = '<a href="'+result['ticketUrl']+'" target="_blank" >'+result['ticketRef']+' : '+result['summary']+'</a>';
-                }else{
-                    var linkHthml = 'ticket not found';
-                }
-                $(form).find('.projectheader .ticketsummary').html(linkHthml);
-                var html = '<option value="">type...</option>';
-                for (i = 0; i < result['workTypes'].length; i++){
-                    html += '<option value="'+result['workTypes'][i]+'">'+result['workTypes'][i]+'</option>';
-                }
-                $(form).find('table tr td select.type').html(html);
-                callback();
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
-            }
-        });
-    }
     $('.forms').on('change', 'form .projectheader .projectselector', function(){
         var form = $(this).closest('form');
         updateProject(form);

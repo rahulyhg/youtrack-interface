@@ -82,9 +82,11 @@ $(document).ready(function(){
         var ticketRef = $(this).siblings( "span").first().html();
         ticketRef = ticketRef.split('-');
         addTicketForm();
-        var TicketElement = $('.forms form .projectheader').last();
+        var form = $('.forms form').last();
+        var TicketElement = form.find('.projectheader');
         TicketElement.children('.projectselector').val(ticketRef[0]);
         TicketElement.children('.ticketnumber').val(ticketRef[1]);
+        updateProject(form)
     });
     
     
