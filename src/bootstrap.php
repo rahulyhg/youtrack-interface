@@ -125,7 +125,7 @@ class ApiWriter implements WriterInterface
         $getDataFromYoutrack = new getDataFromYoutrack;
         //https://confluence.jetbrains.com/display/YTD65/Create+New+Issue
         // PUT /rest/issue?{project}&{summary}&{description}&{attachments}&{permittedGroup}
-        $url = $youtrack_url.'/rest/issue?project='.$item["project"].'&summary='.$item['summary'].'&description='.$item['description'];
+        $url = $youtrack_url.'/rest/issue?project='.$item["project"].'&summary='.urlencode($item['summary']).'&description='.urlencode($item['description']);
         $res = $getDataFromYoutrack->restResponse($url, 'put');
         $res = $res->getResponse();
         $location = $res->getHeader('location') ;
