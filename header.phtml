@@ -1,5 +1,27 @@
-<a href="csvUploader.phtml">upload a csv</a><br>
-<a href="createByForm.phtml">create multiple youtrack tickets by using online form</a><br/>
-<a href="downloadProjectIssue.phtml">Download all issues in a project as xml</a><br>
-<a href="downloadFields.phtml">Download all custom field options and users csv</a><br>
-<a href="timeTracker.phtml">Time Tracker</a><br>
+<nav class="navbar navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="#" class="navbar-brand">Youtrack Interface</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar">
+            <ul class="nav navbar-nav">
+                <li><a href="csvUploader.phtml">upload a csv</a></li>
+                <li><a href="createByForm.phtml">create multiple youtrack tickets</a></li>
+                <li><a href="downloadProjectIssues.phtml">Download project issues</a></li>
+                <li><a href="downloadFields.phtml">Download custom field options & users</a></li>
+                <li><a href="timeTracker.phtml">Time Tracker</a></li>
+                <li>
+                    <form action="src/youtrackLogout.php" method="post" enctype="multipart/form-data">
+                        <button name="submit" value="Submit">logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>

@@ -3,30 +3,31 @@
 <?php $authenticationAndSecurity = new authenticationAndSecurity; ?>
 <?php $cookies = $authenticationAndSecurity->getBrowserCookies();?>
 <!DOCTYPE html>
+<head>
+    <script type="text/javascript" src="js/bootstrap/bootstrap-3.3.7-dist/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap/bootstrap-3.3.7-dist/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap/bootstrap-3.3.7-dist/bootstrap-theme.min.css">
+</head>
 <html>
 <body>
-<h1 style="text-align:center">Youtrack Import</h1>
-<?php if($authenticationType === 'password'): ?>
-<header>
-    <?php require_once(__DIR__.'/header.phtml'); ?> 
-</header>
-<?php else: ?>
-    <?php if ($cookies===null ) : ?>
-        <form action="src/youtrackLogin.php" method="post" enctype="multipart/form-data">
-                <h1>Login</h1>
-                <div>login user: <input type="text" name="user"></div><br>
-                <div>login password: <input type="password" name="password"></div><br>
-                <input type="submit" value="Submit">
-        </form>
-    <?php else: ?>
+    <?php if($authenticationType === 'password'): ?>
         <header>
-            <?php require_once(__DIR__.'/header.phtml'); ?>            
-            <form action="src/youtrackLogout.php" method="post" enctype="multipart/form-data">
-                <button name="submit" value="Submit">logout</button>
-            </form>
+            <?php require_once(__DIR__.'/header.phtml'); ?>
         </header>
+    <?php else: ?>
+        <?php if ($cookies===null ) : ?>
+            <form action="src/youtrackLogin.php" method="post" enctype="multipart/form-data">
+                    <h1>Login</h1>
+                    <div>login user: <input type="text" name="user"></div><br>
+                    <div>login password: <input type="password" name="password"></div><br>
+                    <input type="submit" value="Submit">
+            </form>
+        <?php else: ?>
+            <header>
+                <?php require_once(__DIR__.'/header.phtml'); ?>
+            </header>
+        <?php endif; ?>
     <?php endif; ?>
-<?php endif; ?>
         
 </body>
 </html>

@@ -4,7 +4,6 @@ class authenticationAndSecurity {
     function redirectIfNotLoggedIn(){
         $authentication = $this->getAuthentication();
         if( $authentication['type']==='cookie' && $authentication['details'] === false ){
-            http_response_code(401); // set 'unauthorised' code
             $this->redirectBackToIndex();
         }
     }
@@ -103,10 +102,18 @@ class authenticationAndSecurity {
                echo "Authentication type not recognised: Please update the customSettings.php file";
         }
     }
+
+    /**
+     * @param int $code redirect code
+     */
     function redirectBackToIndex(){
-        $url = (string)filter_input(INPUT_SERVER,'HTTP_REFERER');
-       header( "Location: $url" );
-        die();
+        $url = (string)filter_input(INPUT_SERVER,'REQUEST_SCHEME').'://'.(string)filter_input(INPUT_SERVER,'HTTP_HOST').(string)filter_input(INPUT_SERVER,'REQUEST_URI');
+        $url = explode('/',$url);
+        array_pop( $url );
+        array_pop( $url );
+        $url = implode('/', $url );
+        header( "Location: $url/index.php",true, 302 ); // cant use other than 301 and 302 or browsers don't redirect
+        exit;
     }
     
     function getAllPosts(){
