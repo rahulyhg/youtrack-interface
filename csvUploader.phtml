@@ -13,26 +13,27 @@ require_once __DIR__.'/src/getCustomSettings.php';
 <!DOCTYPE html>
 <html>
 <body>
-
-<form action="src/csvUploader.php" method="post" enctype="multipart/form-data">
-	<h1 style="text-align:center">Youtrack CSV import</h1>
-       <p>
-            Only spreadsheets saved as a csv with a delimiter of a comma will work in the uploader. Please use the example csv's as a reference.
-        </p>
-        <p>For open office see below image</p>
-         <img src="openoffice.png"><br>
-        <div>
-            <a href="csvtemplates/basic.csv">Basic example csv</a><br>
-            <a href="csvtemplates/extended.csv">Extended example csv</a><br>
-        </div><br>
-        <?php if($authenticationType === 'password'): ?>
-            <div>login user: <input type="text" name="user"></div><br>
-            <div>login password: <input type="password" name="password"></div><br>
-        <?php endif; ?>
-        <div>Select a csv to upload: <input type="file" name="fileToUpload" id="fileToUpload"></div><br>
-        <div>test mode: <input type="checkbox" name="test" value="true"></div><br>
-	<input type="submit" value="Submit">
-</form>
-
+    <header>
+        <?php require_once(__DIR__.'/header.phtml'); ?>
+    </header>
+    <form action="src/csvUploader.php" method="post" enctype="multipart/form-data">
+        <h1 style="text-align:center">Youtrack CSV import</h1>
+           <p>
+                Only spreadsheets saved as a csv with a delimiter of a comma will work in the uploader. Please use the example csv's as a reference.
+            </p>
+            <p>For open office see below image</p>
+             <img src="openoffice.png"><br>
+            <div>
+                <a href="csvtemplates/basic.csv">Basic example csv</a><br>
+                <a href="csvtemplates/extended.csv">Extended example csv</a><br>
+            </div><br>
+            <?php if($authenticationType === 'password'): ?>
+                <div>login user: <input type="text" name="user"></div><br>
+                <div>login password: <input type="password" name="password"></div><br>
+            <?php endif; ?>
+            <div>Select a csv to upload: <input type="file" name="fileToUpload" id="fileToUpload"></div><br>
+            <div>test mode: <input type="checkbox" name="test" value="true"></div><br>
+        <input type="submit" value="Submit">
+    </form>
 </body>
 </html>

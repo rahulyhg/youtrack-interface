@@ -13,16 +13,17 @@ require_once __DIR__.'/src/getCustomSettings.php';
 <!DOCTYPE html>
 <html>
 <body>
-
-<form action="src/downloadFields.php" method="post" enctype="multipart/form-data">
-	<h1 style="text-align:center">Youtrack custom field options and users csv</h1>
-	<div>filename: <input type="text" name="filename"></div><br>
-        <?php if($authenticationType === 'password'): ?>
-            <div>login user: <input type="text" name="user"></div><br>
-            <div>login password: <input type="password" name="password"></div><br>
-        <?php endif; ?>
-	<input type="submit" value="Submit">
-</form>
-
+	<header>
+		<?php require_once(__DIR__.'/header.phtml'); ?>
+	</header>
+	<form action="src/downloadFields.php" method="post" enctype="multipart/form-data">
+		<h1 style="text-align:center">Youtrack custom field options and users csv</h1>
+		<div>filename: <input type="text" name="filename"></div><br>
+			<?php if($authenticationType === 'password'): ?>
+				<div>login user: <input type="text" name="user"></div><br>
+				<div>login password: <input type="password" name="password"></div><br>
+			<?php endif; ?>
+		<input type="submit" value="Submit">
+	</form>
 </body>
 </html>
