@@ -54,32 +54,32 @@ function nodeValueFromXml($node,$xmlCode){
 
 function getPojectAssignees($projectid){
     global $getDataFromYoutrack;
-    global $youtrack_url;
-    $url = $youtrack_url.'/rest/admin/project/'.$projectid.'/assignee';
+    global $youtrackUrl;
+    $url = $youtrackUrl.'/rest/admin/project/'.$projectid.'/assignee';
     $response = $getDataFromYoutrack->rest($url,'get');
     return attributeFromXml('assignee','login',$response);
 }
     
 function getCustomFieldList($projectid){
     global $getDataFromYoutrack;
-    global $youtrack_url;
-    $url = $youtrack_url.'/rest/admin/project/'.$projectid.'/customfield';
+    global $youtrackUrl;
+    $url = $youtrackUrl.'/rest/admin/project/'.$projectid.'/customfield';
     $response = $getDataFromYoutrack->rest($url,'get');   
     return attributeFromXml('projectCustomField','name',$response);
 }
 function getFieldData($fieldList,$projectid){
     global $getDataFromYoutrack;
-    global $youtrack_url;
+    global $youtrackUrl;
     $dataArray = [];
     foreach($fieldList as $field){
         $field = str_replace(' ', '%20', $field);
-        $url = $youtrack_url.'/rest/admin/project/'.$projectid.'/customfield/'.$field;
+        $url = $youtrackUrl.'/rest/admin/project/'.$projectid.'/customfield/'.$field;
         $response = $getDataFromYoutrack->rest($url,'get');   
         $bundle = attributeFromXml('param','value',$response);
         $bundleType = attributeFromXml('projectCustomField','type',$response); 
         // if dropdown field and bundle dosnt have a :
         if( strpos($bundleType[0], '[') !== false && strpos( $bundle[0],':') === False ){
-            $url = $youtrack_url.'/rest/admin/customfield/bundle/'.$bundle[0];
+            $url = $youtrackUrl.'/rest/admin/customfield/bundle/'.$bundle[0];
            echo $response = $getDataFromYoutrack->rest($url,'get');
             $fieldOptions = nodeValueFromXml('value', $response);
         }else{

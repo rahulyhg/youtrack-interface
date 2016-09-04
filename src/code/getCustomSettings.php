@@ -7,16 +7,16 @@ if( !file_exists(__DIR__ . '/../../customSettings.php') ){
 
 require_once __DIR__ . '/../../customSettings.php';
 $die = false;
-if( $youtrack_url === 'http://example.com'){
+if( $youtrackUrl === 'http://example.com'){
     die('please fill in the customSettings.php file with your details');
 }
 
-if( substr($youtrack_url, 0, 7)  !== 'http://' ){
-    echo('invalid youtrack url: "http://" required at the start of your url. please update $youtrack_url in customSettings.php'.$GLOBALS["newline"]);
+if( substr($youtrackUrl, 0, 7)  !== 'http://' ){
+    echo('invalid youtrack url: "http://" required at the start of your url. please update $youtrackUrl in customSettings.php'.$GLOBALS["newline"]);
     $die = true;
 }
-if(  substr($youtrack_url, -1) === '/' ){
-    echo('invalid youtrack url: dont finish your url with a "/" . please update $youtrack_url in customSettings.php'.$GLOBALS["newline"]);
+if(  substr($youtrackUrl, -1) === '/' ){
+    echo('invalid youtrack url: dont finish your url with a "/" . please update $youtrackUrl in customSettings.php'.$GLOBALS["newline"]);
     $die = true;
 }
 if($die){

@@ -11,53 +11,53 @@ $csvClass = new csvClass;
 
 use Ddeboer\DataImport\Writer\CsvWriter;
 
-$youtrack_fields = [];
+$youtrackFields = [];
 
 $filename = $authenticationAndSecurity->getPost('filename');
 
-list($youtrack_fields_list, $youtrack_fields) = $getYoutrackData->getCustomFieldsWithDetails();
+list($youtrackFieldsList, $youtrackFields) = $getYoutrackData->getCustomFieldsWithDetails();
 
-$youtrack_fields['user'] = $getYoutrackData->getUsers();
-array_push($youtrack_fields_list, 'user');
+$youtrackFields['user'] = $getYoutrackData->getUsers();
+array_push($youtrackFieldsList, 'user');
 
 function reorganiseArray($array){
-    $new_array = [];
+    $newArray = [];
     foreach( $array as $key => $value ){
         $i = 0;
         foreach( $value as $key2 =>$val){
-           if( !isset($new_array[$i]) ){
-               $new_array[$i] = [];
+           if( !isset($newArray[$i]) ){
+               $newArray[$i] = [];
            }
-           $new_array[$i][$key] = $val;
+           $newArray[$i][$key] = $val;
            $i++;
         }
     }
-    return $new_array;
+    return $newArray;
 }
-$csv_data = reorganiseArray($youtrack_fields);
+$csvData = reorganiseArray($youtrackFields);
 
-function makeColumnsFullLength($csv_data, $youtrack_fields_list){
+function makeColumnsFullLength($csvData, $youtrackFieldsList){
 // needs to replace cos just amending old causes data in wrong column when csv created
-    $csv_data_replace = []; 
-    foreach($csv_data as $key => $column ){
-        $csv_data_replace[$key] = [];
-        foreach($youtrack_fields_list as $field){
+    $csvDataReplace = [];
+    foreach($csvData as $key => $column ){
+        $csvDataReplace[$key] = [];
+        foreach($youtrackFieldsList as $field){
             if( !isset($column[$field]) ){
-                $csv_data_replace[$key][$field] = '';
+                $csvDataReplace[$key][$field] = '';
             }else{
-                $csv_data_replace[$key][$field] = $csv_data[$key][$field];
+                $csvDataReplace[$key][$field] = $csvData[$key][$field];
             }
         }
     }
-    return $csv_data_replace;
+    return $csvDataReplace;
 }
-$csv_data = makeColumnsFullLength($csv_data,$youtrack_fields_list);
+$csvData = makeColumnsFullLength($csvData,$youtrackFieldsList);
 
 if( substr($filename, -4) != '.csv'){
     $filename = $filename.'.csv';
 }
-$output_file_location = '../export/'.$filename;
-$csvCreated = $csvClass->createCsv( $csv_data, $output_file_location );
+$outputFileLocation = '../export/'.$filename;
+$csvCreated = $csvClass->createCsv( $csvData, $outputFileLocation );
 
 if($csvCreated == FALSE){
     function transmitFile($filepath){
@@ -75,5 +75,5 @@ if($csvCreated == FALSE){
         }
         unlink($filepath);
     }
-    transmitFile($output_file_location);
+    transmitFile($outputFileLocation);
 }

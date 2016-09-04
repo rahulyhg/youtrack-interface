@@ -16,8 +16,8 @@ class timeJsonGetAjax {
     
     function getNewestFileFromFolder($folder){
         $files = scandir($folder, SCANDIR_SORT_DESCENDING);
-        $newest_file = $files[0];
-        return $newest_file;
+        $newestFile = $files[0];
+        return $newestFile;
     }
     
     function getFileContents($fileName){

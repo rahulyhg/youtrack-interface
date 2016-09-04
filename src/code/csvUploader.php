@@ -12,10 +12,10 @@ use Ddeboer\DataImport\Writer\WriterInterface;
 
 $authenticationAndSecurity = new authenticationAndSecurity;
 
-function fileUpload($file_type){
+function fileUpload($fileType){
     $currentdir = getcwd();
-    $target_dir = $currentdir."/../uploads/";
-    $target_file = $target_dir .'current.csv';
+    $targetDir = $currentdir."/../uploads/";
+    $fileType = $targetDir .'current.csv';
     $uploadOk = 1;
     $imageFileType = pathinfo($_FILES["fileToUpload"]["name"],PATHINFO_EXTENSION);
     //
@@ -25,8 +25,8 @@ function fileUpload($file_type){
         $uploadOk = 0;
     }
     // Allow certain file formats
-    if($imageFileType != $file_type ) {
-        echo "Sorry, only '".$file_type."'s files are allowed.";
+    if($imageFileType != $fileType ) {
+        echo "Sorry, only '".$fileType."'s files are allowed.";
         $uploadOk = 0;
     }
     // Check if $uploadOk is set to 0 by an error
@@ -35,7 +35,7 @@ function fileUpload($file_type){
         return false;
     // if everything is ok, try to upload file
     } else {
-        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $fileType)) {
             echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
             return true;
         } else {

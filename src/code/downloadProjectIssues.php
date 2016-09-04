@@ -8,7 +8,7 @@ $authenticationAndSecurity = new authenticationAndSecurity;
 
 $filename = $authenticationAndSecurity->getPost('filename');
 
-$url = $youtrack_url . '/rest/export/'
+$url = $youtrackUrl . '/rest/export/'
     . $authenticationAndSecurity->getPost('project')
     .'/issues';
 $res = $getDataFromYoutrack->rest($url,'get');

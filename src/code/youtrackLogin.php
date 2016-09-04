@@ -10,10 +10,10 @@ $authenticationAndSecurity = new authenticationAndSecurity;
 
 function LoginToYouTrack(){
     global $getDataFromYoutrack;
-    global $youtrack_url;
+    global $youtrackUrl;
     global $authenticationAndSecurity;
     
-    $url = $youtrack_url."/rest/user/login";
+    $url = $youtrackUrl."/rest/user/login";
     $response = $getDataFromYoutrack->restResponse($url,'post',null,["login"=>$authenticationAndSecurity->getPost("user"),"password"=>$authenticationAndSecurity->getPost("password")],array());
     $response = $response->getResponse();
     if ($response->getStatusCode() == 200) {

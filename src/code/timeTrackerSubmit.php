@@ -75,9 +75,9 @@ class timeTrackerSubmit{
     }
     
     function updateYoutrack($content,$ticketId){
-        global $youtrack_url;
+        global $youtrackUrl;
         $getDataFromYoutrack = new getDataFromYoutrack;
-        $url = $youtrack_url . '/rest/issue/'
+        $url = $youtrackUrl . '/rest/issue/'
             . $ticketId
             .'/timetracking/workitem';
         $res = $getDataFromYoutrack->restResponse($url,'post',['Content-Type' => 'text/xml; charset=UTF8'],$content);
