@@ -75,7 +75,7 @@ class getDataFromYoutrack {
      * @param string $keyAttribute [optional] uses this attrbute as the key for storing the data in the return array
      * @return array data requested
      */
-    function extract_data_xml( $xml, $node, $attribute='', $whereAttr=[]){
+    function extractDataXml($xml, $node, $attribute='', $whereAttr=[]){
         $return_data = [];
         $reader = new XMLReader();
         $reader->xml($xml);
@@ -83,7 +83,7 @@ class getDataFromYoutrack {
             if ($reader->nodeType == XMLReader::ELEMENT) {
                 $exp = $reader->expand();
                 if ($exp->nodeName == $node){
-                   $data = $this->extract_data_xml_use_node($exp,$attribute,$whereAttr);
+                   $data = $this->extractDataXmlUseNode($exp,$attribute,$whereAttr);
                    if($data){ 
                        $return_data[] = $data;
                    }
@@ -99,7 +99,7 @@ class getDataFromYoutrack {
      * @param string $whereAttr array of required attribute value pairs  for desired node e.g. [ 'attr'=>'value', 'attr2'=>'value2' ]
      * @return array|string
      */
-    function extract_data_xml_use_node($exp,$attribute='',$whereAttr=[]){
+    function extractDataXmlUseNode($exp, $attribute='', $whereAttr=[]){
         if(count($whereAttr)>0){
             $continue = false;
             foreach ( $whereAttr as $attr => $val ){
@@ -123,7 +123,7 @@ class getDataFromYoutrack {
     }
 
     
-    function get_custom_fields($project='' ){
+    function getCustomFields($project='' ){
         global $youtrack_url;
         if( $project == '' ){
             $projectList = $this->getProjectsList();
@@ -131,7 +131,7 @@ class getDataFromYoutrack {
         }
         $url = $youtrack_url.'/rest/admin/project/'.$project.'/customfield'; 
         $youtrack_project_customfields_xml = $this->rest($url,'get');
-        $youtrack_project_customfields = $this->extract_data_xml( $youtrack_project_customfields_xml, 'projectCustomField', 'name');
+        $youtrack_project_customfields = $this->extractDataXml( $youtrack_project_customfields_xml, 'projectCustomField', 'name');
         $key = array_search('Assignee', $youtrack_project_customfields);
         if( $key !== false) {
             unset($youtrack_project_customfields[$key]); // Assignee is not a custom field
@@ -145,16 +145,16 @@ class getDataFromYoutrack {
             $project = $projectList[0];
         }
         if( $youtrack_fields_list == '' ){
-            $youtrack_fields_list = $this->get_custom_fields($project);
+            $youtrack_fields_list = $this->getCustomFields($project);
         }
         foreach($youtrack_fields_list as $field){
             $url = $youtrack_url.'/rest/admin/project/'.$project.'/customfield/'.$field; 
             $customField = $this->rest($url, 'get');
-            $CustomFieldtypeArray = $this->extract_data_xml( $customField, 'projectCustomField', 'type');
+            $CustomFieldtypeArray = $this->extractDataXml( $customField, 'projectCustomField', 'type');
             $customFieldSettings[$field]['fieldType'] = $CustomFieldtypeArray[0];
             // if dropdown field
             if( strpos($CustomFieldtypeArray[0], '[') !== false ){
-                $bundle = $this->extract_data_xml( $customField, 'param', 'value', ['name'=>'bundle'] );
+                $bundle = $this->extractDataXml( $customField, 'param', 'value', ['name'=>'bundle'] );
                 $customFieldSettings[$field]['bundle'] = $bundle[0];
             }else{
                 $customFieldSettings[$field]['bundle'] = '';
@@ -165,14 +165,14 @@ class getDataFromYoutrack {
     /*
      * $customFieldTypeAndBundle array from getCustomFieldTypeAndBundle
      */
-    function get_custom_fields_details($youtrack_fields_list='', $project='', $customFieldTypeAndBundle='' ){
+    function getCustomFieldsDetails($youtrack_fields_list='', $project='', $customFieldTypeAndBundle='' ){
         global $youtrack_url;
         if( $project == '' ){
             $projectList = $this->getProjectsList();
             $project = $projectList[0];
         }
         if( $youtrack_fields_list == '' ){
-            $youtrack_fields_list = $this->get_custom_fields($project);
+            $youtrack_fields_list = $this->getCustomFields($project);
         }
         if( $customFieldTypeAndBundle == '' ){
             $customFieldTypeAndBundle = $this->getCustomFieldTypeAndBundle($youtrack_fields_list, $project);      
@@ -186,15 +186,15 @@ class getDataFromYoutrack {
                 if($fieldTypeShort == 'enum'){
                     $url = $youtrack_url.'/rest/admin/customfield/bundle/'.$customFieldTypeAndBundle[$field]['bundle'];
                     $bundleXml = $this->rest($url, 'get');
-                    $youtrack_fields[$field] = $this->extract_data_xml( $bundleXml, 'value'); 
+                    $youtrack_fields[$field] = $this->extractDataXml( $bundleXml, 'value');
                 }elseif($fieldTypeShort == 'ownedfield'){
                     $url = $youtrack_url.'/rest/admin/customfield/ownedFieldBundle/'.$customFieldTypeAndBundle[$field]['bundle'];
                     $bundleXml = $this->rest($url, 'get');
-                    $youtrack_fields[$field] = $this->extract_data_xml( $bundleXml, 'ownedField'); 
+                    $youtrack_fields[$field] = $this->extractDataXml( $bundleXml, 'ownedField');
                 }else{
                     $url = $youtrack_url.'/rest/admin/customfield/'.$fieldTypeShort.'Bundle/'.$customFieldTypeAndBundle[$field]['bundle'];
                     $bundleXml = $this->rest($url, 'get');
-                    $youtrack_fields[$field] = $this->extract_data_xml( $bundleXml, $fieldTypeShort); 
+                    $youtrack_fields[$field] = $this->extractDataXml( $bundleXml, $fieldTypeShort);
                 }
             }else{
                 $youtrack_fields[$field]='';
@@ -202,14 +202,14 @@ class getDataFromYoutrack {
         }
         return $youtrack_fields;
     }
-    function get_custom_fields_with_details($project=''){
+    function getCustomFieldsWithDetails($project=''){
         if( $project == '' ){
             $projectList = $this->getProjectsList();
             $project = $projectList[0];
         }
-        $youtrack_fields_list = $this->get_custom_fields($project);
+        $youtrack_fields_list = $this->getCustomFields($project);
         $customFieldDetails = $this->getCustomFieldTypeAndBundle($youtrack_fields_list, $project);
-        $youtrack_fields = $this->get_custom_fields_details($youtrack_fields_list, $project, $customFieldDetails);
+        $youtrack_fields = $this->getCustomFieldsDetails($youtrack_fields_list, $project, $customFieldDetails);
         return [$youtrack_fields_list, $youtrack_fields];
     }
    
@@ -219,19 +219,19 @@ class getDataFromYoutrack {
         global $youtrack_url;
         $url = $youtrack_url.'/rest/admin/project'; 
         $youtrack_projects_list_xml = $this->rest($url, 'get');
-        $youtrack_projects_list = $this->extract_data_xml( $youtrack_projects_list_xml, 'project', 'id');
+        $youtrack_projects_list = $this->extractDataXml( $youtrack_projects_list_xml, 'project', 'id');
         return $youtrack_projects_list;
     }
     function getProjectAssignees($project){
         global $youtrack_url;
         $url = $youtrack_url.'/rest/admin/project/'.$project.'/assignee';
         $youtrack_project_assignees_xml = $this->rest($url, 'get');
-        $youtrack_project_assignees = $this->extract_data_xml( $youtrack_project_assignees_xml, 'assignee', 'login');
+        $youtrack_project_assignees = $this->extractDataXml( $youtrack_project_assignees_xml, 'assignee', 'login');
         natcasesort($youtrack_project_assignees);
         return $youtrack_project_assignees;
     }
     
-    function get_users(){
+    function getUsers(){
         global $youtrack_url;
         $user_list = [];
         $request_end = '';
@@ -241,7 +241,7 @@ class getDataFromYoutrack {
             $request_end = '?start='.$users_no;
             $url = $youtrack_url.'/rest/admin/user'.$request_end; 
             $user_list_xml = $this->rest($url, 'get');
-            $new_user_list = $this->extract_data_xml( $user_list_xml, 'user', 'login');
+            $new_user_list = $this->extractDataXml( $user_list_xml, 'user', 'login');
             for($i=0;$i<count($new_user_list);$i++){
                 $user_list[] = $new_user_list[$i];
             }
@@ -259,7 +259,7 @@ class getDataFromYoutrack {
         $url = $youtrack_url . '/rest/issue/'.$ticket;
         try {
             $ticketXml = $this->rest($url, 'get');
-            $ticketSummary = $this->extract_data_xml( $ticketXml,'field', '', $whereAttr=['name'=>'summary']);
+            $ticketSummary = $this->extractDataXml( $ticketXml,'field', '', $whereAttr=['name'=>'summary']);
         } catch (Exception $e) {
             error_log($e);
         }
@@ -272,7 +272,7 @@ class getDataFromYoutrack {
         $url = $youtrack_url . '/rest/admin/project/'.$project.'/timetracking/worktype';
         try {
             $workTypeXml = $this->rest($url, 'get');
-            $workTypes = $this->extract_data_xml($workTypeXml, 'name');
+            $workTypes = $this->extractDataXml($workTypeXml, 'name');
         } catch( Exception $e ){
             error_log($e);
         }
@@ -301,8 +301,8 @@ class getDataFromYoutrack {
                 $explodedTicketXml[$i] = trim($explodedTicketXml[$i]);
                 if(strlen($explodedTicketXml[$i])>0){
                     $explodedTicketXml[$i] = $explodedTicketXml[$i].'</issue>';
-                    $ticketID = $this->extract_data_xml($explodedTicketXml[$i], 'issue', 'id');
-                    $ticketSummary = $this->extract_data_xml($explodedTicketXml[$i], 'field','',['name'=>'summary']);
+                    $ticketID = $this->extractDataXml($explodedTicketXml[$i], 'issue', 'id');
+                    $ticketSummary = $this->extractDataXml($explodedTicketXml[$i], 'field','',['name'=>'summary']);
                     $tickets[$ticketID[0]] = $ticketSummary[0];
                 }
             }
@@ -326,7 +326,7 @@ class getDataFromYoutrack {
         global $youtrack_url;
         $url = $youtrack_url.'/rest/admin/issueLinkType';
         $youtrackLinkTypesXml = $this->rest($url, 'get');
-        $youtrackLinkTypes = $this->extract_data_xml( $youtrackLinkTypesXml, 'issueLinkType', ['name','outwardName','inwardName']);
+        $youtrackLinkTypes = $this->extractDataXml( $youtrackLinkTypesXml, 'issueLinkType', ['name','outwardName','inwardName']);
         return $youtrackLinkTypes;
     }
 }

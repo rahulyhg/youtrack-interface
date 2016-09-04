@@ -23,7 +23,7 @@ foreach( $projectAssignees as $assignee ){
     $response['assignee']['innerHtml'] .= '<option value="'.$assignee.'">'.$assignee.'</option>';
 }
 
-$customFieldDetails = $getDataFromYoutrack->get_custom_fields_details($customFieldList, $project, $customFieldTypeAndBundle);
+$customFieldDetails = $getDataFromYoutrack->getCustomFieldsDetails($customFieldList, $project, $customFieldTypeAndBundle);
 foreach( $customFieldDetails as $key => $list ){
     if( gettype($list) == 'array'){
         $response[$key]['innerHtml'] = '<option value=""></option>'; 

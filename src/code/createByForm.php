@@ -2,7 +2,7 @@
 $getDataFromYoutrack = new getDataFromYoutrack;
 
 $customFieldList = [];
-$customFieldListFull = $getDataFromYoutrack->get_custom_fields();
+$customFieldListFull = $getDataFromYoutrack->getCustomFields();
 $key = array_search('Spent time', $customFieldListFull);
 unset($customFieldListFull[$key]);
 $customFieldListFull = array_merge($customFieldListFull);
@@ -14,5 +14,5 @@ foreach( $customFieldListFull as $customField ){
 $projectList = $getDataFromYoutrack->getProjectsList();
 $projectAssignees = $getDataFromYoutrack->getProjectAssignees($projectList[0]);
 $customFieldTypeAndBundle = $getDataFromYoutrack->getCustomFieldTypeAndBundle($customFieldList, $projectList[0]);
-$customFieldDetails = $getDataFromYoutrack->get_custom_fields_details($customFieldList, $projectList[0], $customFieldTypeAndBundle);
+$customFieldDetails = $getDataFromYoutrack->getCustomFieldsDetails($customFieldList, $projectList[0], $customFieldTypeAndBundle);
 $linkTypes = $getDataFromYoutrack->getLinkTypes();

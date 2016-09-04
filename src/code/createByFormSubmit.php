@@ -128,17 +128,17 @@ class createByFormSubmit{
         // creates csv log before sending to guzzle as guzzle dosnt fail gracefully
         if($GLOBALS['createByFormTransferLog']){
             $this->createFolder($csvLogFolder);
-            $csvClass->create_csv($posts, $csvLogFolder.'/'.$csvLogFileName);
+            $csvClass->createCsv($posts, $csvLogFolder.'/'.$csvLogFileName);
         }
         
         $posts = $this->sendPostData($posts);
         
         if($GLOBALS['createByFormTransferLog']){
-            $csvClass->create_csv($posts, $csvLogFolder.'/'.$csvLogFileName);
+            $csvClass->createCsv($posts, $csvLogFolder.'/'.$csvLogFileName);
         }elseif( $GLOBALS['createByFormTransferErrorLog'] ){
             $posts = $this->removeSuccessfulPosts($posts);
             $this->createFolder($csvLogFolder);
-            $csvClass->create_csv($posts, $csvLogFolder.'/'.$csvLogFileName);
+            $csvClass->createCsv($posts, $csvLogFolder.'/'.$csvLogFileName);
         }
         
         if (null !== $authenticationAndSecurity->getPost("test")) {

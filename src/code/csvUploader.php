@@ -12,7 +12,7 @@ use Ddeboer\DataImport\Writer\WriterInterface;
 
 $authenticationAndSecurity = new authenticationAndSecurity;
 
-function file_upload($file_type){
+function fileUpload($file_type){
     $currentdir = getcwd();
     $target_dir = $currentdir."/../uploads/";
     $target_file = $target_dir .'current.csv';
@@ -61,7 +61,7 @@ $options = getopt("u:p:f:t");
 // if not run in terminal (web page)
 if( !isset($options['f']) ){
     $GLOBALS["newline"] = "<br/>\n";
-    $uploaded = file_upload('csv');
+    $uploaded = fileUpload('csv');
     if($uploaded !== true ){
         exit();
     }

@@ -15,12 +15,12 @@ $youtrack_fields = [];
 
 $filename = $authenticationAndSecurity->getPost('filename');
 
-list($youtrack_fields_list, $youtrack_fields) = $getYoutrackData->get_custom_fields_with_details();
+list($youtrack_fields_list, $youtrack_fields) = $getYoutrackData->getCustomFieldsWithDetails();
 
-$youtrack_fields['user'] = $getYoutrackData->get_users();
+$youtrack_fields['user'] = $getYoutrackData->getUsers();
 array_push($youtrack_fields_list, 'user');
 
-function reorganise_array($array){
+function reorganiseArray($array){
     $new_array = [];
     foreach( $array as $key => $value ){
         $i = 0;
@@ -34,9 +34,9 @@ function reorganise_array($array){
     }
     return $new_array;
 }
-$csv_data = reorganise_array($youtrack_fields);
+$csv_data = reorganiseArray($youtrack_fields);
 
-function make_columns_full_length($csv_data,$youtrack_fields_list){
+function makeColumnsFullLength($csv_data, $youtrack_fields_list){
 // needs to replace cos just amending old causes data in wrong column when csv created
     $csv_data_replace = []; 
     foreach($csv_data as $key => $column ){
@@ -51,16 +51,16 @@ function make_columns_full_length($csv_data,$youtrack_fields_list){
     }
     return $csv_data_replace;
 }
-$csv_data = make_columns_full_length($csv_data,$youtrack_fields_list);
+$csv_data = makeColumnsFullLength($csv_data,$youtrack_fields_list);
 
 if( substr($filename, -4) != '.csv'){
     $filename = $filename.'.csv';
 }
 $output_file_location = '../export/'.$filename;
-$csvCreated = $csvClass->create_csv( $csv_data, $output_file_location );
+$csvCreated = $csvClass->createCsv( $csv_data, $output_file_location );
 
 if($csvCreated == FALSE){
-    function transmit_file($filepath){
+    function transmitFile($filepath){
         if (file_exists($filepath)) {
             header('Content-Description: File Transfer');
             header('Content-Type: application/octet-stream');
@@ -75,5 +75,5 @@ if($csvCreated == FALSE){
         }
         unlink($filepath);
     }
-    transmit_file($output_file_location);
+    transmitFile($output_file_location);
 }

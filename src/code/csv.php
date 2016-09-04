@@ -7,7 +7,7 @@ class csvClass {
     /*
      * returns false if unable to write to folder
      */
-    function create_csv( $data, $output_file_location, $delimiter = ',', $header=[] ){
+    function createCsv($data, $output_file_location, $delimiter = ',', $header=[] ){
         if ( ! is_writable(dirname($output_file_location))) {
             echo 'Unable to create file '.$output_file_location.' . Please check write permissions for your web server (apache/nginx/..)'.$GLOBALS["newline"];
             return false;
