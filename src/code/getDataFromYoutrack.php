@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__.'/authenticationAndSecurity.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/authenticationAndSecurity.php';
 require_once __DIR__ . '/cache.php';
-require_once __DIR__.'/getCustomSettings.php';
+require_once __DIR__ . '/getCustomSettings.php';
 
 class getDataFromYoutrack {
     function restResponse($url, $postOrGet = 'get', $headers = null, $body = null, $options = null){

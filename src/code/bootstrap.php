@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/getDataFromYoutrack.php';
-require_once __DIR__.'/authenticationAndSecurity.php';
+require_once __DIR__ . '/authenticationAndSecurity.php';
 use Juno\Workflow;
 use Ddeboer\DataImport\Reader\CsvReader;
 use Ddeboer\DataImport\ItemConverter\MappingItemConverter;

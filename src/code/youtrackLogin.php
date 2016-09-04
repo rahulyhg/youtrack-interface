@@ -1,6 +1,6 @@
 <?php
 $GLOBALS['newline'] = '\n'; // keep at the top needed by getCustomSettings
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/getCustomSettings.php';
 require_once __DIR__ . '/getDataFromYoutrack.php';
 require_once __DIR__ . '/authenticationAndSecurity.php';

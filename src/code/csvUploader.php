@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/bootstrap.php';
-require_once __DIR__.'/authenticationAndSecurity.php';
+require_once __DIR__ . '/authenticationAndSecurity.php';
 
 ini_set('display_errors', true);
 
@@ -74,7 +74,7 @@ if( !isset($options['f']) ){
         $_POST['test'] = true;
     }
     if( strpos('/',$options['f']) == false ){
-        $csv = new SplFileObject(__DIR__ . '/../uploads/'.$options['f']);
+        $csv = new SplFileObject(__DIR__ . '/../uploads/' .$options['f']);
     }else{
         $csv = new SplFileObject($options['f']);
     }

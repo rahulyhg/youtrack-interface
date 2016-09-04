@@ -1,11 +1,11 @@
 <?php
-require_once __DIR__.'/authenticationAndSecurity.php';
+require_once __DIR__ . '/authenticationAndSecurity.php';
 
-if( !file_exists( __DIR__.'/../customSettings.php' ) ){
+if( !file_exists(__DIR__ . '/../../customSettings.php') ){
     die('custom settings file missing: please copy customSettings.php.example to customSettings.php and update it with your settings');
 }
 
-require_once __DIR__.'/../customSettings.php';
+require_once __DIR__ . '/../../customSettings.php';
 $die = false;
 if( $youtrack_url === 'http://example.com'){
     die('please fill in the customSettings.php file with your details');

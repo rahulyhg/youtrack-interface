@@ -4,19 +4,19 @@
 // <p>---------------------------------------------------------</p>
 
 // redirect to index.html if cookie not set and not using password verification
-require_once __DIR__ . '/src/authenticationAndSecurity.php';
+require_once __DIR__ . '/code/authenticationAndSecurity.php';
 $authenticationAndSecurity = new authenticationAndSecurity;
 $authenticationAndSecurity->redirectIfNotLoggedIn();
 
-require_once __DIR__.'/src/getCustomSettings.php';
+require_once __DIR__ . '/code/getCustomSettings.php';
 ?>
 <!DOCTYPE html>
 <html>
 <body>
 	<header>
-		<?php require_once(__DIR__.'/header.phtml'); ?>
+		<?php require_once(__DIR__ . '/header.phtml'); ?>
 	</header>
-	<form action="src/downloadFields.php" method="post" enctype="multipart/form-data">
+	<form action="code/downloadFields.php" method="post" enctype="multipart/form-data">
 		<h1 style="text-align:center">Youtrack custom field options and users csv</h1>
 		<div>filename: <input type="text" name="filename"></div><br>
 			<?php if($authenticationType === 'password'): ?>

@@ -4,17 +4,17 @@
 // <p>---------------------------------------------------------</p>
 
 // redirect to index.html if cookie not set and not using password verification
-require_once __DIR__ . '/src/authenticationAndSecurity.php';
+require_once __DIR__ . '/code/authenticationAndSecurity.php';
 $authenticationAndSecurity = new authenticationAndSecurity;
 $authenticationAndSecurity->redirectIfNotLoggedIn();
 
-require_once __DIR__.'/src/getCustomSettings.php';
+require_once __DIR__ . '/code/getCustomSettings.php';
 ?>
 <!DOCTYPE html>
 <html>
 <body>
 	<header>
-		<?php require_once(__DIR__.'/header.phtml'); ?>
+		<?php require_once(__DIR__ . '/header.phtml'); ?>
 	</header>
 	<form action="src/downloadAllProjectIssues.php" method="post" enctype="multipart/form-data">
 		<h1 style="text-align:center">Youtrack xml Project export</h1>

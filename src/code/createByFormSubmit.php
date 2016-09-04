@@ -2,7 +2,7 @@
 require_once __DIR__ . '/getCustomSettings.php';
 require_once __DIR__ . '/bootstrap.php';
 require_once __DIR__ . '/csv.php';
-require_once __DIR__.'/authenticationAndSecurity.php';
+require_once __DIR__ . '/authenticationAndSecurity.php';
 
 use Guzzle\Client;
 use Ddeboer\DataImport\Writer\CsvWriter;

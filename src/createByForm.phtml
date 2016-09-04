@@ -4,15 +4,15 @@
 // <p>---------------------------------------------------------</p>
 
 $GLOBALS['newline'] = '<br>'; // keep at the top needed by getCustomSettings
-require_once __DIR__.'/src/getCustomSettings.php'; 
+require_once __DIR__ . '/code/getCustomSettings.php';
 
 // redirect to index.html if cookie not set and not using password verification
-require_once __DIR__ . '/src/authenticationAndSecurity.php';
+require_once __DIR__ . '/code/authenticationAndSecurity.php';
 $authenticationAndSecurity = new authenticationAndSecurity;
 $authenticationAndSecurity->redirectIfNotLoggedIn();
 
-require_once __DIR__ . '/src/getDataFromYoutrack.php';
-require_once __DIR__ . '/src/createByForm.php';
+require_once __DIR__ . '/code/getDataFromYoutrack.php';
+require_once __DIR__ . '/code/createByForm.php';
 
 ?>            
 
@@ -30,7 +30,7 @@ require_once __DIR__ . '/src/createByForm.php';
 
     <body>
         <header>
-            <?php require_once(__DIR__.'/header.phtml'); ?>
+            <?php require_once(__DIR__ . '/header.phtml'); ?>
         </header>
         <div id="loadingScreen"></div>
         <h1>Youtrack Create Tickets By Form</h1>
@@ -45,7 +45,7 @@ require_once __DIR__ . '/src/createByForm.php';
                 <?php endforeach; ?>
             </div>
         </div>
-        <form id='toBeImported' action="src/createByFormSubmit.php" method="post" enctype="multipart/form-data">
+        <form id='toBeImported' action="code/createByFormSubmit.php" method="post" enctype="multipart/form-data">
             <table>
                 <tr>
                     <th>project</th>
