@@ -1,14 +1,28 @@
 <?php
+
+/**
+ * Class cache caching responses from youtrack api
+ */
 class cache {
     private $cacheFolder;
     public function __construct(){
         $this->cacheFolder = __DIR__ . '/../cache';
     }
-    
+
+    /**
+     * get file path for cache file
+     * @param string $ref is the Youtrack rest url
+     * @return string file path
+     */
     function getFilename($ref){
         $ref = $this->validateFileName($ref);
         return $this->cacheFolder.'/'.$ref;
     }
+    /**
+     * validate filename for cache
+     * @param string $ref is the Youtrack rest url
+     * @return string filename
+     */
     function validateFileName($ref){
         $delimiter = '¦';
         $unwanted = array( '/' );
@@ -18,7 +32,11 @@ class cache {
         $ref = str_replace( $unwanted, $delimiter , $ref);
         return $ref;
     }
-    //$ref is the rest url
+    /**
+     * is file cached
+     * @param string $ref is the Youtrack rest url
+     * @return bool
+     */
     function checkForCached($ref){
         $fileName = $this->getFilename($ref);
         if ( file_exists($fileName) && is_readable($fileName) ) {
@@ -27,6 +45,12 @@ class cache {
             return false;
         }    
     }
+    /**
+     * create cache file
+     * @param string $ref is the Youtrack rest url
+     * @param string $content content to cache
+     * @return bool
+     */
     function createCache($ref,$content){
         $fileName = $this->getFilename($ref);
         if( file_exists($fileName) ){
@@ -43,11 +67,16 @@ class cache {
                     return false;
                 }
             }else{
-                error_log($this->cacheFolder.' folder dosnt exists');
+                error_log($this->cacheFolder." folder dosen't exists");
                 return false;
             }
         }
     }
+    /**
+     * get cached content
+     * @param string $ref is the Youtrack rest url
+     * @return string
+     */
     function getCached($ref){
         $fileName = $this->getFilename($ref);
         if( file_exists($fileName) ){
@@ -61,11 +90,14 @@ class cache {
             return false;
         }
     }
+    /**
+     * clear the cache
+     */
     function clearCache(){
         $files = glob($this->cachedFolder);
         foreach($files as $fileName){
             if(is_file($fileName)){
-                if(is_writable($filename)){
+                if(is_writable($fileName)){
                     unlink($fileName);
                 }else{
                     error_log('clear cache: failed to remove file '.$fileName.' it is not writable');
