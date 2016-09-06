@@ -7,8 +7,15 @@ require_once __DIR__ . '/authenticationAndSecurity.php';
 use Guzzle\Client;
 use Ddeboer\DataImport\Writer\CsvWriter;
 
+/**
+ * Class createByFormSubmit create tickets from form data
+ */
 class createByFormSubmit{
 
+    /**
+     * get post data and organise by ticket
+     * @return array post data in format $postsArray[ticket][field] = value
+     */
     function organisePosts(){
         $authenticationAndSecurity = new authenticationAndSecurity;
         
@@ -34,7 +41,11 @@ class createByFormSubmit{
         unset($postsArray[0]);
         return $postsArray;
     }
-    
+    /**
+     * organise attachments in $posts, linking them to their ticket
+     * @param array $posts
+     * @return array $posts
+     */
     function organiseAttachments($posts){
         $keys = array_keys($_FILES);
         for($i=0;$i<count($keys);$i++){
@@ -45,7 +56,12 @@ class createByFormSubmit{
         }
         return $posts;
     }
-    
+
+    /**
+     * send posts to Youtrack
+     * @param array $posts
+     * @return array $posts
+     */
     function sendPostData($posts){
         $authenticationAndSecurity = new authenticationAndSecurity;
         foreach($posts as $postskey => $singlePost){
@@ -85,7 +101,12 @@ class createByFormSubmit{
 //            }
         }
         return $posts;
-    } 
+    }
+    /**
+     * remove successful posts (tickets)
+     * @param array $posts
+     * @return array
+     */
     function removeSuccessfulPosts($posts){
         foreach( $posts as $key => $singlePost){
             if( $singlePost['upload success'] === 'success'){
@@ -94,12 +115,19 @@ class createByFormSubmit{
         }
         return $posts;
     }
+    /**
+     * create folder with folder permissions set in customsettings.php
+     * @param string $folder folder path
+     */
     function createFolder($folder){
         if (!file_exists($folder)) {
-            mkdir($folder,0777,true);
+            mkdir($folder,0777,true); // need to set with 777 for some reason
             chmod($folder,$GLOBALS['folderPermissions']);
         }
     }
+    /**
+     * create tickets from form data
+     */
     function submit(){
         $authenticationAndSecurity = new authenticationAndSecurity;
         $csvClass = new csvClass;
