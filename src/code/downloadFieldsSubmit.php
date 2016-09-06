@@ -1,4 +1,7 @@
-<?php 
+<?php
+/**
+ * download a csv with field options
+ */
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/getCustomSettings.php';
 require_once __DIR__ . '/getDataFromYoutrack.php';
@@ -20,6 +23,11 @@ list($youtrackFieldsList, $youtrackFields) = $getYoutrackData->getCustomFieldsWi
 $youtrackFields['user'] = $getYoutrackData->getUsers();
 array_push($youtrackFieldsList, 'user');
 
+/**
+ * organises fields into more usable format, removing empty
+ * @param array $array youtrack fields
+ * @return array
+ */
 function reorganiseArray($array){
     $newArray = [];
     foreach( $array as $key => $value ){
@@ -36,6 +44,12 @@ function reorganiseArray($array){
 }
 $csvData = reorganiseArray($youtrackFields);
 
+/**
+ * make each row have a full set of fields
+ * @param array $csvData
+ * @param array $youtrackFieldsList
+ * @return array
+ */
 function makeColumnsFullLength($csvData, $youtrackFieldsList){
 // needs to replace cos just amending old causes data in wrong column when csv created
     $csvDataReplace = [];

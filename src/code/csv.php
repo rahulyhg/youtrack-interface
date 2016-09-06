@@ -4,8 +4,14 @@ require_once __DIR__ . '/authenticationAndSecurity.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 class csvClass {
-    /*
-     * returns false if unable to write to folder
+
+    /**
+     * creates a csv
+     * @param array $data simple array of csv data
+     * @param string $outputFileLocation file location
+     * @param string $delimiter
+     * @param array $header header fields
+     * @return bool false if unable to write to folder
      */
     function createCsv($data, $outputFileLocation, $delimiter = ',', $header=[] ){
         if ( ! is_writable(dirname($outputFileLocation))) {

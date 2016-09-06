@@ -4,7 +4,19 @@ require_once __DIR__ . '/authenticationAndSecurity.php';
 require_once __DIR__ . '/cache.php';
 require_once __DIR__ . '/getCustomSettings.php';
 
+/**
+ * Class getDataFromYoutrack get/post data from Youtrack api
+ */
 class getDataFromYoutrack {
+
+    /**
+     * send request to Youtrack api, dosnt check the cache. Use the rest function in this class instead
+     * @param string $url request url
+     * @param string $postOrGet get|post|put request type
+     * @param array $headers
+     * @param string $body
+     * @param array $options
+     */
     function restResponse($url, $postOrGet = 'get', $headers = null, $body = null, $options = null){
         $client = new \Guzzle\Http\Client();
         $authenticationAndSecurity = new authenticationAndSecurity;        
@@ -42,6 +54,16 @@ class getDataFromYoutrack {
         $request->send(); 
         return $request;
     }
+    /**
+     * returns response from Youtrack api or from cache if cache-able abd available
+     * @param string $url request url
+     * @param string $postOrGet get|post|put request type
+     * @param null $headers
+     * @param null $body
+     * @param null $options
+     * @param bool $cachable should the response be cached
+     * @return string response from request
+     */
     function rest($url, $postOrGet = 'get', $headers = null, $body = null, $options = null, $cachable = true ){
         if( $cachable == true ){
             if( $GLOBALS['cache'] && $postOrGet == 'get' ){
@@ -70,9 +92,8 @@ class getDataFromYoutrack {
      * extract and return data from xml
      * @param string $xml the xml
      * @param string $node the name of the node
-     * @param string $attribute [optional] attribute on node to return, if empty string node value is used 
-     * @param array $whereAttr [optional] array of required attribute value pairs  for desired node e.g. [ 'attr'=>'value', 'attr2'=>'value2' ]  
-     * @param string $keyAttribute [optional] uses this attrbute as the key for storing the data in the return array
+     * @param string $attribute attribute on node to return, if empty string node value is used
+     * @param array $whereAttr array of required attribute value pairs  for desired node e.g. [ 'attr'=>'value', 'attr2'=>'value2' ]
      * @return array data requested
      */
     function extractDataXml($xml, $node, $attribute='', $whereAttr=[]){
@@ -96,7 +117,7 @@ class getDataFromYoutrack {
      * extract data from xml node
      * @param DOMNode $exp xml node
      * @param array|string $attribute
-     * @param string $whereAttr array of required attribute value pairs  for desired node e.g. [ 'attr'=>'value', 'attr2'=>'value2' ]
+     * @param array $whereAttr required attribute value pairs  for desired node e.g. [ 'attr'=>'value', 'attr2'=>'value2' ]
      * @return array|string
      */
     function extractDataXmlUseNode($exp, $attribute='', $whereAttr=[]){
@@ -122,7 +143,11 @@ class getDataFromYoutrack {
         }
     }
 
-    
+    /**
+     * get list of the custom youtrack fields
+     * @param string $project project ref
+     * @return array
+     */
     function getCustomFields($project='' ){
         global $youtrackUrl;
         if( $project == '' ){
@@ -138,13 +163,19 @@ class getDataFromYoutrack {
         }
         return $youtrackProjectCustomfields;
     }
-    function getCustomFieldTypeAndBundle($youtrackFieldsList = '', $project=''){
+    /**
+     * get the custom field type and its bundle name. bundles are the list of options for the select and multi-selects
+     * @param array $youtrackFieldsList lst of youtrack fields
+     * @param string $project project reference
+     * @return array
+     */
+    function getCustomFieldTypeAndBundle($youtrackFieldsList = [], $project=''){
         global $youtrackUrl;
         if( $project == '' ){
             $projectList = $this->getProjectsList();
             $project = $projectList[0];
         }
-        if( $youtrackFieldsList == '' ){
+        if( count($youtrackFieldsList) ){
             $youtrackFieldsList = $this->getCustomFields($project);
         }
         foreach($youtrackFieldsList as $field){
@@ -165,16 +196,23 @@ class getDataFromYoutrack {
     /*
      * $customFieldTypeAndBundle array from getCustomFieldTypeAndBundle
      */
-    function getCustomFieldsDetails($youtrackFieldsList='', $project='', $customFieldTypeAndBundle='' ){
+    /**
+     * get the options for the custom field
+     * @param array $youtrackFieldsList
+     * @param string $project
+     * @param array $customFieldTypeAndBundle
+     * @return array
+     */
+    function getCustomFieldsDetails($youtrackFieldsList=[], $project='', $customFieldTypeAndBundle=[] ){
         global $youtrackUrl;
         if( $project == '' ){
             $projectList = $this->getProjectsList();
             $project = $projectList[0];
         }
-        if( $youtrackFieldsList == '' ){
+        if( count($youtrackFieldsList) ){
             $youtrackFieldsList = $this->getCustomFields($project);
         }
-        if( $customFieldTypeAndBundle == '' ){
+        if( count($customFieldTypeAndBundle) ){
             $customFieldTypeAndBundle = $this->getCustomFieldTypeAndBundle($youtrackFieldsList, $project);
         }
         
@@ -202,6 +240,11 @@ class getDataFromYoutrack {
         }
         return $youtrackFields;
     }
+    /**
+     * get array of the custom fields with their selection options where appropriate and other data
+     * @param string $project project reference
+     * @return array [ array of field names, array of fields data ]
+     */
     function getCustomFieldsWithDetails($project=''){
         if( $project == '' ){
             $projectList = $this->getProjectsList();
@@ -213,7 +256,10 @@ class getDataFromYoutrack {
         return [$youtrackFieldsList, $youtrackFields];
     }
 
-    
+    /**
+     * get a list of projects in youtrack
+     * @return array of project references
+     */
     function getProjectsList(){
         global $youtrackUrl;
         $url = $youtrackUrl.'/rest/admin/project';
@@ -221,6 +267,11 @@ class getDataFromYoutrack {
         $youtrackProjectsList = $this->extractDataXml( $youtrackProjectsListXml, 'project', 'id');
         return $youtrackProjectsList;
     }
+    /**
+     * get assignees on given project
+     * @param string $project project reference
+     * @return array assignee references
+     */
     function getProjectAssignees($project){
         global $youtrackUrl;
         $url = $youtrackUrl.'/rest/admin/project/'.$project.'/assignee';
@@ -229,11 +280,14 @@ class getDataFromYoutrack {
         natcasesort($youtrackProjectAssignees);
         return $youtrackProjectAssignees;
     }
-    
+
+    /**
+     * get an array of users from youtrack
+     * @return array
+     */
     function getUsers(){
         global $youtrackUrl;
         $userList = [];
-        $requestEnd = '';
         $loop = true;
         $usersNo = 0;
         while( $loop == true ){
@@ -251,7 +305,12 @@ class getDataFromYoutrack {
         }
         return $userList;
     }
-    
+
+    /**
+     * get the summary of a ticket
+     * @param string $ticket ticket reference
+     * @return string
+     */
     function getTicketSummary($ticket){
         global $youtrackUrl;
         $ticketSummary = '';
@@ -264,6 +323,11 @@ class getDataFromYoutrack {
         }
         return $ticketSummary;
     }
+    /**
+     * get ticket work types
+     * @param string $project project reference
+     * @return array
+     */
     function getTicketWorkTypes($project){
         global $youtrackUrl;
         $worktypes = '';
@@ -278,15 +342,13 @@ class getDataFromYoutrack {
         return $workTypes;
     }
 
-    
-    
-    
     /**
-     * 
-     * @global type $youtrackUrl
-     * @param type $projectId
-     * @param type $query
-     * @param type $maximumReturned maximum returned tickets
+     * search for youtrack tickets
+     * @param string $projectId project reference
+     * @param string $query search query
+     * @param int $maximumReturned maximum returned tickets
+     * @param int $after show results starting after this amount
+     * @return array [ tickets data, is it a partial set? ]
      */
     function getTicketsFromSearch($projectId,$query,$maximumReturned=100,$after=0){
         global $youtrackUrl;
@@ -318,8 +380,7 @@ class getDataFromYoutrack {
     
    /**
     * get list of ticket links types e.g. "depends"
-    * @global type $youtrackUrl
-    * @return type
+    * @return array
     */
     function getLinkTypes(){
         global $youtrackUrl;

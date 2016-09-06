@@ -1,4 +1,7 @@
 <?php
+/**
+ * gets data for the createByForm page
+ */
 $getDataFromYoutrack = new getDataFromYoutrack;
 
 $customFieldList = [];

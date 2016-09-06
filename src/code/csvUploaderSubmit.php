@@ -12,7 +12,11 @@ use Ddeboer\DataImport\Writer\WriterInterface;
 
 $authenticationAndSecurity = new authenticationAndSecurity;
 
-function fileUpload($fileType){
+/**
+ * upload file
+ * @return bool
+ */
+function fileUpload(){
     $currentdir = getcwd();
     $targetDir = $currentdir."/../uploads/";
     $fileType = $targetDir .'current.csv';
