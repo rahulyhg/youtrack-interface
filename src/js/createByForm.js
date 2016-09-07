@@ -162,7 +162,7 @@ $(document).ready(function(){
         var explodedName = name.split('-');
         var row = explodedName[1];
         $("#toBeImported table tr[row='" + row + "'] select:not(.dontClear)").html('<option value=""></option>');
-        $.ajax({url: "src/createByFormAjax.php?project="+project, dataType: "json",
+        $.ajax({url: "code/createByFormAjax.php?project="+project, dataType: "json",
             success: function(result){
                 removeUnwantedFields(result,row);
                 for ( var fieldName in result ){

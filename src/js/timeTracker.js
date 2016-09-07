@@ -1,7 +1,7 @@
 function addTicketForm(){
     var form = $('form.template');
     var html = form.html();
-    $('div.forms').append('<form action="src/timeTrackerSubmit.php" method="post" enctype="multipart/form-data">'+html+'</form>');
+    $('div.forms').append('<form action="code/timeTrackerSubmit.php" method="post" enctype="multipart/form-data">'+html+'</form>');
     updateProject(form);
 }
 
@@ -22,7 +22,7 @@ function updateProject(form,callback){
         return;
     }
     var ticket = project + '-' + ticketNo;
-    $.ajax({url: "src/ticketAjax.php?ticket="+ticket,
+    $.ajax({url: "code/ticketAjax.php?ticket="+ticket,
         dataType: "json",
         success: function(result){
             if(result['summary']){
@@ -241,7 +241,7 @@ $(document).ready(function(){
      * saves form's data onto server for later retrieval
      */
     function storeFormDataOnServer(jsonString){
-        $.ajax({url: "src/timeJsonSaveAjax.php",
+        $.ajax({url: "code/timeJsonSaveAjax.php",
             type: 'POST',
             dataType: "json",
             data: { json: jsonString },
@@ -380,7 +380,7 @@ $(document).ready(function(){
             var jsonData = JSON.parse(json);
             dataIntoForm(jsonData);
         } else {
-            $.ajax({url: "src/timeJsonGetAjax.php", dataType: "json",
+            $.ajax({url: "code/timeJsonGetAjax.php", dataType: "json",
                 success: function(result){
                     dataIntoForm(result);
                 }

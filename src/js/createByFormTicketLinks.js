@@ -37,7 +37,7 @@ $(document).ready(function(){
             return;
         }
         var ticket = project + '-' + ticketNo;
-        $.ajax({url: "src/ticketAjax.php?ticket="+ticket,
+        $.ajax({url: "code/ticketAjax.php?ticket="+ticket,
             dataType: "json",
             success: function(result){
                 var linkHthml = result['ticketRef']+' : '+result['summary'];
