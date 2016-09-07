@@ -8,6 +8,9 @@ require_once __DIR__ . '/authenticationAndSecurity.php';
 $getDataFromYoutrack = new getDataFromYoutrack;
 $authenticationAndSecurity = new authenticationAndSecurity;
 
+/**
+ * set login cookie
+ */
 function LoginToYouTrack(){
     global $getDataFromYoutrack;
     global $youtrackUrl;

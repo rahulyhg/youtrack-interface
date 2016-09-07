@@ -2,17 +2,29 @@
 require_once __DIR__ . '/getCustomSettings.php';
 require_once __DIR__ . '/getDataFromYoutrack.php';
 
+/**
+ * Class timeJsonSaveAjax save timer data ont server
+ */
 class timeJsonSaveAjax {
     private $timeJsonFolder;
     public function __construct(){
-        $this->timeJsonFolder = __DIR__ . '/../timings';
+        $this->timeJsonFolder = __DIR__ . '/../../timings';
     }
 
+    /**
+     * get the timing location of the folder for this user
+     * @param string $reporterName user reference
+     * @return string folder location
+     */
     function getFolderName($reporterName){
         $reporterFilenameFriendly = rawurlencode( trim($reporterName) );
         return $this->timeJsonFolder.'/'.$reporterFilenameFriendly;
     }
-    
+
+    /**
+     * create the folder for this user
+     * @param string $folderName user reference
+     */
     function createReporterFolder($folderName){
         $parentFolder = $this->timeJsonFolder;
         if( file_exists( $parentFolder )){
@@ -26,7 +38,13 @@ class timeJsonSaveAjax {
             }
         }
     }
-    
+
+    /**
+     * create timing data file
+     * @param string $reporterName user reference
+     * @param string $content
+     * @return bool success or not
+     */
     function createTimeJsonFile($reporterName,$content){
         $folderName = $this->getFolderName($reporterName);
         $this->createReporterFolder($folderName);
@@ -50,7 +68,11 @@ class timeJsonSaveAjax {
             }
         }
     }
-    
+
+    /**
+     * remove old timings files
+     * @param string $reporterName user reference
+     */
     function removeOldFiles($reporterName){
         if( isset($GLOBALS['timeTrackerKeptEdits']) && is_numeric($GLOBALS['timeTrackerKeptEdits']) ){
             $timeTrackerKeptEdits = $GLOBALS['timeTrackerKeptEdits'];
@@ -66,11 +88,16 @@ class timeJsonSaveAjax {
             }
         }
     }
-    
+
+    /**
+     * save the timing data
+     * @param $json
+     * @return bool
+     */
     function saveJson($json){
         $authenticationAndSecurity = new authenticationAndSecurity;
         
-        $reporterCookieName = 'myCookie';
+        $reporterCookieName = 'timerCookie';
         if(null !== $authenticationAndSecurity->getcookie($reporterCookieName)){
             $reporterName =  $authenticationAndSecurity->getSingleCookie($reporterCookieName);
         }else{

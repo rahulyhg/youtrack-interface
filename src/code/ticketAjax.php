@@ -1,4 +1,7 @@
 <?php
+/**
+ *  time tracker ticket details ajax code
+ */
 require_once __DIR__ . '/getCustomSettings.php';
 require_once __DIR__ . '/getDataFromYoutrack.php';
 $getDataFromYoutrack = new getDataFromYoutrack;
