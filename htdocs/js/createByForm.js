@@ -1,17 +1,29 @@
 $(document).ready(function(){
+    /**
+     * create new set of fields for a new ticket
+     */
     function duplicateTableRow(){
         var html = '<tr>' + $('#toBeImported tr.hidden').last().html() + '</tr>';
         $('#toBeImported table tbody').append( html );
     }
+    /**
+     * update an elements attribute
+     * @param inputField {object} jquery object of field
+     * @param attributeName {string} attribute to update
+     * @param row {int} ticket row number
+     */
     function updateInputAttribute(inputField, attributeName, row){
         var attribute = inputField.attr( attributeName );
         if (typeof attribute !== 'undefined') {
             var name = attribute.substring( 0, attribute.lastIndexOf("-") );
-            var lastRowInputName = $('#toBeImported table tbody tr:last td input:first').attr('name');
             attribute = name + '-' + row;
             inputField.attr(attributeName,attribute);
         }
     }
+    /**
+     * update the input elements name & group attributes in the new ticket row
+     * @param row {int} ticket row number
+     */
     function tableInputAttributeUpdate(row){
         $('#toBeImported table tbody tr:last td input').each(function(){
             updateInputAttribute($(this),'name',row);
@@ -27,6 +39,9 @@ $(document).ready(function(){
         });
         $('#toBeImported table tbody tr:last').attr('row',row);
     }
+    /**
+     * add row to table button
+     */
     $('#addRowToTable').on('click',function(){
         var row = $('#toBeImported table tbody tr:last').attr('row');
         row++;
@@ -36,8 +51,13 @@ $(document).ready(function(){
         // update the ui
         updateUi("tr:last");
     });
-    
-   $('#HideFields').accordion({collapsible: true});
+
+
+    $('#HideFields').accordion({collapsible: true});
+    /**
+     * hide or show the a column for all ticket fields
+     * @param checkbox {object} jquery object
+     */
     function hideOrShowField(checkbox){
         var name = checkbox.attr('name');
         if( checkbox.is(':checked') ){
@@ -60,10 +80,12 @@ $(document).ready(function(){
         });
     });
 
+    /**
+     * add needed or remove not needed hide/show checkboxes
+     */
     function updateHideFieldsCheckboxes(){
         $('form#toBeImported th').each(function(){
             var name = $(this).text();
-            
             switch(name) {
                 case 'project':
                 case 'Assignee':
@@ -71,28 +93,40 @@ $(document).ready(function(){
                 case 'description': 
                     return;
                     break;
-            } 
-            
+            }
             // if checkbox dosnt exist
             if ( !$( '#HideFields input[name="'+name+'"]' ).length && name.length !== 0) {
                 $('#HideFields #HideFieldsCheckBoxContainer').append('<label><input type="checkbox" name="'+name+'" value="'+name+'">'+name+'</label>');
             }
         });
     }
-    
+
+    /**
+     * does element exist?
+     * @param selector {string} css selector
+     * @param children {boolean} check element for children
+     * @returns {boolean}
+     */
     function elementExists(selector,children){
         if( children === true){
             selected = $(selector).children();
         }else{
             selected = $(selector);    
         }
-         if(selected.length){
+        if(selected.length){
             return true;
         }else{
             return false;
         }
     }
-    
+
+    /**
+     * create a field that dosent yet exist for the new ticket row, but is needed
+     * @param selector {string} css selector
+     * @param fieldName {string} name on the field
+     * @param row {int} row reference of the new field
+     * @param result {array} data of field from code/createByFormAjax.php
+     */
     function createField(selector,fieldName,row, result){
         var html;
         var name = fieldName.replace(/\ /g,'¬')+'-'+row;
@@ -116,9 +150,14 @@ $(document).ready(function(){
         }
         
     }
-    
+
+    /**
+     * update new ticket dropdown fields with the available options
+     * @param selector {string} css selector
+     * @param fieldName {string} name on the field
+     * @param result {array} data of field from code/createByFormAjax.php
+     */
     function updateField(selector,fieldName, result){
-        var html;
         var fieldType = result[fieldName]['fieldType'];
         var dropdown = (fieldType.indexOf("[") > -1);
         if(dropdown){
@@ -153,9 +192,12 @@ $(document).ready(function(){
             $("#toBeImported table tr[row='" + row + "'] td."+singleClass).html('<hr/>');
         }
     }
-    
-    function updateProjectRowFromSelector(projectSelector){
 
+    /**
+     * update the project row for the new project given
+     * @param projectSelector {string} project selector
+     */
+    function updateProjectRowFromProjectSelector(projectSelector){
         var name = $(projectSelector).attr('name');
         $('#loadingScreen').show();
         var project = $(projectSelector).val();
@@ -169,13 +211,13 @@ $(document).ready(function(){
                     if ( typeof(fieldName) !== "undefined" && result.hasOwnProperty(fieldName) && fieldName!=='assignee') {
                         var fieldNameNoSpaces = fieldName.replace(/\ /g,'');
 
-                        // if column dosnt exist
+                        // if column dosent exist add to header
                         if(!elementExists('#toBeImported table tr th.'+fieldNameNoSpaces+'column')){
                             $('#toBeImported table tr').first().append('<th class="'+fieldNameNoSpaces+'column">'+fieldName+'</th>');
                             $('#toBeImported table tr[row]').append('<td class="'+fieldNameNoSpaces+'column"></td>');
                         }
 
-                        // if field dosnt exist
+                        // if field dosent exist create it or just update it
                         if(!elementExists('#toBeImported table tr[row="' + row + '"] td.'+fieldNameNoSpaces+'column',true)){
                             createField('#toBeImported table tr[row="' + row + '"] td.'+fieldNameNoSpaces+'column', fieldName, row, result);
                             updateField('#toBeImported table tr[row="' + row + '"] td.'+fieldNameNoSpaces+'column select', fieldName, result);
@@ -196,6 +238,10 @@ $(document).ready(function(){
             }
         });
     }
+    /**
+     * update the hidden row used as a template for new ticket rows
+     * @param projectSelector {object} jquery object of the project select element
+     */
     function updateHiddenRow(projectSelector){
         var name = $(projectSelector).attr('name');
         var explodedName = name.split('-');
@@ -208,6 +254,10 @@ $(document).ready(function(){
             $('#toBeImported table tr.hidden select[name='+variableName+'-0]').html( $(this).html() );
         });
     }
+    /**
+     * update the hidden input for duration field, when the visible spinner inputs for that field is edited.
+     * @param spinner {string} css selector of spinner input (not the hidden input)
+     */
     function updateSpinnerValue(spinner){
         var val ='';
         var group = $(spinner).attr('group');
@@ -229,9 +279,15 @@ $(document).ready(function(){
         }
         $('input[name="'+group+'"]').val(val);
     }
+    /**
+     * enable the user interfaces for the new ticket row
+     * @param selector {string} css selector of the new row. "#toBeImported table "+selector must be valid css selector.
+     */
     function updateUi(selector){
-
         var selector = selector || '';
+        /**
+         * spinner interface
+         */
         $("#toBeImported table "+selector+" .weekSpinner" ).spinner({
           spin: function( event, ui ) {
             if ( ui.value < 0 ) {
@@ -330,16 +386,24 @@ $(document).ready(function(){
                 alert('invalid duration');
             }
         });
+        /**
+         * date picker
+         */
         $("#toBeImported table "+selector+" .datepicker" ).datepicker({dateFormat: 'yy-mm-dd' });
+        /**
+         * project selector
+         */
         $('#toBeImported table '+selector+' select.projectselector').change(function(){
-           updateProjectRowFromSelector(this);
+           updateProjectRowFromProjectSelector(this);
             updateHiddenRow(this);
         });
     }
-    updateUi("tr:last");  
-    
-    // before submit
-     $('#toBeImported').submit(function() {
+    updateUi("tr:last");
+
+    /**
+     * submit pre processing
+     */
+    $('#toBeImported').submit(function() {
         // format datepicker data
          $('#toBeImported table tr:not(.hidden) input.datepicker').each(function(){
             var val = $(this).val();
