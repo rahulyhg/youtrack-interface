@@ -10,7 +10,12 @@ require_once __DIR__ . '/../../vendor/autoload.php';
  * submit data from the time tracker page to youtrack
  */
 class timeTrackerSubmit{
-    
+
+    /**
+     * organise post data by ticket
+     * @param array $posts
+     * @return array post data in format $postsArray[ticket][field] = value
+     */
     function organisePosts($posts){
         $organisedPosts = [];
         foreach($posts as $key => $value){
@@ -25,8 +30,10 @@ class timeTrackerSubmit{
        return $organisedPosts;
     }
     
-    /*
-     * converts duration format from "1h 12m" into an interger of minutes
+    /**
+     * converts duration format from "1h 12m" into an integer of minutes
+     * @param string $duration duration in format "1h 3m"
+     * @return int
      */
     function convertDuration($duration){
         $totalMinutes = 0;
@@ -43,23 +50,11 @@ class timeTrackerSubmit{
         return $totalMinutes;
     }
 
-    /*
-     * create xml to send to youtrack
-     *
-     * input:-
-     *  
-     * $ticket array of ticket data and timings,
-     *   e.g. $ticket =
-     *   [ 
-     *      'project'=>'testproject',
-     *      'ticketnumber'=>'1',
-     *      [
-     *           0=>['start'=>'16:47', end=>'16:52', 'duration' => '0h 5m', 'description' => 'my description', 'type' => 'Development']
-     *           1=>['start'=>'15:14', end=>'16:16', 'duration' => '1h 2m', 'description' => 'my description', 'type' => 'Development']
-     *      ]
-     *   ]
-     * 
-     */   
+    /**
+     * create xml to send to Youtrack
+     * @param array $timeRow single timing data  ['start'=>'16:47', end=>'16:52', 'duration' => '0h 5m', 'description' => 'my description', 'type' => 'Development']
+     * @return string timing xml for upload
+     */
     function createXml($timeRow){
         $xml = '';
         if(!$date = strtotime($timeRow['date'])){
@@ -77,7 +72,13 @@ class timeTrackerSubmit{
         '</workItem>';
         return $xml;
     }
-    
+
+    /**
+     * update Youtrack with timing data
+     * @param string $content timing xml
+     * @param string $ticketId ticket reference
+     * @return bool success
+     */
     function updateYoutrack($content,$ticketId){
         global $youtrackUrl;
         $getDataFromYoutrack = new getDataFromYoutrack;
@@ -93,8 +94,11 @@ class timeTrackerSubmit{
          }
   }
     
-    /*
-     * post data to youtrack
+    /**
+     * post timing data to youtrack
+     * @param string $content timing xml
+     * @param string $ticketId ticket reference
+     * @return bool
      */
     function postData($content,$ticketId){
         try {
@@ -105,7 +109,10 @@ class timeTrackerSubmit{
             return false;
         }
     }
-    
+
+    /**
+     * exit respond with 401 code if logged in
+     */
     function checkForCookie(){
         $authenticationAndSecurity = new authenticationAndSecurity;
         $authentication = $authenticationAndSecurity->getAuthentication();
@@ -114,7 +121,11 @@ class timeTrackerSubmit{
             exit();
         }
     }
-    
+
+    /**
+     * format & send timing data to Youtrack
+     * @return array
+     */
     function submit(){
         $authenticationAndSecurity = new authenticationAndSecurity;
         $this->checkForCookie();
