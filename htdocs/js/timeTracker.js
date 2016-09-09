@@ -1,3 +1,6 @@
+/**
+ * add new ticket form, for adding timing for new ticket
+ */
 function addTicketForm(){
     var form = $('form.template');
     var html = form.html();
@@ -5,10 +8,10 @@ function addTicketForm(){
     updateProject(form);
 }
 
-/*
+/**
  * update the summary and work types drop down
- * @param form
- * @param callback - callback function (optional)
+ * @param form {sting} css selector for the form
+ * @param callback {function} callback function
  */
 function updateProject(form,callback){
     if (typeof (callback) === "undefined") {
@@ -45,15 +48,22 @@ function updateProject(form,callback){
 }
 
 $(document).ready(function(){
-    // stop enter submitting forms
+    /**
+     * stop enter submitting forms
+     */
     $(window).keydown(function(event){
         if(event.keyCode === 13) {
           event.preventDefault();
           return false;
         }
     });
-  
-    // the difference between two time values
+
+    /**
+     * the difference between two time values on the same day
+     * @param start {string} 24h start time e.g. 12:00
+     * @param end {string} 24h end time e.g. 12:00
+     * @returns {number} difference in minutes
+     */
     function differenceInMinutes(start,end){
         var startTime = start.split(':');
         var endTime = end.split(':');
@@ -70,14 +80,21 @@ $(document).ready(function(){
 
         return totalDifferenceInMinutes;
     }
-    // converts minutes into hours and minutes associative array
+    /**
+     * converts minutes into hours and minutes associative array
+     * @param minutes {int}
+     * @returns {{hours: number, minutes: number}}
+     */
     function convertMinutesIntoHours(minutes){
         minutes = parseInt(minutes);
         var hours = Math.floor(minutes / 60);
         var minutesLeft = minutes - (hours * 60);
         return { 'hours':hours , 'minutes':minutesLeft};
     }
-    // update the difference field
+    /**
+     * update the difference field
+     * @param timeRow {string} css selector
+     */
     function updateDifference(timeRow){
         var startTime = $(timeRow).find('td input.start').val();
         var endTime = $(timeRow).find('td input.end').val();
@@ -92,14 +109,22 @@ $(document).ready(function(){
         updateDifference(timeRow);
     });
 
-    // adds a 0 if value less than ten
+    /**
+     * adds a 0 to start of string if value less than ten
+     * @param i {int}
+     * @returns {int}
+     */
     function timeAddZero(i) {
         if (i < 10) {
             i = "0" + i;
         }
         return i;
     }
-    // stop start the timer
+
+    /**
+     * stop start the timer
+     * @param button {string} css selector
+     */
     function timertoggle(button){
         var form = $(button).closest('form');
         if($(button).hasClass('play')){
@@ -135,6 +160,9 @@ $(document).ready(function(){
         timertoggle(this);
     });
 
+    /**
+     * add clock face time picker
+     */
     $('.forms').on('focus','.clockpicker', function(){
         $(this).clockpicker({
             placement: 'bottom', // clock popover placement
@@ -144,13 +172,19 @@ $(document).ready(function(){
             vibrate: true        // vibrate the device when dragging clock hand
         });
     });
-    
+
+    /**
+     * add date picker
+     */
     $('.forms').on('focus','form table tr td input.datepicker', function(){
         $(this).datepicker({
           "dateFormat": 'd M y'
         });
     });
 
+    /**
+     * update form when ticket ref changed
+     */
     $('.forms').on('change', 'form .projectheader .projectselector', function(){
         var form = $(this).closest('form');
         updateProject(form);
@@ -160,6 +194,10 @@ $(document).ready(function(){
         updateProject(form);
     });
 
+    /**
+     * update row number in field names
+     * @param form {string} css selector of the form
+     */
     function updateNames(form){
         var nextRowNumber = parseInt( $(form).find('table').attr('nextRowNumber') );
         $(form).find('tr:first td input, tr:first td select').each(function(){
@@ -168,6 +206,10 @@ $(document).ready(function(){
         });
         $(form).find('table').attr('nextRowNumber',nextRowNumber+1);
     }
+    /**
+     * add a time row to ticket form
+     * @param form {string} css selector of the form
+     */
     function addTimeRow(form){
         var html = $('form.template').find('table tr:first').html();
         $(form).find('table tbody').prepend('<tr>'+html+'</tr>');
@@ -179,7 +221,11 @@ $(document).ready(function(){
         var form = $(this).closest('form');
         addTimeRow(form);
     });
-    
+
+    /**
+     * remove time row from ticket form
+     * @param row {string} css selector
+     */
     function removeTimeRow(row){
         var tbody = $(row).parent();
         $(row).remove();
@@ -194,10 +240,17 @@ $(document).ready(function(){
         removeTimeRow(row);
     });
 
+    /**
+     * add a new form for a new ticket
+     */
     $('body').on('click','.addTicketForm',function(){
        addTicketForm();
     });
-    
+
+    /**
+     * remove ticket form
+     * @param form {string} css selector of the form
+     */
     function removeTicketForm(form){
         $(form).remove();
         var formCount = $('.forms').children('form').length;
@@ -209,7 +262,11 @@ $(document).ready(function(){
         var form = $(this).closest('form');
         removeTicketForm(form);
     });
-    
+
+    /**
+     * create data array of the timing from all forms
+     * @returns {{}}
+     */
     function createDataArray(){
         var dataArray = {};
         var i = 0;
@@ -237,8 +294,9 @@ $(document).ready(function(){
         });
         return dataArray;
     }
-    /*
+    /**
      * saves form's data onto server for later retrieval
+     * @param jsonString {string}
      */
     function storeFormDataOnServer(jsonString){
         $.ajax({url: "code/timeJsonSaveAjax.php",
@@ -250,7 +308,7 @@ $(document).ready(function(){
             }
         });
     }
-    /*
+    /**
      * saves form's data into local storage for later retrieval
      */
     function storeFormData(){
@@ -266,7 +324,7 @@ $(document).ready(function(){
         storeFormData();
     });
    
-    /*
+    /**
      * ajax submit & standard submit
      */
     $('.forms').on('click', '.ajaxSubmit', function() {
@@ -331,10 +389,14 @@ $(document).ready(function(){
     });
     
     
-    /*
-     * 
-     * e.g of object format required
-     * {"test-1":{"0":{"date":"17 Nov, 15","start":"10:10","end":"10:20","duration":"0h 10m","description":"test description","type":"Development"}}}
+    /**
+     * recover stored form data
+     * @param data {array}
+     * {"test-1":
+     *   {"0":
+     *     {"date":"17 Nov, 15","start":"10:10","end":"10:20","duration":"0h 10m","description":"test description","type":"Development"}
+     *   }
+     *  }
     */
     function dataIntoForm(data){
         var i = 0;
@@ -371,7 +433,7 @@ $(document).ready(function(){
         });
     }
     
-    /*
+    /**
      * sets the form content from json from local storage or then from server file
      */
     function populateFormJson(){

@@ -1,6 +1,8 @@
 $(document).ready(function(){
     
-    // add search results
+    /**
+     * add search results
+     */
     $('#ticketSearch').on('click', '.ajaxSubmit', function (){
         $('#ticketSearch .ajaxSubmit').prop('disabled', true);
         $('#ticketSearch .searchResponseMore').prop('disabled', true);
@@ -38,7 +40,9 @@ $(document).ready(function(){
         });
     });
 
-    // get more results
+    /**
+     * get more results
+     */
     $('#ticketSearch').on('click', '.searchResponseMore', function (){
         $('#ticketSearch .ajaxSubmit').prop('disabled', true);
         $('#ticketSearch .searchResponseMore').prop('disabled', true);
@@ -78,6 +82,9 @@ $(document).ready(function(){
         });
     });
 
+    /**
+     * add ticket form on search link click
+     */
     $('#ticketSearch').on('click', '#searchResponse ul li a', function (){
         var ticketRef = $(this).siblings( "span").first().html();
         ticketRef = ticketRef.split('-');
