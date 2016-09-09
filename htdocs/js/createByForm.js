@@ -286,7 +286,7 @@ $(document).ready(function(){
     function updateUi(selector){
         var selector = selector || '';
         /**
-         * spinner interface
+         * set fields as spinners
          */
         $("#toBeImported table "+selector+" .weekSpinner" ).spinner({
           spin: function( event, ui ) {
@@ -329,63 +329,66 @@ $(document).ready(function(){
             }
           }
         });
+        /**
+         * spinner change update hidden field on spinner change
+         */
         $("#toBeImported table "+selector+' .spinner').spinner({
             stop:function(e,ui){
                 updateSpinnerValue(this);
             }
         });
-        $("#toBeImported table "+selector+' .spinnerInput').change(function(){
-            var val = $(this).val();
-            var group = $(this).attr('name');
-            // check valid format 1w1d1h1m or 1w1m 
-            var closestValid = val.match(/((\d)+w)?(\dd)?((\d|\d\d)h)?((\d|\d\d)m)?/);
-            if( closestValid[0] === val ){
-                var str = val;
-                if( str.search('w')>-1 ){
-                    var myarr = str.split('w');
-                    var w = myarr[0];
-                    str = myarr[1];
-                }else{
-                    var w = '';
-                }
-                if( str.search('d')>-1 ){
-                    var myarr = str.split('d');
-                    var d = myarr[0];
-                    str = myarr[1];
-                }else{
-                    var d = '';
-                }
-                if( str.search('h')>-1 ){
-                    var myarr = str.split('h');
-                    var h = myarr[0];
-                    str = myarr[1];
-                }else{
-                    var h = '';
-                }
-                if( str.search('m')>-1 ){
-                    var myarr = str.split('m');
-                    var m = myarr[0];
-                    str = myarr[1];
-                }else{
-                    var m = '';
-                }
-                if( (typeof d === 'undefined' || d<7 )  && (typeof h === 'undefined' || h < 24 ) && (typeof m === 'undefined' || m < 60 ) ){
-                    w = parseInt(w);
-                    $("#toBeImported table tr:last .weekSpinner[group='"+group+"']").spinner("value", w);
-                    $("#toBeImported table .daySpinner[group='"+group+"']").spinner("value",d);
-                    $("#toBeImported table .hourSpinner[group='"+group+"']").spinner("value",h);
-                    $("#toBeImported table .minSpinner[group='"+group+"']").spinner("value",m);
-                    isValid = true;
-                }else{
-                    isValid = false;
-                }
-            }else{
-                isValid = false;
-            }
-            if( isValid === false ){
-                alert('invalid duration');
-            }
-        });
+        // $("#toBeImported table "+selector+' .spinnerInput').change(function(){
+        //     var val = $(this).val();
+        //     var group = $(this).attr('name');
+        //     // check valid format 1w1d1h1m or 1w1m
+        //     var closestValid = val.match(/((\d)+w)?(\dd)?((\d|\d\d)h)?((\d|\d\d)m)?/);
+        //     if( closestValid[0] === val ){
+        //         var str = val;
+        //         if( str.search('w')>-1 ){
+        //             var myarr = str.split('w');
+        //             var w = myarr[0];
+        //             str = myarr[1];
+        //         }else{
+        //             var w = '';
+        //         }
+        //         if( str.search('d')>-1 ){
+        //             var myarr = str.split('d');
+        //             var d = myarr[0];
+        //             str = myarr[1];
+        //         }else{
+        //             var d = '';
+        //         }
+        //         if( str.search('h')>-1 ){
+        //             var myarr = str.split('h');
+        //             var h = myarr[0];
+        //             str = myarr[1];
+        //         }else{
+        //             var h = '';
+        //         }
+        //         if( str.search('m')>-1 ){
+        //             var myarr = str.split('m');
+        //             var m = myarr[0];
+        //             str = myarr[1];
+        //         }else{
+        //             var m = '';
+        //         }
+        //         if( (typeof d === 'undefined' || d<7 )  && (typeof h === 'undefined' || h < 24 ) && (typeof m === 'undefined' || m < 60 ) ){
+        //             w = parseInt(w);
+        //             $("#toBeImported table tr:last .weekSpinner[group='"+group+"']").spinner("value", w);
+        //             $("#toBeImported table .daySpinner[group='"+group+"']").spinner("value",d);
+        //             $("#toBeImported table .hourSpinner[group='"+group+"']").spinner("value",h);
+        //             $("#toBeImported table .minSpinner[group='"+group+"']").spinner("value",m);
+        //             isValid = true;
+        //         }else{
+        //             isValid = false;
+        //         }
+        //     }else{
+        //         isValid = false;
+        //     }
+        //     if( isValid === false ){
+        //         alert('invalid duration');
+        //     }
+        // });
         /**
          * date picker
          */
