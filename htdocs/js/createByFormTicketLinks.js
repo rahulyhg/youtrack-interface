@@ -1,16 +1,27 @@
-$(document).ready(function(){    
-    
-    // add new ticket link input row
-    // string div containing links
+/**
+ * javascript for the adding linking tickets (e.g. depends on) to create by form page
+ */
+$(document).ready(function(){
+    /**
+     * add new ticket link input row
+     * @param linksDiv {string} div containing links
+     */
     function addTicketLink(linksDiv){
         var html = linksDiv.find('.hiddenSingleLink').html();
         linksDiv.append( '<div class="singleLink">'+html+'</div>' );
     }
+
+    /**
+     * add the link
+     */
     $('#toBeImported').on('click', '.addLinkType', function() {
         var linksDiv = $(this).siblings('.ticketLinks');
         addTicketLink(linksDiv);
     });
-    // remove current ticket link
+
+    /**
+     * remove current ticket link
+     */
     $('#toBeImported').on('click', '.deleteLinkType', function() {
         var linksDiv = $(this).closest('.ticketLinks');
         $(this).closest('.singleLink').remove();
@@ -20,10 +31,10 @@ $(document).ready(function(){
         }
     });
     
-    /*
+    /**
      * update the summary and work types drop down
-     * @param singleLinksDiv
-     * @param callback - callback function (optional)
+     * @param singleLinksDiv {object} jquery object of the link div
+     * @param callback {function} callback function
      */
     function updateProject(singleLinksDiv,callback){
         if (typeof (callback) === "undefined") {
