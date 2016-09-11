@@ -50,6 +50,7 @@ require_once __DIR__ . '/code/createByForm.php';
         <form id='toBeImported' action="code/createByFormSubmit.php" method="post" enctype="multipart/form-data">
             <table>
                 <tr>
+                    <th></th>
                     <th>project</th>
                     <th>Assignee</th>
                     <th>summary</th>
@@ -77,6 +78,7 @@ require_once __DIR__ . '/code/createByForm.php';
                 <!-- test mode cant work for standard users -->
 <!--            <div>test mode: <input type="checkbox" name="test" value="true"></div><br>-->
             <input type="submit" value="Submit"> 
+            <button type="button" id="ajaxSubmit">ajax submit</button>
         </form>
     </body>
 </html>

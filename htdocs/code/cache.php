@@ -6,7 +6,7 @@
 class cache {
     private $cacheFolder;
     public function __construct(){
-        $this->cacheFolder = __DIR__ . '/../cache';
+        $this->cacheFolder = __DIR__ . '/../../cache';
     }
 
     /**

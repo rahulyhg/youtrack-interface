@@ -27,3 +27,7 @@ fieldset.spinnerFieldset{
     text-align: right;
     width: 450px;
 }
+.submitSuccess{
+     background-color: #d9edf7;
+     text-decoration: line-through;
+ }

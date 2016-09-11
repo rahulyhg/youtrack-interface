@@ -2,8 +2,8 @@
     "name": "junomedia/youtrack-csv",
     "description": "CSV Import tool for YouTrack Issues",
     "require": {
-        "ddeboer/data-import": "~0.16",
-        "guzzle/guzzle": "~3.9",
+        "ddeboer/data-import": "0.16",
+        "guzzle/guzzle": "3.9",
         "silex/silex": "~1.2"
     },
     "require-dev": {
@@ -20,6 +20,6 @@
 
     ],
     "autoload": {
-        "psr-4" : {"Juno\\" : "src/"}
+        "psr-4" : {"Juno\\" : "htdocs/code/"}
     }
 }

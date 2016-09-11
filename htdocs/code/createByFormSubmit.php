@@ -90,7 +90,7 @@ class createByFormSubmit{
 //                    $HTTPResponseStatusCode = $e->getResponse()->getStatusCode();
                     // if previous ticket import permission issues, possibly not admin user
 //                    if($HTTPResponseStatusCode = 403){
-                        $workflow->stdUserUpdateTracker($singlePost);
+                        $workflow->stdUserUpdateTracker($singlePost,$postskey);
                         $posts[$postskey] = array_merge( ['upload success' => 'success'] , $posts[$postskey] );
 //                    }
 //                }else{
@@ -131,26 +131,29 @@ class createByFormSubmit{
     function submit(){
         $authenticationAndSecurity = new authenticationAndSecurity;
         $csvClass = new csvClass;
-        
+
+        $isAjax = $authenticationAndSecurity->getGet("ajax");
+
         $GLOBALS['newline'] = '<br/>';
         $newLine = $GLOBALS["newline"];
 
-        echo $newLine . $newLine .
-         "------------------------------" . $newLine .
-         "    Youtrack csv importer     " . $newLine .
-         "------------------------------" . $newLine;
-
-        if (null !== $authenticationAndSecurity->getPost("test")) {
-            echo "-- Testing progress --" . $newLine;
-        } else {
-            echo "-- Progress --" . $newLine;
+        if($isAjax !== 'true') {
+            echo $newLine . $newLine .
+             "------------------------------" . $newLine .
+             "    Youtrack csv importer     " . $newLine .
+             "------------------------------" . $newLine;
+            if (null !== $authenticationAndSecurity->getPost("test")) {
+                echo "-- Testing progress --" . $newLine;
+            } else {
+                echo "-- Progress --" . $newLine;
+            }
         }
 
         $posts = $this->organisePosts();
         $posts = $this->organiseAttachments($posts);
 
         date_default_timezone_set('Europe/London');
-        $csvLogFolder = __DIR__.'/../log/createByForm/'.date("Y-m-d");
+        $csvLogFolder = __DIR__.'/../../log/createByForm/'.date("Y-m-d");
         $csvLogFileName = time().'.csv';
         
         // creates csv log before sending to guzzle as guzzle dosnt fail gracefully
@@ -168,11 +171,15 @@ class createByFormSubmit{
             $this->createFolder($csvLogFolder);
             $csvClass->createCsv($posts, $csvLogFolder.'/'.$csvLogFileName);
         }
-        
-        if (null !== $authenticationAndSecurity->getPost("test")) {
-            echo $newLine . "---- Test Finished -----" . $newLine;
-        } else {
-            echo $newLine . "---- Upload Finished -----" . $newLine;
+
+        if($isAjax !== 'true') {
+            if (null !== $authenticationAndSecurity->getPost("test")) {
+                echo $newLine . "---- Test Finished -----" . $newLine;
+            } else {
+                echo $newLine . "---- Upload Finished -----" . $newLine;
+            }
+        }else{
+            echo json_encode($GLOBALS['createByFormAjax']);
         }
     }
 }

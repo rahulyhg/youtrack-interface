@@ -119,10 +119,18 @@ class ApiWriter implements WriterInterface
         echo $item['project'].'-'.$numberInProject.':   '.$item['summary'];
         echo $GLOBALS["newline"];
     }
-    
-    function stdUserCreateIssue($item){
+
+    /**
+     * create issue on youtrack, creates $GLOBALS['createByFormAjax'] with upload success data
+     * @param array $item youtrack ticket data
+     * @param int $ticketRow ticket row no. added to data array
+     * @return string new ticket ref
+     */
+    function stdUserCreateIssue($item,$ticketRow = null){
         global $youtrackUrl;
         $getDataFromYoutrack = new getDataFromYoutrack;
+        $authenticationAndSecurity = new authenticationAndSecurity;
+
         //https://confluence.jetbrains.com/display/YTD65/Create+New+Issue
         // PUT /rest/issue?{project}&{summary}&{description}&{attachments}&{permittedGroup}
         $url = $youtrackUrl.'/rest/issue?project='.$item["project"].'&summary='.urlencode($item['summary']).'&description='.urlencode($item['description']);
@@ -134,8 +142,23 @@ class ApiWriter implements WriterInterface
         }
         $ticketRef = explode('/',$singleLocation);
         $ticketRef = $ticketRef[sizeof($ticketRef) - 1];
-        echo 'created: <a href="'.$youtrackUrl.'/issue/'.$ticketRef.'">'.$ticketRef.':   '.$item['summary'].'</a>';
-        echo $GLOBALS["newline"];
+
+        $isAjax = $authenticationAndSecurity->getGet("ajax");
+        if($isAjax !== 'true') {
+            echo 'created: <a href="' . $youtrackUrl . '/issue/' . $ticketRef . '">' . $ticketRef . ':   ' . $item['summary'] . '</a>';
+            echo $GLOBALS["newline"];
+        }else{
+            $GLOBALS['createByFormAjax'][$ticketRef] = [
+                'uploaded' => true,
+                'summary' => $item['summary'],
+                'url' => $youtrackUrl . '/issue/' . $ticketRef,
+                'ticketRef' => $ticketRef
+            ];
+            if($ticketRow){
+                $GLOBALS['createByFormAjax'][$ticketRef]['row'] = $ticketRow;
+            }
+        }
+
         return $ticketRef;
     }
     /**
@@ -147,6 +170,7 @@ class ApiWriter implements WriterInterface
     function stdUserUpdateIssue($issueRef,$item){
         global $youtrackUrl;
         $getDataFromYoutrack = new getDataFromYoutrack;
+        $authenticationAndSecurity = new authenticationAndSecurity;
         $customFieldsDetails = $getDataFromYoutrack->getCustomFieldTypeAndBundle('',$item['project']);
         // https://confluence.jetbrains.com/display/YTD65/Apply+Command+to+an+Issue
         // POST /rest/issue/{issue}/execute?{command}&{comment}&{group}&{disableNotifications}&{runAs} 
@@ -188,14 +212,24 @@ class ApiWriter implements WriterInterface
      //  $url = 'http://tracker.juno.is/youtrack/rest/issue/test-57/execute?command= State Open';
         $url = $youtrackUrl.'/rest/issue/'.$issueRef.'/execute?command='.$cmd;
         $getDataFromYoutrack->rest($url,'post');
-        echo 'updated : <a href="'.$youtrackUrl.'/issue/'.$issueRef.'">'.$issueRef.'</a>';
-        echo $GLOBALS["newline"];
+
+        $isAjax = $authenticationAndSecurity->getGet("ajax");
+        if($isAjax !== 'true') {
+            echo 'updated : <a href="'.$youtrackUrl.'/issue/'.$issueRef.'">'.$issueRef.'</a>';
+            echo $GLOBALS["newline"];
+        }else{
+            $GLOBALS['createByFormAjax'][$issueRef]['updated'] = true;
+        }
     }
-    
-    // update tracker if user, used only when the submiting user is not an admin
-    function stdUserUpdateTracker(array $item){
+
+    /**
+     * upload ticket to youtrack with standard user permissions
+     * @param array $item ticket item
+     * @param int $ticketRow ticket row no. added to data array
+     */
+    function stdUserUpdateTracker(array $item,$ticketRow){
         try {
-           $issueRef = $this->stdUserCreateIssue($item);
+           $issueRef = $this->stdUserCreateIssue($item,$ticketRow);
             $this->stdUserUpdateIssue($issueRef,$item);
             $this->stdUserUpdateAttachments($issueRef,$item);
         } catch (Exception $e) {   
@@ -214,9 +248,12 @@ class ApiWriter implements WriterInterface
     function stdUserUpdateAttachments($issueRef,$item){
         global $youtrackUrl;
         $getDataFromYoutrack = new getDataFromYoutrack;
-        $files = $item['attachmentFiles'];
-        if($count = count($files['name'])) {
+        $files = (isset($item['attachmentFiles'])) ? $item['attachmentFiles'] : null;
+        if($files && $count = count($files['name'])) {
             for($i=0;$i<$count;$i++) {
+                if(!strlen($files['name'][$i])){
+                    continue;
+                }
                 $header = ['Content-Type' => 'multipart/form-data'];
                 $body = [
                     'name' => $files['name'][$i],
@@ -228,6 +265,7 @@ class ApiWriter implements WriterInterface
                 $url = $youtrackUrl.'/rest/issue/'.$issueRef.'/attachment';
                 $getDataFromYoutrack->rest($url,'post',$header,$body);
             }
+            $GLOBALS['createByFormAjax'][$issueRef]['attachmentsUpdated'] = true;
         }
         
     }
