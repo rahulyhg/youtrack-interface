@@ -1,6 +1,6 @@
 <?php
 /**
- * returns feild options for createByForm page
+ * returns field options for createByForm page
  */
 require_once __DIR__ . '/getCustomSettings.php';
 require_once __DIR__ . '/getDataFromYoutrack.php';
