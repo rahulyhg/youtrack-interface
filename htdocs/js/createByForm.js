@@ -1,4 +1,6 @@
 $(document).ready(function(){
+    $('input, select, textarea, button').prop('disabled', false);
+
     /**
      * create new set of fields for a new ticket
      */
@@ -212,7 +214,7 @@ $(document).ready(function(){
                         var fieldNameNoSpaces = fieldName.replace(/\ /g,'');
 
                         // if column dosent exist add to header
-                        if(!elementExists('#toBeImported table tr th.'+fieldNameNoSpaces+'column')){
+                        if( !elementExists('#toBeImported table tr th.' + fieldNameNoSpaces + 'column',false) ){
                             $('#toBeImported table tr').first().append('<th class="'+fieldNameNoSpaces+'column">'+fieldName+'</th>');
                             $('#toBeImported table tr[row]').append('<td class="'+fieldNameNoSpaces+'column"></td>');
                         }
@@ -407,32 +409,76 @@ $(document).ready(function(){
      * submit pre processing
      */
     $('#toBeImported').submit(function() {
+        preSubmit();
+    });
+    function preSubmit() {
         // format datepicker data
-         $('#toBeImported table tr:not(.hidden) input.datepicker').each(function(){
+        $('#toBeImported table tr:not(.hidden) input.datepicker').each(function () {
             var val = $(this).val();
-            var date = new Date( val );
+            var date = new Date(val);
             var time = date.getTime(date);
-            if(time){
-                $(this).val( time );
-            }else{
-                $(this).val( '' );
+            if (time) {
+                $(this).val(time);
+            } else {
+                $(this).val('');
             }
         });
-        // format ticket links 
-        $('#toBeImported table tr:not(.hidden) .ticketLinkscolumn').each(function(){
-           var linkCommand = '';
-           $(this).find('.ticketLinks .singleLink').each(function(){
+        // format ticket links
+        $('#toBeImported table tr:not(.hidden) .ticketLinkscolumn').each(function () {
+            var linkCommand = '';
+            $(this).find('.ticketLinks .singleLink').each(function () {
                 var linkType = $(this).find('.linkType').first().val();
                 var linkProjectSelector = $(this).find('.linkProjectSelector').first().val();
                 var linkTicketNumber = $(this).find('.linkTicketNumber').first().val();
-                if(linkType && linkProjectSelector && linkTicketNumber){
-                   linkCommand = linkCommand + ' '
-                       + linkType + ' '
-                       + linkProjectSelector + '-'
-                       + linkTicketNumber;
+                if (linkType && linkProjectSelector && linkTicketNumber) {
+                    linkCommand = linkCommand + ' '
+                            + linkType + ' '
+                            + linkProjectSelector + '-'
+                            + linkTicketNumber;
                 }
-           });
-           $(this).find('.linkInputField').val(linkCommand);
+            });
+            $(this).find('.linkInputField').val(linkCommand);
         });
+    }
+
+
+    $('#toBeImported').on('click', '#ajaxSubmit', function(){
+        $(this).prop('disabled', true);
+        var form = $('#toBeImported');
+        preSubmit();
+        $.ajax({
+            dataType: "json",
+            type: form.attr('method'),
+            url: form.attr('action') + '?ajax=true',
+            data: form.serialize(),
+            success: function (result) {
+                for ( var ticket in result ){
+                    var html = '<div><a href="' + result[ticket]['url'] + '">' + result[ticket]['ticketRef'] + '</a></div>';
+                    if(result[ticket]['uploaded']){
+                        html += '<div>uploaded</div>';
+                    }else{
+                        html += '<div>upload failed</div>';
+                    }
+                    if(result[ticket]['updated']){
+                        html += '<div>updated</div>';
+                    }else{
+                        html += '<div>update failed</div>';
+                    }
+                    var row = $( '#toBeImported tr[row=' + result[ticket]['row'] + ']');
+                    row .children('td.success').html(html);
+                    row.find('input, textarea').prop('readonly', true)
+                    row.find('button, select').prop('disabled',true);
+                    row.find('input, select, textarea, button')
+                            .addClass('submitSuccess')
+                            .removeAttr('name');
+                };
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('submit fail');
+                console.log(textStatus, errorThrown);
+            }
+        });
+        $(this).prop('disabled', false);
     });
+
 });
