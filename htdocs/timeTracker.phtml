@@ -1,0 +1,62 @@
+<?php
+// <p>---------------------------------------------------------</p>
+// <p>          Error: Please allow phtml files to run php     </p>
+// <p>---------------------------------------------------------</p>
+
+// redirect to index.html if cookie not set and not using password verification
+require_once __DIR__ . '/code/authenticationAndSecurity.php';
+$authenticationAndSecurity = new authenticationAndSecurity;
+$authenticationAndSecurity->redirectIfNotLoggedIn();
+
+
+require_once __DIR__ . '/code/timeTracker.php';
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <script src='js/jquery-1.10.2.min.js'></script>
+    <script src="js/1.12.0jquery-ui.js"></script>
+    <script src='js/timeTracker.js'></script>
+    <script src='js/timeTrackerSearch.js'></script>
+    <link rel="stylesheet" href="css/timeTracker.css">
+    <link rel="stylesheet" href="css/jquery/1.12.0jquery-ui.css">
+    <script type="text/javascript" src="js/bootstrap/bootstrap-3.3.7-dist/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap/bootstrap-3.3.7-dist/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap/bootstrap-3.3.7-dist/bootstrap-theme.min.css">
+    <!-- time picker -->
+    <link rel="stylesheet" type="text/css" href="js/clockpicker/dist/bootstrap-clockpicker.min.css">
+    <script type="text/javascript" src="js/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
+    <style>
+        .input-group .form-control {
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <?php require_once(__DIR__ . '/header.phtml'); ?>
+    </header>
+    <h1 style="text-align:center">Time Tracker</h1>
+    <form id="ticketSearch" action="code/querySearchAjax.php" method="post" enctype="multipart/form-data">
+        <select class="projectselector" name="project" >
+            <?php foreach( $projectList as $project ){ ?>
+                <option value="<?php echo $project ?>"><?php echo $project ?></option>
+            <?php } ?>
+        </select>
+        <input type="text" class="query" name="query"/>
+        <button class="ajaxSubmit" >search</button>
+        <div id="searchResponse"></div>
+    </form>
+    <div id="wrapper">
+        <button class="addTicketForm" type="button">Add Ticket</button>
+
+        <?php $hidden = true; ?>
+        <?php require __DIR__ . '/timeTrackerForm.phtml'; ?>
+
+        <div class="forms">
+            <?php $hidden = false; ?>
+            <?php require __DIR__ . '/timeTrackerForm.phtml'; ?>
+        </div>
+    </div>
+</body>
+</html>
