@@ -30,6 +30,9 @@
 .deleteTimeRow {
     margin: 0 -5px 0 0;
 }
+#ticketSearch {
+    margin: 20px;
+}
 #ticketSearch #searchResponse li.partialSet{
     font-weight: bold;
     list-style-type: none;
