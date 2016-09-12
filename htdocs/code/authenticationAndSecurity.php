@@ -5,10 +5,26 @@
  */
 class authenticationAndSecurity {
     /**
+     * is the server using https
+     */
+    function usingHttps(){
+        if (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']))
+        {
+            return TRUE;
+        }
+        return FALSE;
+    }
+
+    /**
      * redirect back to the homepage
      */
     function redirectBackToIndex(){
-        $url = (string)filter_input(INPUT_SERVER,'REQUEST_SCHEME').'://'.(string)filter_input(INPUT_SERVER,'HTTP_HOST').(string)filter_input(INPUT_SERVER,'REQUEST_URI');
+        if($this->usingHttps()){
+            $url = 'https://';
+        }else{
+            $url = 'http://' ;
+        }
+        $url .= (string)filter_input(INPUT_SERVER,'HTTP_HOST').(string)filter_input(INPUT_SERVER,'REQUEST_URI');
         $url = explode('/',$url);
         array_pop( $url );
         array_pop( $url );

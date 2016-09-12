@@ -26,9 +26,9 @@ function LoginToYouTrack(){
         }
         $reporterCookieName = 'myCookie';
         $authenticationAndSecurity->setCookie($reporterCookieName,$authenticationAndSecurity->getPost("user"), 0, '/');
-        echo "Successfully logged in.\n";
+        return true;
     }else {
-        echo "Unable to login, please try again.\n";
+        return false;
     }
 }
 LoginToYouTrack();

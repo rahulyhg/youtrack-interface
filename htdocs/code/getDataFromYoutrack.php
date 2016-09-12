@@ -16,6 +16,7 @@ class getDataFromYoutrack {
      * @param array $headers
      * @param string $body
      * @param array $options
+     * @return object request object
      */
     function restResponse($url, $postOrGet = 'get', $headers = null, $body = null, $options = null){
         $client = new \Guzzle\Http\Client();
@@ -44,7 +45,7 @@ class getDataFromYoutrack {
 //                $request->addHeader($key,$value);
 //            }
 //        }
-        if($authentication['type'] === 'cookie'){
+        if($authentication['type'] === 'cookie' && $authentication['details']){
             foreach($authentication['details'] as $singleCookie){
                 foreach($singleCookie as $cookieName => $cookieValue){
                     $request->addCookie( $cookieName, $cookieValue );
