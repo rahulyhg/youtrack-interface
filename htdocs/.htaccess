@@ -1,3 +1,4 @@
 ############ allow phtml files to run php  ################################
 AddType application/x-httpd-php .php .phtml
 DirectoryIndex index.php
+#php_flag   xdebug.remote_enable off
