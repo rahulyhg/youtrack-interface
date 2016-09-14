@@ -453,7 +453,7 @@ $(document).ready(function(){
             data: form.serialize(),
             success: function (result) {
                 for ( var ticket in result ){
-                    var html = '<div><a href="' + result[ticket]['url'] + '">' + result[ticket]['ticketRef'] + '</a></div>';
+                    var html = '<div><a href="'+result[ticket]['url']+'" target="_blank">' + result[ticket]['ticketRef'] + '</a></div>';
                     if(result[ticket]['uploaded']){
                         html += '<div>uploaded</div>';
                     }else{
