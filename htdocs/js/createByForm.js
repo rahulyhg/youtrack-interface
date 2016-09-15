@@ -444,13 +444,16 @@ $(document).ready(function(){
 
     $('#toBeImported').on('click', '#ajaxSubmit', function(){
         $(this).prop('disabled', true);
-        var form = $('#toBeImported');
         preSubmit();
+        var form = $('#toBeImported');
+        var formElement = document.querySelector('#toBeImported');
         $.ajax({
             dataType: "json",
             type: form.attr('method'),
             url: form.attr('action') + '?ajax=true',
-            data: form.serialize(),
+            data: new FormData( form[0] ),
+            processData: false,
+            contentType: false,
             success: function (result) {
                 for ( var ticket in result ){
                     var html = '<div><a href="'+result[ticket]['url']+'" target="_blank">' + result[ticket]['ticketRef'] + '</a></div>';
