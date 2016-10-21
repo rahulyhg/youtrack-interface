@@ -157,6 +157,164 @@ function timeAddZero(i) {
     return i;
 }
 
+/**
+ * the difference between two time values on the same day
+ * @param start {string} 24h start time e.g. 12:00
+ * @param end {string} 24h end time e.g. 12:00
+ * @returns {number} difference in minutes
+ */
+function differenceInMinutes(start,end){
+    var startTime = start.split(':');
+    var endTime = end.split(':');
+
+    var startTimeInMin = ( parseInt(startTime[0]) * 60 ) + parseInt(startTime[1]);
+    var endTimeInMin = ( parseInt(endTime[0]) * 60 ) + parseInt(endTime[1]);
+
+    if(startTimeInMin<=endTimeInMin) {
+        var totalDifferenceInMinutes = endTimeInMin - startTimeInMin;
+    }else{
+        var minutesInADay = 24 * 60 ;
+        var totalDifferenceInMinutes = endTimeInMin + (minutesInADay - startTimeInMin);
+    }
+
+    return totalDifferenceInMinutes;
+}
+/**
+ * converts minutes into hours and minutes associative array
+ * @param minutes {int}
+ * @returns {{hours: number, minutes: number}}
+ */
+function convertMinutesIntoHours(minutes){
+    minutes = parseInt(minutes);
+    var hours = Math.floor(minutes / 60);
+    var minutesLeft = minutes - (hours * 60);
+    return { 'hours':hours , 'minutes':minutesLeft};
+}
+/**
+ * update the difference field
+ * @param timeRow {string} css selector
+ */
+function updateDifference(timeRow){
+    var startTime = $(timeRow).find('td input.start').val();
+    var endTime = $(timeRow).find('td input.end').val();
+
+    var durationInMinutes = differenceInMinutes(startTime,endTime);
+    var duration = convertMinutesIntoHours(durationInMinutes);
+    $(timeRow).find('td input.duration')
+        .val(duration['hours'] +'h '+ duration['minutes']+'m');
+}
+
+/**
+ * update row number in field names
+ * @param form {string} css selector of the form
+ */
+function updateNames(form){
+    var nextRowNumber = parseInt( $(form).find('table').attr('nextRowNumber') );
+    $(form).find('tr:first td input, tr:first td select').each(function(){
+        var name = $(this).attr('name').split('-');
+        $(this).attr('name',nextRowNumber + '-' + name[1]);
+    });
+    $(form).find('table').attr('nextRowNumber',nextRowNumber+1);
+}
+/**
+ * add a time row to ticket form
+ * @param form {string} css selector of the form
+ */
+function addTimeRow(form){
+    var html = $('form.template').find('table tr:first').html();
+    $(form).find('table tbody').prepend('<tr>'+html+'</tr>');
+    html = $(form).find('table tr:last td select.type').html();
+    $(form).find('table tr:first td select.type').html(html);
+    updateNames(form);
+}
+
+/**
+ * remove time row from ticket form
+ * @param row {string} css selector
+ */
+function removeTimeRow(row){
+    var tbody = $(row).parent();
+    $(row).remove();
+    var rowCount = $(tbody).children('tr').length;
+    var form = $(tbody).closest('form');
+    if(rowCount === 0){
+        addTimeRow(form);
+    }
+}
+
+/**
+ * remove ticket form
+ * @param form {string} css selector of the form
+ */
+function removeTicketForm(form){
+    $(form).remove();
+    var formCount = $('.forms').children('form').length;
+    if(formCount === 0){
+        addTicketForm();
+    }
+}
+
+/**
+ * recover stored form data
+ * @param data {array}
+ * {"test-1":
+     *   {"0":
+     *     {"date":"17 Nov, 15","start":"10:10","end":"10:20","duration":"0h 10m","description":"test description","type":"Development"}
+     *   }
+     *  }
+ */
+function dataIntoForm(data){
+    var i = 0;
+    $.each(data, function(index, ticket) {
+        var ticketRef = ticket.ticketRef.split('-');
+        delete ticket.ticketRef;
+        var project = ticketRef[0];
+        var ticketNo = ticketRef[1];
+        // if not first ticket
+        if(i>0){
+            addTicketForm();
+        }
+        var form = $('.forms form:last');
+        form.find('.projectheader .projectselector').val(project);
+        form.find('.projectheader .ticketnumber').val(ticketNo);
+        var j = 0;
+        for (var key in ticket) {
+            if( ticket[key] !== undefined ) {
+                var timeRow = ticket[key];
+                if( j > 0 ){
+                    addTimeRow(form);
+                }
+                form.find('table tr:first td .date').val(timeRow.date);
+                form.find('table tr:first td .start').val(timeRow.start);
+                form.find('table tr:first td .end').val(timeRow.end);
+                form.find('table tr:first td .duration').val(timeRow.duration);
+                form.find('table tr:first td .description').val(timeRow.description);
+                form.find('table tr:first td .type').val(timeRow.type);
+            };
+            j++;
+        }
+        updateProject(form);
+        i++;
+    });
+}
+
+/**
+ * sets the form content from json from local storage or then from server file
+ */
+function populateFormJson(){
+    var json = localStorage.getItem("json");
+    if (typeof json !== 'undefined' && json !== '' && json !== null ) {
+        var jsonData = JSON.parse(json);
+        dataIntoForm(jsonData);
+    } else {
+        $.ajax({url: "code/timeJsonGetAjax.php", dataType: "json",
+            success: function(result){
+                dataIntoForm(result);
+            }
+        });
+    }
+}
+
 $(document).ready(function(){
     /**
      * stop enter submitting forms
@@ -168,52 +326,7 @@ $(document).ready(function(){
         }
     });
 
-    /**
-     * the difference between two time values on the same day
-     * @param start {string} 24h start time e.g. 12:00
-     * @param end {string} 24h end time e.g. 12:00
-     * @returns {number} difference in minutes
-     */
-    function differenceInMinutes(start,end){
-        var startTime = start.split(':');
-        var endTime = end.split(':');
-        
-        var startTimeInMin = ( parseInt(startTime[0]) * 60 ) + parseInt(startTime[1]);
-        var endTimeInMin = ( parseInt(endTime[0]) * 60 ) + parseInt(endTime[1]);
 
-        if(startTimeInMin<=endTimeInMin) {
-            var totalDifferenceInMinutes = endTimeInMin - startTimeInMin;
-        }else{
-            var minutesInADay = 24 * 60 ;
-            var totalDifferenceInMinutes = endTimeInMin + (minutesInADay - startTimeInMin);
-        }
-
-        return totalDifferenceInMinutes;
-    }
-    /**
-     * converts minutes into hours and minutes associative array
-     * @param minutes {int}
-     * @returns {{hours: number, minutes: number}}
-     */
-    function convertMinutesIntoHours(minutes){
-        minutes = parseInt(minutes);
-        var hours = Math.floor(minutes / 60);
-        var minutesLeft = minutes - (hours * 60);
-        return { 'hours':hours , 'minutes':minutesLeft};
-    }
-    /**
-     * update the difference field
-     * @param timeRow {string} css selector
-     */
-    function updateDifference(timeRow){
-        var startTime = $(timeRow).find('td input.start').val();
-        var endTime = $(timeRow).find('td input.end').val();
-
-        var durationInMinutes = differenceInMinutes(startTime,endTime);
-        var duration = convertMinutesIntoHours(durationInMinutes);
-        $(timeRow).find('td input.duration')
-                    .val(duration['hours'] +'h '+ duration['minutes']+'m');
-    }
     $('.forms').on('change', 'form table tr td .clockpicker', function(){
         var timeRow = $(this).closest('tr');
         updateDifference(timeRow);
@@ -257,47 +370,12 @@ $(document).ready(function(){
         updateProject(form);
     });
 
-    /**
-     * update row number in field names
-     * @param form {string} css selector of the form
-     */
-    function updateNames(form){
-        var nextRowNumber = parseInt( $(form).find('table').attr('nextRowNumber') );
-        $(form).find('tr:first td input, tr:first td select').each(function(){
-           var name = $(this).attr('name').split('-');
-           $(this).attr('name',nextRowNumber + '-' + name[1]);
-        });
-        $(form).find('table').attr('nextRowNumber',nextRowNumber+1);
-    }
-    /**
-     * add a time row to ticket form
-     * @param form {string} css selector of the form
-     */
-    function addTimeRow(form){
-        var html = $('form.template').find('table tr:first').html();
-        $(form).find('table tbody').prepend('<tr>'+html+'</tr>');
-        html = $(form).find('table tr:last td select.type').html();
-        $(form).find('table tr:first td select.type').html(html);
-        updateNames(form);
-    }
+
     $('.forms').on('click', 'form .addTimeRow', function(){
         var form = $(this).closest('form');
         addTimeRow(form);
     });
 
-    /**
-     * remove time row from ticket form
-     * @param row {string} css selector
-     */
-    function removeTimeRow(row){
-        var tbody = $(row).parent();
-        $(row).remove();
-        var rowCount = $(tbody).children('tr').length;
-        var form = $(tbody).closest('form');
-        if(rowCount === 0){
-            addTimeRow(form);
-        }
-    }
     $('.forms').on('click', '.deleteTimeRow', function() {
         var row = $(this).closest('tr');
         removeTimeRow(row);
@@ -310,23 +388,12 @@ $(document).ready(function(){
        addTicketForm();
     });
 
-    /**
-     * remove ticket form
-     * @param form {string} css selector of the form
-     */
-    function removeTicketForm(form){
-        $(form).remove();
-        var formCount = $('.forms').children('form').length;
-        if(formCount === 0){
-            addTicketForm();
-        }
-    }
     $('.forms').on('click', '.deleteTimeForm', function() {
         var form = $(this).closest('form');
         removeTicketForm(form);
         storeFormData();
     });
-   
+
     /**
      * ajax submit & standard submit
      */
@@ -390,67 +457,6 @@ $(document).ready(function(){
         });
         $(this).prop('disabled', false);
     });
-    
-    
-    /**
-     * recover stored form data
-     * @param data {array}
-     * {"test-1":
-     *   {"0":
-     *     {"date":"17 Nov, 15","start":"10:10","end":"10:20","duration":"0h 10m","description":"test description","type":"Development"}
-     *   }
-     *  }
-    */
-    function dataIntoForm(data){
-        var i = 0;
-        $.each(data, function(index, ticket) {
-            var ticketRef = ticket.ticketRef.split('-');
-            delete ticket.ticketRef; 
-            var project = ticketRef[0];
-            var ticketNo = ticketRef[1];
-            // if not first ticket
-            if(i>0){
-                addTicketForm();
-            }
-            var form = $('.forms form:last');
-            form.find('.projectheader .projectselector').val(project);
-            form.find('.projectheader .ticketnumber').val(ticketNo);
-            var j = 0;
-            for (var key in ticket) {
-                if( ticket[key] !== undefined ) {
-                    var timeRow = ticket[key];
-                    if( j > 0 ){
-                        addTimeRow(form);
-                    }
-                    form.find('table tr:first td .date').val(timeRow.date);
-                    form.find('table tr:first td .start').val(timeRow.start);
-                    form.find('table tr:first td .end').val(timeRow.end);
-                    form.find('table tr:first td .duration').val(timeRow.duration);
-                    form.find('table tr:first td .description').val(timeRow.description);
-                    form.find('table tr:first td .type').val(timeRow.type);
-                };
-                j++;
-            }
-            updateProject(form);
-            i++;
-        });
-    }
-    
-    /**
-     * sets the form content from json from local storage or then from server file
-     */
-    function populateFormJson(){
-        var json = localStorage.getItem("json");
-        if (typeof json !== 'undefined' && json !== '' && json !== null ) {
-            var jsonData = JSON.parse(json);
-            dataIntoForm(jsonData);
-        } else {
-            $.ajax({url: "code/timeJsonGetAjax.php", dataType: "json",
-                success: function(result){
-                    dataIntoForm(result);
-                }
-            });
-        }
-    }
+
     populateFormJson();
 });
