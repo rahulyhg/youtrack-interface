@@ -85,10 +85,12 @@ $(document).ready(function(){
     /**
      * add ticket form on search link click
      */
-    $('#ticketSearch').on('click', '#searchResponse ul li a', function (){
-        var ticketRef = $(this).siblings( "span").first().html();
+    $('#ticketSearch').on('click', '#searchResponse ul li a', function () {
+        var ticketRef = $(this).siblings("span").first().html();
         ticketRef = ticketRef.split('-');
-        addTicketForm();
+        if ( !isFormEmpty($('.forms form').last()) ){
+            addTicketForm();
+        }
         var form = $('.forms form').last();
         var TicketElement = form.find('.projectheader');
         TicketElement.children('.projectselector').val(ticketRef[0]);
@@ -96,6 +98,37 @@ $(document).ready(function(){
         updateProject(form);
         timertoggle(form.find('.timertoggle'));
     });
-    
-    
+
+    /**
+     * check if form is empty
+     * @param form {string} css selector of the form
+     * @returns {boolean}
+     */
+    function isFormEmpty(form){
+        if($(form).find('.projectselector').val()){
+            return false;
+        }
+        if($(form).find('.ticketnumber').val()){
+            return false;
+        }
+        $(this).find('table tr').each(function(n) {
+            if($(this).find('.date[name]').val()){
+                return false;
+            }
+            if($(this).find('.start[name]').val()){
+                return false;
+            }
+            if($(this).find('.end[name]').val()){
+                return false;
+            }
+            if($(this).find('.description[name]').val()){
+                return false;
+            }
+            if($(this).find('.type[name]').val()){
+                return false;
+            }
+        });
+        return true;
+    }
+
 });
