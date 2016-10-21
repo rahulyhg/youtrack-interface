@@ -47,6 +47,116 @@ function updateProject(form,callback){
     });
 }
 
+/**
+ * stop start the timer
+ * @param button {string} css selector
+ */
+function timertoggle(button){
+    var form = $(button).closest('form');
+    if($(button).hasClass('play')){
+        if($(form).find('table tr:first td input.start').val() !== ''){
+            addTimeRow(form);
+        }
+        var time = new Date($.now());
+        var startTime = timeAddZero(time.getHours())+":"+timeAddZero(time.getMinutes());
+        var date =  $.datepicker.formatDate("d M y", time);
+        $(form).find('table tr:first td input.start')
+            .val(startTime);
+        $(form).find('table tr:first td input.date')
+            .val(date);
+        $(button).html('stop')
+            .removeClass('play')
+            .addClass('stop');
+    }else if($(button).hasClass('stop')){
+        time = new Date($.now());
+        var endTime = timeAddZero(time.getHours())+":"+timeAddZero(time.getMinutes());
+
+        $(form).find('table tr:first td input.end')
+            .val(endTime);
+        $(button).html('play')
+            .removeClass('stop')
+            .addClass('play');
+
+        var timeRow = $(form).find('table tr:first');
+        updateDifference(timeRow);
+    }
+    storeFormData();
+}
+
+/**
+ * saves form's data onto server for later retrieval
+ * @param jsonString {string}
+ */
+function storeFormDataOnServer(jsonString){
+    $.ajax({url: "code/timeJsonSaveAjax.php",
+        type: 'POST',
+        dataType: "json",
+        data: { json: jsonString },
+        success: function(result){
+            return result;
+        }
+    });
+}
+/**
+ * saves form's data into local storage for later retrieval
+ */
+function storeFormData(){
+    var array = createDataArray();
+    var jsonString = JSON.stringify(array);
+    // Store
+    if (typeof (Storage) !== "undefined") {
+        localStorage.setItem("json", jsonString);
+    }
+    storeFormDataOnServer(jsonString);
+}
+$('.forms').on('change', 'form', function(){
+    storeFormData();
+});
+
+/**
+ * create data array of the timing from all forms
+ * @returns {{}}
+ */
+function createDataArray(){
+    var dataArray = {};
+    var i = 0;
+    $('.forms form').each(function(){
+        i++;
+        // if one or more timeRow not submitted
+        if($(this).find('tr [name]').length>0){
+            var ticketRef = $(this).find('.projectselector').val() + '-' + $(this).find('.ticketnumber').val();
+            dataArray[i] = {};
+            dataArray[i]['ticketRef'] = ticketRef;
+            $(this).find('table tr').each(function(n){
+                var noOfTiming = $(this).find('.date[name]').length;
+                // if this timeRow not submitted
+                if(noOfTiming>0){
+                    dataArray[i][noOfTiming-n] = {};
+                    dataArray[i][noOfTiming-n]['date'] = $(this).find('.date[name]').val();
+                    dataArray[i][noOfTiming-n]['start'] = $(this).find('.start[name]').val();
+                    dataArray[i][noOfTiming-n]['end'] = $(this).find('.end[name]').val();
+                    dataArray[i][noOfTiming-n]['duration'] = $(this).find('.duration[name]').val();
+                    dataArray[i][noOfTiming-n]['description'] = $(this).find('.description[name]').val();
+                    dataArray[i][noOfTiming-n]['type'] = $(this).find('.type[name]').val();
+                }
+            });
+        }
+    });
+    return dataArray;
+}
+
+/**
+ * adds a 0 to start of string if value less than ten
+ * @param i {int}
+ * @returns {int}
+ */
+function timeAddZero(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+}
+
 $(document).ready(function(){
     /**
      * stop enter submitting forms
@@ -109,53 +219,6 @@ $(document).ready(function(){
         updateDifference(timeRow);
     });
 
-    /**
-     * adds a 0 to start of string if value less than ten
-     * @param i {int}
-     * @returns {int}
-     */
-    function timeAddZero(i) {
-        if (i < 10) {
-            i = "0" + i;
-        }
-        return i;
-    }
-
-    /**
-     * stop start the timer
-     * @param button {string} css selector
-     */
-    function timertoggle(button){
-        var form = $(button).closest('form');
-        if($(button).hasClass('play')){
-            if($(form).find('table tr:first td input.start').val() !== ''){
-               addTimeRow(form);
-            }
-            var time = new Date($.now());
-            var startTime = timeAddZero(time.getHours())+":"+timeAddZero(time.getMinutes());
-            var date =  $.datepicker.formatDate("d M y", time);
-            $(form).find('table tr:first td input.start')
-                .val(startTime);
-            $(form).find('table tr:first td input.date')
-                .val(date);
-            $(button).html('stop')
-                .removeClass('play')
-                .addClass('stop');
-        }else if($(button).hasClass('stop')){
-            time = new Date($.now());
-            var endTime = timeAddZero(time.getHours())+":"+timeAddZero(time.getMinutes());
-    
-            $(form).find('table tr:first td input.end')
-                .val(endTime);
-            $(button).html('play')
-                .removeClass('stop')
-                .addClass('play');
-        
-            var timeRow = $(form).find('table tr:first');
-            updateDifference(timeRow);
-        }
-        storeFormData();
-    }
     $('.forms').on('click', 'form .projectheader .timertoggle', function(){
         timertoggle(this);
     });
@@ -261,66 +324,6 @@ $(document).ready(function(){
     $('.forms').on('click', '.deleteTimeForm', function() {
         var form = $(this).closest('form');
         removeTicketForm(form);
-    });
-
-    /**
-     * create data array of the timing from all forms
-     * @returns {{}}
-     */
-    function createDataArray(){
-        var dataArray = {};
-        var i = 0;
-        $('.forms form').each(function(){
-            i++;
-            // if one or more timeRow not submitted
-            if($(this).find('tr [name]').length>0){
-                var ticketRef = $(this).find('.projectselector').val() + '-' + $(this).find('.ticketnumber').val();
-                dataArray[i] = {};
-                dataArray[i]['ticketRef'] = ticketRef;
-                $(this).find('table tr').each(function(n){
-                    var noOfTiming = $(this).find('.date[name]').length;
-                    // if this timeRow not submitted
-                    if(noOfTiming>0){
-                        dataArray[i][noOfTiming-n] = {};
-                        dataArray[i][noOfTiming-n]['date'] = $(this).find('.date[name]').val();
-                        dataArray[i][noOfTiming-n]['start'] = $(this).find('.start[name]').val();
-                        dataArray[i][noOfTiming-n]['end'] = $(this).find('.end[name]').val();
-                        dataArray[i][noOfTiming-n]['duration'] = $(this).find('.duration[name]').val();
-                        dataArray[i][noOfTiming-n]['description'] = $(this).find('.description[name]').val();
-                        dataArray[i][noOfTiming-n]['type'] = $(this).find('.type[name]').val();
-                    }
-                });
-            }
-        });
-        return dataArray;
-    }
-    /**
-     * saves form's data onto server for later retrieval
-     * @param jsonString {string}
-     */
-    function storeFormDataOnServer(jsonString){
-        $.ajax({url: "code/timeJsonSaveAjax.php",
-            type: 'POST',
-            dataType: "json",
-            data: { json: jsonString },
-            success: function(result){
-                return result;
-            }
-        });
-    }
-    /**
-     * saves form's data into local storage for later retrieval
-     */
-    function storeFormData(){
-        var array = createDataArray();
-        var jsonString = JSON.stringify(array);
-        // Store
-        if (typeof (Storage) !== "undefined") {
-            localStorage.setItem("json", jsonString);
-        }
-        storeFormDataOnServer(jsonString);
-    }
-    $('.forms').on('change', 'form', function(){
         storeFormData();
     });
    

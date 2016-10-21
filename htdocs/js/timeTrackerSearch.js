@@ -93,7 +93,8 @@ $(document).ready(function(){
         var TicketElement = form.find('.projectheader');
         TicketElement.children('.projectselector').val(ticketRef[0]);
         TicketElement.children('.ticketnumber').val(ticketRef[1]);
-        updateProject(form)
+        updateProject(form);
+        timertoggle(form.find('.timertoggle'));
     });
     
     
