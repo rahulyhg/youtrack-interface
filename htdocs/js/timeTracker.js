@@ -4,7 +4,7 @@
 function addTicketForm(){
     var form = $('form.template');
     var html = form.html();
-    $('div.forms').append('<form action="code/timeTrackerSubmit.php" method="post" enctype="multipart/form-data">'+html+'</form>');
+    $('div.forms').append('<form action="code/timeTrackerSubmit.php?ajax=true" method="post" enctype="multipart/form-data">'+html+'</form>');
     updateProject(form);
 }
 
