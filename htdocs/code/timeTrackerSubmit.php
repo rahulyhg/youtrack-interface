@@ -65,7 +65,7 @@ class timeTrackerSubmit{
         $xml .= '<workItem>'.
             '<date>'.$date.'</date>'.
             '<duration>'.$duration.'</duration>'.
-            '<description>'.$timeRow['description'].'</description>'.
+            '<description>'.str_replace('&','and',$timeRow['description']).'</description>'. // & symbol not accepted by youtrack api
             '<worktype>'.
                 '<name>'.$timeRow['type'].'</name>'.
             '</worktype>'.
