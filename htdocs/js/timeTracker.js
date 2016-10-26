@@ -313,6 +313,9 @@ function populateFormJson(){
             }
         });
     }
+    $( "#wrapper .forms > form:visible" ).each(function( index ) {
+        updateStateFromProjectSelector(this);
+    });
 }
 
 
@@ -324,15 +327,17 @@ function updateStateFromProjectSelector(form){
     var project = $(form).find('.projectselector').val();
     var stateSelector = $(form).find('.stateselector');
     stateSelector.html('<option value="">state...</option>');
-    $.ajax({url: "code/createByFormAjax.php?project="+project, dataType: "json",
-        success: function(result){
-            stateSelector.html(result['State']['innerHtml']);
-        },
-        error: function(result){
-            console.log('state selector update error')
-            console.log(result)
-        }
-    });
+    if(project!=''){
+        $.ajax({url: "code/createByFormAjax.php?project="+project, dataType: "json",
+            success: function(result){
+                stateSelector.html(result['State']['innerHtml']);
+            },
+            error: function(result){
+                console.log('state selector update error')
+                console.log(result)
+            }
+        });
+    }
 }
 
 $(document).ready(function(){
