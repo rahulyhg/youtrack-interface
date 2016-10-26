@@ -163,7 +163,7 @@ class ApiWriter implements WriterInterface
     }
     /**
      * 
-     * @global type $youtrackUrl
+     * @global string $youtrackUrl
      * @param string $issueRef
      * @param array $item
      */

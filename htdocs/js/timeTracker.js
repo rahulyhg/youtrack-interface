@@ -315,6 +315,25 @@ function populateFormJson(){
     }
 }
 
+
+/**
+ * update the project row for the new project given
+ * @param projectSelector {string} project selector
+ */
+function updateProjectRowFromProjectSelector(projectSelector){
+    var project = $(projectSelector).find('.projectselector').val();
+    $(projectSelector).find('.stateselector').html('<option value="">state...</option>');
+    $.ajax({url: "code/createByFormAjax.php?project="+project, dataType: "json",
+        success: function(result){
+            $(projectSelector).find('.stateselector').html(result['State']['innerHtml']);
+        },
+        error: function(result){
+            console.log('state selector update error')
+            console.log(result)
+        }
+    });
+}
+
 $(document).ready(function(){
     /**
      * stop enter submitting forms
@@ -364,6 +383,7 @@ $(document).ready(function(){
     $('.forms').on('change', 'form .projectheader .projectselector', function(){
         var form = $(this).closest('form');
         updateProject(form);
+        updateProjectRowFromProjectSelector(form);
     });
     $('.forms').on('change', '.ticketnumber', function(){
         var form = $(this).closest('form');
