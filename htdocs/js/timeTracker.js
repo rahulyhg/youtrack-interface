@@ -4,7 +4,7 @@
 function addTicketForm(){
     var form = $('form.template');
     var html = form.html();
-    $('div.forms').append('<form action="code/timeTrackerSubmit.php" method="post" enctype="multipart/form-data">'+html+'</form>');
+    $('div.forms').append('<form action="code/timeTrackerSubmit.php?ajax=true" method="post" enctype="multipart/form-data">'+html+'</form>');
     updateProject(form);
 }
 
@@ -315,6 +315,26 @@ function populateFormJson(){
     }
 }
 
+
+/**
+ * update the project row for the new project given
+ * @param projectSelector {string} project selector
+ */
+function updateStateFromProjectSelector(form){
+    var project = $(form).find('.projectselector').val();
+    var stateSelector = $(form).find('.stateselector');
+    stateSelector.html('<option value="">state...</option>');
+    $.ajax({url: "code/createByFormAjax.php?project="+project, dataType: "json",
+        success: function(result){
+            stateSelector.html(result['State']['innerHtml']);
+        },
+        error: function(result){
+            console.log('state selector update error')
+            console.log(result)
+        }
+    });
+}
+
 $(document).ready(function(){
     /**
      * stop enter submitting forms
@@ -364,6 +384,7 @@ $(document).ready(function(){
     $('.forms').on('change', 'form .projectheader .projectselector', function(){
         var form = $(this).closest('form');
         updateProject(form);
+        updateStateFromProjectSelector(form);
     });
     $('.forms').on('change', '.ticketnumber', function(){
         var form = $(this).closest('form');

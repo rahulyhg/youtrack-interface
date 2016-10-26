@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/authenticationAndSecurity.php';
 require_once __DIR__ . '/getDataFromYoutrack.php';
+require_once __DIR__ . '/bootstrap.php';
 
 // --delete me : used for testing guzzle --
 require_once __DIR__ . '/../../vendor/autoload.php';
@@ -136,6 +137,15 @@ class timeTrackerSubmit{
             $xml = $this->createXml($timeRow);
             $organisedPosts[$key]['success'] = $this->postData($xml,$ticketId);
         }
+
+        $workflow = new ApiWriter;
+        if( strlen(trim($posts['state']))>0 ){
+            $workflow->stdUserUpdateIssue($ticketId,["State"=>$posts['state'], "project"=>$posts['project']]);
+            if($GLOBALS['createByFormAjax'][$ticketId]['updated']){
+                $organisedPosts['state']['success'] = true;
+            };
+        }
+
         return $organisedPosts;
     }
 }

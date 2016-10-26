@@ -97,6 +97,7 @@ $(document).ready(function(){
         TicketElement.children('.ticketnumber').val(ticketRef[1]);
         updateProject(form);
         timertoggle(form.find('.timertoggle'));
+        updateStateFromProjectSelector(form);
     });
 
     /**

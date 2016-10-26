@@ -1,4 +1,4 @@
-<form <?php if($hidden){ echo 'class="hidden template" '; } ?> action="code/timeTrackerSubmit.php" method="post" enctype="multipart/form-data">
+<form <?php if($hidden){ echo 'class="hidden template" '; } ?> action="code/timeTrackerSubmit.php?ajax=true" method="post" enctype="multipart/form-data">
     <div class="projectheader">
         <button class="deleteTimeForm" type="button">Remove</button>
         <select class="projectselector form-control"  autocomplete="off" name="project" >
@@ -9,6 +9,9 @@
         </select>
         <input class="ticketnumber"  autocomplete="off" name="ticketnumber"/>
         <div class="ticketsummary"></div>
+        <select class="stateselector"  autocomplete="off" name="state">
+            <option value="">state...</option>
+        </select>
         <div class="buttonsWrapper">
             <button class="timertoggle play" type="button">play</button>
             <button class="ajaxSubmit" >ajax submit</button>
