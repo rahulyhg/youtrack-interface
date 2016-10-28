@@ -4,6 +4,7 @@
 <?php $cookies = $authenticationAndSecurity->getBrowserCookies();?>
 <!DOCTYPE html>
 <head>
+    <script src='js/jquery-1.10.2.min.js'></script>
     <script type="text/javascript" src="js/bootstrap/bootstrap-3.3.7-dist/bootstrap.min.js"></script>
     <link rel="stylesheet" href="css/bootstrap/bootstrap-3.3.7-dist/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap/bootstrap-3.3.7-dist/bootstrap-theme.min.css">
