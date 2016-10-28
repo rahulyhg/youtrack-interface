@@ -69,13 +69,12 @@ class timeJsonGetAjax {
     function getJson(){
         $authenticationAndSecurity = new authenticationAndSecurity;
         
-        $reporterCookieName = 'timerCookie';
+        $reporterCookieName = 'myCookie';
         if(null !== $authenticationAndSecurity->getcookie($reporterCookieName)){
             $reporterName =  $authenticationAndSecurity->getSingleCookie($reporterCookieName);
         }else{
             die('Error: no reporter cookie');
         }
-        
         $json = $this->getTimeJsonFile($reporterName);
         return $json;
     }

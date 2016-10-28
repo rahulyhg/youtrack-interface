@@ -97,7 +97,7 @@ class timeJsonSaveAjax {
     function saveJson($json){
         $authenticationAndSecurity = new authenticationAndSecurity;
         
-        $reporterCookieName = 'timerCookie';
+        $reporterCookieName = 'myCookie';
         if(null !== $authenticationAndSecurity->getcookie($reporterCookieName)){
             $reporterName =  $authenticationAndSecurity->getSingleCookie($reporterCookieName);
         }else{
