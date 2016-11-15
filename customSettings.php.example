@@ -1,5 +1,5 @@
 <?php
-$youtrack_url = 'http://example.com'; // e.g. 'http://example.com/example' or  'http://example.com'
+$youtrackUrl = 'http://example.com'; // e.g. 'http://example.com/example' or  'http://example.com'
 $user = 'user';
 $password = 'password';
 
