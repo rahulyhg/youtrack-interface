@@ -134,8 +134,10 @@ class timeTrackerSubmit{
         $ticketId = $posts['project'].'-'.$posts['ticketnumber'];
         $organisedPosts = $this->organisePosts($posts);
         foreach($organisedPosts as $key => $timeRow){
-            $xml = $this->createXml($timeRow);
-            $organisedPosts[$key]['success'] = $this->postData($xml,$ticketId);
+            if ($timeRow['duration']) {
+                $xml = $this->createXml($timeRow);
+                $organisedPosts[$key]['success'] = $this->postData($xml, $ticketId);
+            }
         }
 
         $workflow = new ApiWriter;
