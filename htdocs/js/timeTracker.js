@@ -293,6 +293,11 @@ function dataIntoForm(data){
             };
             j++;
         }
+        if (form.find('table tr:first td .end').val() === "") {
+            form.find('.timertoggle').html('stop')
+                .removeClass('play')
+                .addClass('stop');
+        }
         updateProject(form);
         i++;
     });
@@ -405,6 +410,7 @@ $(document).ready(function(){
     $('.forms').on('click', '.deleteTimeRow', function() {
         var row = $(this).closest('tr');
         removeTimeRow(row);
+        storeFormData()
     });
 
     /**
