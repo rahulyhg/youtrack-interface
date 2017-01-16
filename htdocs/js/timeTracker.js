@@ -293,7 +293,7 @@ function dataIntoForm(data){
             };
             j++;
         }
-        if (form.find('table tr:first td .end').val() === "") {
+        if (form.find('table tr:first td .start').val() && form.find('table tr:first td .end').val() === "") {
             form.find('.timertoggle').html('stop')
                 .removeClass('play')
                 .addClass('stop');
