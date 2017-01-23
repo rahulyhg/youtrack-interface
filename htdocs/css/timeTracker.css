@@ -37,3 +37,6 @@
     font-weight: bold;
     list-style-type: none;
 }
+#searchResponse a{
+    margin-right: 10px;
+}
