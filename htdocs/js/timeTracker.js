@@ -323,6 +323,35 @@ function populateFormJson(){
     });
 }
 
+/**
+ * @param stateField form element
+ */
+function ajaxSubmitState(stateField){
+    var form = $(stateField).closest('form');
+    var sendData = {
+        'project': form.find('.projectselector').val(),
+        'ticketnumber':  form.find('.ticketnumber').val(),
+        'state' : $(stateField).val()
+    };
+    $.ajax({
+        type: form.attr('method'),
+        url: form.attr('action'),
+        data: sendData,
+        success: function (rawData) {
+            $(stateField).after("<div class='updateSuccess' >state updated successfully</div>");
+            setTimeout( function(){
+                $(form).find('.updateSuccess').fadeOut( "slow" );
+            }, 3000 );
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR['status'] === 401) {
+                window.location.replace("index.php");
+            } else {
+                alert('request failed');
+            }
+        }
+    })
+}
 
 /**
  * update the project row for the new project given
@@ -399,6 +428,7 @@ $(document).ready(function(){
     $('.forms').on('change', '.ticketnumber', function(){
         var form = $(this).closest('form');
         updateProject(form);
+        updateStateFromProjectSelector(form);
     });
 
 
@@ -490,5 +520,8 @@ $(document).ready(function(){
         $(this).prop('disabled', false);
     });
 
+    $('.forms').on('change', '.stateselector', function(){
+        ajaxSubmitState(this);
+    });
     populateFormJson();
 });
