@@ -6,7 +6,7 @@
 class cache {
     private $cacheFolder;
     public function __construct(){
-        $this->cacheFolder = __DIR__ . '/../../cache';
+        $this->cacheFolder = realpath(__DIR__ . '/../../cache');
     }
 
     /**
@@ -26,10 +26,10 @@ class cache {
     function validateFileName($ref){
         $delimiter = '¦';
         $unwanted = array( '/' );
-        $ref = str_replace( $unwanted, $delimiter , $ref);
+        $ref = str_replace($unwanted, $delimiter , $ref);
         $delimiter = '¬';
         $unwanted = array(',', ';', '|', ' ', '$', '"', "'", '*' );
-        $ref = str_replace( $unwanted, $delimiter , $ref);
+        $ref = str_replace($unwanted, $delimiter , $ref);
         return $ref;
     }
     /**
@@ -90,16 +90,22 @@ class cache {
             return false;
         }
     }
+
     /**
      * clear the cache
+     * @param string $fileRef filename or references in cache folder to clear
      */
-    function clearCache(){
-        $files = glob($this->cachedFolder);
-        foreach($files as $fileName){
-            if(is_file($fileName)){
-                if(is_writable($fileName)){
+    public function clearCache($fileRef)
+    {
+        if (!$fileRef) {
+            $fileRef = '*';
+        }
+        $files = glob($this->cacheFolder.'/'.$fileRef);
+        foreach ($files as $fileName) {
+            if (is_file($fileName)) {
+                if (is_writable($fileName)) {
                     unlink($fileName);
-                }else{
+                } else {
                     error_log('clear cache: failed to remove file '.$fileName.' it is not writable');
                 }
             }
