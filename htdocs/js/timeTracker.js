@@ -127,17 +127,19 @@ function createDataArray(){
             var ticketRef = $(this).find('.projectselector').val() + '-' + $(this).find('.ticketnumber').val();
             dataArray[i] = {};
             dataArray[i]['ticketRef'] = ticketRef;
-            $(this).find('table tr').each(function(n){
-                var noOfTiming = $(this).find('.date[name]').length;
+            var rows = $(this).find('table tr');
+            var noOfTiming = rows.length;
+            rows.each(function(n){
                 // if this timeRow not submitted
-                if(noOfTiming>0){
-                    dataArray[i][noOfTiming-n] = {};
-                    dataArray[i][noOfTiming-n]['date'] = $(this).find('.date[name]').val();
-                    dataArray[i][noOfTiming-n]['start'] = $(this).find('.start[name]').val();
-                    dataArray[i][noOfTiming-n]['end'] = $(this).find('.end[name]').val();
-                    dataArray[i][noOfTiming-n]['duration'] = $(this).find('.duration[name]').val();
-                    dataArray[i][noOfTiming-n]['description'] = $(this).find('.description[name]').val();
-                    dataArray[i][noOfTiming-n]['type'] = $(this).find('.type[name]').val();
+                if( $(this).find('.date[name]').length > 0 ){
+                    var j = noOfTiming - n;
+                    dataArray[i][j] = {};
+                    dataArray[i][j]['date'] = $(this).find('.date[name]').val();
+                    dataArray[i][j]['start'] = $(this).find('.start[name]').val();
+                    dataArray[i][j]['end'] = $(this).find('.end[name]').val();
+                    dataArray[i][j]['duration'] = $(this).find('.duration[name]').val();
+                    dataArray[i][j]['description'] = $(this).find('.description[name]').val();
+                    dataArray[i][j]['type'] = $(this).find('.type[name]').val();
                 }
             });
         }
@@ -240,6 +242,7 @@ function removeTimeRow(row){
     if(rowCount === 0){
         addTimeRow(form);
     }
+    storeFormData();
 }
 
 /**
@@ -306,7 +309,7 @@ function dataIntoForm(data){
 /**
  * sets the form content from json from local storage or then from server file
  */
-function populateFormJson(){
+function populateFromJson(){
     var json = localStorage.getItem("json");
     if (typeof json !== 'undefined' && json !== '' && json !== null ) {
         var jsonData = JSON.parse(json);
@@ -523,5 +526,5 @@ $(document).ready(function(){
     $('.forms').on('change', '.stateselector', function(){
         ajaxSubmitState(this);
     });
-    populateFormJson();
+    populateFromJson();
 });
