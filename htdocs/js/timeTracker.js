@@ -388,7 +388,6 @@ $(document).ready(function(){
         }
     });
 
-
     $('.forms').on('change', 'form table tr td .clockpicker', function(){
         var timeRow = $(this).closest('tr');
         updateDifference(timeRow);
@@ -430,6 +429,14 @@ $(document).ready(function(){
     });
     $('.forms').on('change', '.ticketnumber', function(){
         var form = $(this).closest('form');
+        var firstLetter  = $(this).val().charAt(0);
+        if (firstLetter.length === 1 && firstLetter.match(/[a-z]/i)) {
+            var cuttingPoint = $(this).val().lastIndexOf("-");
+            var project = $(this).val().slice(0, cuttingPoint);
+            $(form).find('.projectheader .projectselector').val(project);
+            var ticketNo = $(this).val().slice(cuttingPoint+1);
+            $(this).val(ticketNo);
+        }
         updateProject(form);
         updateStateFromProjectSelector(form);
     });
