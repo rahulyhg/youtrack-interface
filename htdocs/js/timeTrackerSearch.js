@@ -27,11 +27,17 @@ $(document).ready(function(){
                         html += '<li class="partialSet"><button class="searchResponseMore">more</button></li>';
                     }
                     html += '</ul>';
-                    $('#ticketSearch #searchResponse').html(html)
+
+                    if ($('#ticketSearch #searchResponse').hasClass('ui-accordion')) {
+                        $('#ticketSearch #searchResponse')
+                            .accordion("destroy")
+                    }
+                    $('#ticketSearch #searchResponse')
+                        .html(html)
                         .attr('after',100)
                         .accordion({collapsible: true});
                     $('#ticketSearch .ajaxSubmit').prop('disabled', false);
-                    $('#ticketSearch .searchResponseMore').prop('disabled', false);    
+                    $('#ticketSearch .searchResponseMore').prop('disabled', false);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(textStatus, errorThrown);
