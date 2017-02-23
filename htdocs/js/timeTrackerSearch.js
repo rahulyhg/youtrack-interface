@@ -1,5 +1,27 @@
 $(document).ready(function(){
-    
+
+    $('#ticketSearch').on('change', '.query',function() {
+        var form = $('#ticketSearch');
+        if(form.find('.projectselector').val() !== ""){
+            return;
+        }
+        var firstLetter  = $(this).val().charAt(0);
+        if (firstLetter.length === 1 && firstLetter.match(/[a-zA-Z]/i)) {
+            var ticketRef = $(this).val();
+            var html = '<h3>Results</h3><ul><li><a href="#">play</a><span>'+ticketRef+'</span></li></ul>';
+
+            if ($('#ticketSearch #searchResponse').hasClass('ui-accordion')) {
+                $('#ticketSearch #searchResponse')
+                    .accordion("destroy")
+            }
+            $('#ticketSearch #searchResponse')
+                .html(html)
+                .attr('after',100)
+                .accordion({collapsible: true});
+
+        }
+    });
+
     /**
      * add search results
      */

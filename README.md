@@ -1,3 +1,8 @@
+#### usage
+##### time tracker
+Pasting a full ticket reference into the search box when 'select  a project' is selected in the drop down, shows the reference in the results drop-down. note: it dosn't check if the reference is valid.
+Pasting a full ticket reference into the ticket no. box, sets the the full ticket reference.
+
 #### installation
 * composer install 
 * make sure the 'timings', 'cache', 'uploads' and 'export' folders have apache/nginx read & write permissions

@@ -430,7 +430,7 @@ $(document).ready(function(){
     $('.forms').on('change', '.ticketnumber', function(){
         var form = $(this).closest('form');
         var firstLetter  = $(this).val().charAt(0);
-        if (firstLetter.length === 1 && firstLetter.match(/[a-z]/i)) {
+        if (firstLetter.length === 1 && firstLetter.match(/[a-zA-Z]/i)) {
             var cuttingPoint = $(this).val().lastIndexOf("-");
             var project = $(this).val().slice(0, cuttingPoint);
             $(form).find('.projectheader .projectselector').val(project);
