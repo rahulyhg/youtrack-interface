@@ -13,23 +13,23 @@ require_once __DIR__ . '/code/getCustomSettings.php';
 <!DOCTYPE html>
 <html>
 <head>
-	<script src='js/jquery-1.10.2.min.js'></script>
-	<script type="text/javascript" src="js/bootstrap/bootstrap-3.3.7-dist/bootstrap.min.js"></script>
-	<link rel="stylesheet" href="css/bootstrap/bootstrap-3.3.7-dist/bootstrap.min.css">
-	<link rel="stylesheet" href="css/bootstrap/bootstrap-3.3.7-dist/bootstrap-theme.min.css">
+    <script src='js/jquery-1.10.2.min.js'></script>
+    <script type="text/javascript" src="js/bootstrap/bootstrap-3.3.7-dist/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap/bootstrap-3.3.7-dist/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap/bootstrap-3.3.7-dist/bootstrap-theme.min.css">
 </head>
 <body>
-	<header>
-		<?php require_once(__DIR__ . '/header.phtml'); ?>
-	</header>
-	<form action="code/downloadFieldsSubmit.php" method="post" enctype="multipart/form-data">
-		<h1 style="text-align:center">Youtrack custom field options and users csv</h1>
-		<div>filename: <input type="text" name="filename"></div><br>
-			<?php if($authenticationType === 'password'): ?>
-				<div>login user: <input type="text" name="user"></div><br>
-				<div>login password: <input type="password" name="password"></div><br>
-			<?php endif; ?>
-		<input type="submit" value="Submit">
-	</form>
+    <header>
+        <?php require_once(__DIR__ . '/header.phtml'); ?>
+    </header>
+    <form action="code/downloadFieldsSubmit.php" method="post" enctype="multipart/form-data">
+        <h1 style="text-align:center">Youtrack custom field options and users csv</h1>
+        <div>filename: <input type="text" name="filename"></div><br>
+            <?php if ($authenticationType === 'password') : ?>
+                <div>login user: <input type="text" name="user"></div><br>
+                <div>login password: <input type="password" name="password"></div><br>
+            <?php endif; ?>
+        <input type="submit" value="Submit">
+    </form>
 </body>
 </html>

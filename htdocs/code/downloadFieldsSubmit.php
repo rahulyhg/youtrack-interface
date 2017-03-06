@@ -1,18 +1,16 @@
 <?php
 /**
- * download a csv with field options
+ * download a csv with field options.
  */
-require_once __DIR__ . '/../../vendor/autoload.php';
-require_once __DIR__ . '/getCustomSettings.php';
-require_once __DIR__ . '/getDataFromYoutrack.php';
-require_once __DIR__ . '/authenticationAndSecurity.php';
-$getYoutrackData = new getDataFromYoutrack;
-$authenticationAndSecurity = new authenticationAndSecurity;
+require_once __DIR__.'/../../vendor/autoload.php';
+require_once __DIR__.'/getCustomSettings.php';
+require_once __DIR__.'/getDataFromYoutrack.php';
+require_once __DIR__.'/authenticationAndSecurity.php';
+$getYoutrackData = new getDataFromYoutrack();
+$authenticationAndSecurity = new authenticationAndSecurity();
 
-require_once __DIR__ . '/csv.php';
-$csvClass = new csvClass;
-
-use Ddeboer\DataImport\Writer\CsvWriter;
+require_once __DIR__.'/csv.php';
+$csvClass = new csvClass();
 
 $youtrackFields = [];
 
@@ -24,57 +22,66 @@ $youtrackFields['user'] = $getYoutrackData->getUsers();
 array_push($youtrackFieldsList, 'user');
 
 /**
- * organises fields into more usable format, removing empty
+ * organises fields into more usable format, removing empty.
+ *
  * @param array $array youtrack fields
+ *
  * @return array
  */
-function reorganiseArray($array){
+function reorganiseArray($array)
+{
     $newArray = [];
-    foreach( $array as $key => $value ){
+    foreach ($array as $key => $value) {
         $i = 0;
-        foreach( $value as $key2 =>$val){
-           if( !isset($newArray[$i]) ){
-               $newArray[$i] = [];
-           }
-           $newArray[$i][$key] = $val;
-           $i++;
+        foreach ($value as $key2 => $val) {
+            if (!isset($newArray[$i])) {
+                $newArray[$i] = [];
+            }
+            $newArray[$i][$key] = $val;
+            ++$i;
         }
     }
+
     return $newArray;
 }
 $csvData = reorganiseArray($youtrackFields);
 
 /**
- * make each row have a full set of fields
+ * make each row have a full set of fields.
+ *
  * @param array $csvData
  * @param array $youtrackFieldsList
+ *
  * @return array
  */
-function makeColumnsFullLength($csvData, $youtrackFieldsList){
-// needs to replace cos just amending old causes data in wrong column when csv created
+function makeColumnsFullLength($csvData, $youtrackFieldsList)
+{
+    // needs to replace cos just amending old causes data in wrong column when csv created
     $csvDataReplace = [];
-    foreach($csvData as $key => $column ){
+    foreach ($csvData as $key => $column) {
         $csvDataReplace[$key] = [];
-        foreach($youtrackFieldsList as $field){
-            if( !isset($column[$field]) ){
+        foreach ($youtrackFieldsList as $field) {
+            if (!isset($column[$field])) {
                 $csvDataReplace[$key][$field] = '';
-            }else{
+            } else {
                 $csvDataReplace[$key][$field] = $csvData[$key][$field];
             }
         }
     }
+
     return $csvDataReplace;
 }
-$csvData = makeColumnsFullLength($csvData,$youtrackFieldsList);
+$csvData = makeColumnsFullLength($csvData, $youtrackFieldsList);
 
-if( substr($filename, -4) != '.csv'){
+if (substr($filename, -4) != '.csv') {
     $filename = $filename.'.csv';
 }
 $outputFileLocation = '../export/'.$filename;
-$csvCreated = $csvClass->createCsv( $csvData, $outputFileLocation );
+$csvCreated = $csvClass->createCsv($csvData, $outputFileLocation);
 
-if($csvCreated == FALSE){
-    function transmitFile($filepath){
+if ($csvCreated == false) {
+    function transmitFile($filepath)
+    {
         if (file_exists($filepath)) {
             header('Content-Description: File Transfer');
             header('Content-Type: application/octet-stream');
@@ -82,7 +89,7 @@ if($csvCreated == FALSE){
             header('Expires: 1');
             header('Cache-Control: must-revalidate');
             header('Pragma: public');
-            header('Content-Length: ' . filesize($filepath));
+            header('Content-Length: '.filesize($filepath));
             header('Content-type: text/csv');
             readfile($filepath);
             exit;

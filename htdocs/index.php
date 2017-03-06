@@ -1,7 +1,7 @@
-<?php require_once __DIR__ . '/code/getCustomSettings.php'; ?>
-<?php require_once __DIR__ . '/code/authenticationAndSecurity.php'; ?>
-<?php $authenticationAndSecurity = new authenticationAndSecurity; ?>
-<?php $cookies = $authenticationAndSecurity->getBrowserCookies();?>
+<?php require_once __DIR__.'/code/getCustomSettings.php'; ?>
+<?php require_once __DIR__.'/code/authenticationAndSecurity.php'; ?>
+<?php $authenticationAndSecurity = new authenticationAndSecurity(); ?>
+<?php $cookies = $authenticationAndSecurity->getBrowserCookies(); ?>
 <!DOCTYPE html>
 <head>
     <script src='js/jquery-1.10.2.min.js'></script>
@@ -11,12 +11,12 @@
 </head>
 <html>
 <body>
-    <?php if($authenticationType === 'password'): ?>
+    <?php if ($authenticationType === 'password'): ?>
         <header>
-            <?php require_once(__DIR__ . '/header.phtml'); ?>
+            <?php require_once __DIR__.'/header.phtml'; ?>
         </header>
     <?php else: ?>
-        <?php if ($cookies===null ) : ?>
+        <?php if ($cookies === null) : ?>
             <form action="code/youtrackLogin.php" method="post" enctype="multipart/form-data">
                     <h1>Login</h1>
                     <div>login user: <input type="text" name="user"></div><br>
@@ -25,7 +25,7 @@
             </form>
         <?php else: ?>
             <header>
-                <?php require_once(__DIR__ . '/header.phtml'); ?>
+                <?php require_once __DIR__.'/header.phtml'; ?>
             </header>
         <?php endif; ?>
     <?php endif; ?>

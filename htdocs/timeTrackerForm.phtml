@@ -1,11 +1,15 @@
-<form <?php if($hidden){ echo 'class="hidden template" '; } ?> action="code/timeTrackerSubmit.php?ajax=true" method="post" enctype="multipart/form-data">
+<form
+    <?php echo (($hidden)? 'class="hidden template" ' : ''); ?>
+    action="code/timeTrackerSubmit.php?ajax=true"
+    method="post" enctype="multipart/form-data"
+>
     <div class="projectheader">
         <button class="deleteTimeForm" type="button">Remove</button>
         <select class="projectselector form-control"  autocomplete="off" name="project" >
             <option value="">project...</option>
-            <?php foreach( $projectList as $project ){ ?>
+            <?php foreach ($projectList as $project) : ?>
                 <option value="<?php echo $project ?>"><?php echo $project ?></option>
-            <?php } ?>
+            <?php endforeach; ?>
         </select>
         <input class="ticketnumber"  autocomplete="off" name="ticketnumber"/>
         <div class="ticketsummary"></div>
@@ -21,11 +25,25 @@
     <table nextRowNumber="1">
         <tr>
             <td>
-                <input type="text" class="form-control date datepicker" autocomplete="off" value="" name="0-date" placeholder="date">
+                <input
+                    type="text"
+                    class="form-control date datepicker"
+                    autocomplete="off"
+                    value=""
+                    name="0-date"
+                    placeholder="date"
+                >
             </td>
             <td>
                 <div class="input-group clockpicker">
-                    <input type="text" class="start form-control" value="" autocomplete="off" name="0-start" placeholder="start">
+                    <input
+                        type="text"
+                        class="start form-control"
+                        value=""
+                        autocomplete="off"
+                        name="0-start"
+                        placeholder="start"
+                    >
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-time"></span>
                     </span>
@@ -33,16 +51,46 @@
             </td>
             <td>
                 <div class="input-group clockpicker">
-                    <input type="text" class="end form-control" value=""  autocomplete="off"name="0-end" placeholder="end">
+                    <input
+                        type="text"
+                        class="end form-control"
+                        value=""
+                        autocomplete="off"
+                        name="0-end"
+                        placeholder="end"
+                    >
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-time"></span>
                     </span>
                 </div>
             </td>
-            <td><input type="text" class='form-control duration' autocomplete="off" name="0-duration" placeholder="duration" readonly="readonly"></td>
-            <td><input type="text" class='form-control description' autocomplete="off" name="0-description" placeholder="description"></td>
             <td>
-                <select class="form-control type" autocomplete="off" name="0-type" placeholder="type">
+                <input
+                    type="text"
+                    class='form-control duration'
+                    autocomplete="off"
+                    name="0-duration"
+                    placeholder="duration"
+                    readonly="readonly"
+                >
+            </td>
+            <td>
+                <input
+                    type="text"
+                    class='form-control
+                    description'
+                    autocomplete="off"
+                    name="0-description"
+                    placeholder="description"
+                >
+            </td>
+            <td>
+                <select
+                    class="form-control type"
+                    autocomplete="off"
+                    name="0-type"
+                    placeholder="type"
+                >
                     <option value="">type...</option>
                 </select>
             </td>
