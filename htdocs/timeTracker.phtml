@@ -40,9 +40,9 @@ require_once __DIR__ . '/code/timeTracker.php';
     <form id="ticketSearch" action="code/querySearchAjax.php" method="post" enctype="multipart/form-data">
         <select class="projectselector" name="project" >
             <option value="">select a project</option>
-            <?php foreach( $projectList as $project ){ ?>
+            <?php foreach ($projectList as $project) : ?>
                 <option value="<?php echo $project ?>"><?php echo $project ?></option>
-            <?php } ?>
+            <?php endforeach; ?>
         </select>
         <input type="text" class="query" name="query"/>
         <button class="ajaxSubmit" >search</button>

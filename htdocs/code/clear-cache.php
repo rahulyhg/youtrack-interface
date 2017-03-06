@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/cache.php';
-$cache = new cache;
+
+require_once __DIR__.'/cache.php';
+$cache = new cache();
 $cache->clearCache();
-header('Location: ' . $_SERVER['HTTP_REFERER']);
+header('Location: '.$_SERVER['HTTP_REFERER']);

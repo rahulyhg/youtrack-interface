@@ -42,8 +42,14 @@ require_once __DIR__ . '/code/createByForm.php';
             <div id="HideFieldsCheckBoxContainer">
                 <label><input type="checkbox" name="links" value="links">Links</label>
                 <label><input type="checkbox" name="attachments" value="attachments">Attachments</label>
-                <?php foreach( $customFieldList as $customField ): ?>
-                        <label><input type="checkbox" name="<?php echo $customField ?>" value="<?php echo $customField ?>"><?php echo $customField ?></label>
+                <?php foreach ($customFieldList as $customField) : ?>
+                        <label>
+                            <input type="checkbox"
+                                   name="<?php echo $customField ?>"
+                                   value="<?php echo $customField ?>"
+                            >
+                            <?php echo $customField ?>
+                        </label>
                 <?php endforeach; ?>
             </div>
         </div>
@@ -57,8 +63,10 @@ require_once __DIR__ . '/code/createByForm.php';
                     <th>description</th>
                     <th class="linkscolumn"></th>
                     <th class="attachmentscolumn"></th>
-                    <?php foreach( $customFieldList as $customField ): ?>
-                            <th class="<?php echo str_replace(' ','', $customField) ?>column"><?php echo $customField; ?></th>
+                    <?php foreach ($customFieldList as $customField) : ?>
+                            <th class="<?php echo str_replace(' ', '', $customField) ?>column">
+                                <?php echo $customField; ?>
+                            </th>
                     <?php endforeach; ?>
                 </tr>
                 <tr class="hidden" >
@@ -71,7 +79,7 @@ require_once __DIR__ . '/code/createByForm.php';
                 </tr>
             </table>
             <button type="button" id="addRowToTable">add line to table</button>
-            <?php if($authenticationType === 'password'): ?>
+            <?php if ($authenticationType === 'password') : ?>
                 <div>login user: <input type="text" name="user"></div><br>
                 <div>login password: <input type="password" name="password"></div><br>
             <?php endif; ?>

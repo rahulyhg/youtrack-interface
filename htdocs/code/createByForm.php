@@ -1,17 +1,17 @@
 <?php
 /**
- * gets data for the createByForm page
+ * gets data for the createByForm page.
  */
-$getDataFromYoutrack = new getDataFromYoutrack;
+$getDataFromYoutrack = new getDataFromYoutrack();
 
 $customFieldList = [];
 $customFieldListFull = $getDataFromYoutrack->getCustomFields();
 $key = array_search('Spent time', $customFieldListFull);
 unset($customFieldListFull[$key]);
 $customFieldListFull = array_merge($customFieldListFull);
-foreach( $customFieldListFull as $customField ){
-    if( !isset($createByFormSettings['IgnoreCustomFields']) || !in_array($customField, $createByFormSettings['IgnoreCustomFields']) ):
-        array_push( $customFieldList, $customField);
+foreach ($customFieldListFull as $customField) {
+    if (!isset($createByFormSettings['IgnoreCustomFields']) || !in_array($customField, $createByFormSettings['IgnoreCustomFields'])):
+        array_push($customFieldList, $customField);
     endif;
 }
 $projectList = $getDataFromYoutrack->getProjectsList();
