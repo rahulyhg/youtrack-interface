@@ -214,6 +214,9 @@ function updateDifference(timeRow){
  */
 function roundDuration(duration){
     var roundedTo =  $('#timeRounding').val();
+    if (!roundedTo) {
+        return duration;
+    }
     return Math.ceil(duration / roundedTo ) * roundedTo ;
 }
 
