@@ -201,9 +201,20 @@ function updateDifference(timeRow){
     var endTime = $(timeRow).find('td input.end').val();
 
     var durationInMinutes = differenceInMinutes(startTime,endTime);
+    durationInMinutes = roundDuration(durationInMinutes);
     var duration = convertMinutesIntoHours(durationInMinutes);
     $(timeRow).find('td input.duration')
         .val(duration['hours'] +'h '+ duration['minutes']+'m');
+}
+
+/**
+ * round the duration up to nearest multiple of #timeRounding value.
+ * @param duration
+ * @returns {number}
+ */
+function roundDuration(duration){
+    var roundedTo =  $('#timeRounding').val();
+    return Math.ceil(duration / roundedTo ) * roundedTo ;
 }
 
 /**
