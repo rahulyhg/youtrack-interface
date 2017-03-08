@@ -36,30 +36,30 @@ require_once __DIR__ . '/code/timeTracker.php';
     <header>
         <?php require_once(__DIR__ . '/header.phtml'); ?>
     </header>
-    <h1 style="text-align:center">Time Tracker</h1>
-    <form id="ticketSearch" action="code/querySearchAjax.php" method="post" enctype="multipart/form-data">
-        <select class="projectselector" name="project" >
-            <option value="">select a project</option>
-            <?php foreach ($projectList as $project) : ?>
-                <option value="<?php echo $project ?>"><?php echo $project ?></option>
-            <?php endforeach; ?>
-        </select>
-        <input type="text" class="query" name="query"/>
-        <button class="ajaxSubmit" >search</button>
-        <div id="searchResponse"></div>
-    </form>
-    <div>
-        <p>Round up to nearest multiple of</p>
-        <select id="timeRounding">
-            <option value="">Duration Rounding</option>
-            <option value="5">5m</option>
-            <option value="10">10m</option>
-            <option value="15">15m</option>
-            <option value="30">30m</option>
-            <option value="60">60m</option>
-        </select>
-    </div>
     <div id="wrapper">
+        <h1 style="text-align:center">Time Tracker</h1>
+        <form id="ticketSearch" action="code/querySearchAjax.php" method="post" enctype="multipart/form-data">
+            <select class="projectselector" name="project" >
+                <option value="">select a project</option>
+                <?php foreach ($projectList as $project) : ?>
+                    <option value="<?php echo $project ?>"><?php echo $project ?></option>
+                <?php endforeach; ?>
+            </select>
+            <input type="text" class="query" name="query"/>
+            <button class="ajaxSubmit" >search</button>
+            <div id="searchResponse"></div>
+        </form>
+        <div class="roundingDiv">
+            Round up to nearest multiple of
+            <select id="timeRounding">
+                <option value="">Duration Rounding</option>
+                <option value="5">5m</option>
+                <option value="10">10m</option>
+                <option value="15">15m</option>
+                <option value="30">30m</option>
+                <option value="60">60m</option>
+            </select>
+        </div>
         <button class="addTicketForm" type="button">Add Ticket</button>
 
         <?php $hidden = true; ?>
