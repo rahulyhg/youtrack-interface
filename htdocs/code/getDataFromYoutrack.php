@@ -302,7 +302,7 @@ class getDataFromYoutrack
         $url = $youtrackUrl.'/rest/admin/project';
         $youtrackProjectsListXml = $this->rest($url, 'get');
         $youtrackProjectsList = $this->extractDataXml($youtrackProjectsListXml, 'project', 'id');
-
+        natcasesort($youtrackProjectsList);
         return $youtrackProjectsList;
     }
     /**
@@ -389,7 +389,7 @@ class getDataFromYoutrack
             $workTypeXml = $this->rest($url, 'get');
             $workTypes = $this->extractDataXml($workTypeXml, 'name');
         } catch (Exception $e) {
-            error_log($e);
+           error_log($e);
         }
 
         return $workTypes;
