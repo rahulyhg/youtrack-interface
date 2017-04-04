@@ -109,9 +109,7 @@ function storeFormData(){
     }
     storeFormDataOnServer(jsonString);
 }
-$('.forms').on('change', 'form', function(){
-    storeFormData();
-});
+
 
 /**
  * create data array of the timing from all forms
@@ -392,6 +390,10 @@ function updateStateFromProjectSelector(form){
 }
 
 $(document).ready(function(){
+    $('.forms').on('change', 'form input, form select', function(){
+        storeFormData();
+    });
+
     /**
      * stop enter submitting forms
      */
