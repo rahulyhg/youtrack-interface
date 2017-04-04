@@ -69,6 +69,7 @@ class timeTrackerSubmit
     public function createXml($timeRow)
     {
         $xml = '';
+        date_default_timezone_set('America/Los_Angeles');  // youtrack api likes the date in usa timezone
         if (!$date = strtotime($timeRow['date'])) {
             $date = time();
         }
