@@ -404,9 +404,10 @@ function updateStateFromProjectSelector(form){
 
 $(document).ready(function(){
     $('.forms').on('change', 'form input, form select', function(){
-        var form = $(button).closest('form');
-        var button = $(form).find('.buttonsWrapper .timmertoggle');
-        timerToggleButtonUpdate(button);
+        var form = $(this).closest('form');
+        $(form).find('.buttonsWrapper .timertoggle').each(function () {
+                timerToggleButtonUpdate(this);
+            });
         storeFormData();
     });
 
