@@ -53,34 +53,47 @@ function updateProject(form,callback){
  */
 function timertoggle(button){
     var form = $(button).closest('form');
+    var time = new Date($.now());
+    var thisTime = timeAddZero(time.getHours())+":"+timeAddZero(time.getMinutes());
+    timerToggleButtonUpdate(button);
     if($(button).hasClass('play')){
         if($(form).find('table tr:first td input.start').val() !== ''){
             addTimeRow(form);
         }
-        var time = new Date($.now());
-        var startTime = timeAddZero(time.getHours())+":"+timeAddZero(time.getMinutes());
-        var date =  $.datepicker.formatDate("d M y", time);
         $(form).find('table tr:first td input.start')
-            .val(startTime);
-        $(form).find('table tr:first td input.date')
-            .val(date);
-        $(button).html('stop')
-            .removeClass('play')
-            .addClass('stop');
-    }else if($(button).hasClass('stop')){
-        time = new Date($.now());
-        var endTime = timeAddZero(time.getHours())+":"+timeAddZero(time.getMinutes());
-
+            .val(thisTime);
+    } else if($(button).hasClass('stop')){
         $(form).find('table tr:first td input.end')
-            .val(endTime);
-        $(button).html('play')
-            .removeClass('stop')
-            .addClass('play');
-
+            .val(thisTime);
         var timeRow = $(form).find('table tr:first');
         updateDifference(timeRow);
     }
+    if($(form).find('table tr:first td input.date').val() === '') {
+        var date =  $.datepicker.formatDate("d M y", time);
+        $(form).find('table tr:first td input.date')
+            .val(date);
+    }
+    timerToggleButtonUpdate(button);
     storeFormData();
+}
+
+/**
+ * update classes for the timer toggle button
+ * @param button
+ */
+function timerToggleButtonUpdate(button){
+    var form = $(button).closest('form');
+    if($(form).find('table tr:first td input.start').val() === ''
+        || $(form).find('table tr:first td input.end').val() !== ''
+    ){
+        $(button).html('play')
+            .removeClass('stop')
+            .addClass('play');
+        return;
+    }
+    $(button).html('stop')
+        .removeClass('play')
+        .addClass('stop');
 }
 
 /**
@@ -391,6 +404,9 @@ function updateStateFromProjectSelector(form){
 
 $(document).ready(function(){
     $('.forms').on('change', 'form input, form select', function(){
+        var form = $(button).closest('form');
+        var button = $(form).find('.buttonsWrapper .timmertoggle');
+        timerToggleButtonUpdate(button);
         storeFormData();
     });
 
