@@ -422,6 +422,12 @@ $(document).ready(function(){
     });
 
     $('.forms').on('change', 'form table tr td .clockpicker', function(){
+        var inputField = $(this).find('input');
+        var timeArray = inputField.val().split(":");
+        if (timeArray.length > 2) {
+            timeArray.pop();
+            inputField.val(timeArray.join(":"));
+        }
         var timeRow = $(this).closest('tr');
         updateDifference(timeRow);
     });
