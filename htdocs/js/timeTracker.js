@@ -331,6 +331,14 @@ function dataIntoForm(data){
     });
 }
 
+function storeRounding(){
+    localStorage.setItem("roundingIncrement", $('div.roundingDiv select#timeRounding').val());
+}
+
+function populateRounding(){
+    $('div.roundingDiv select#timeRounding').val(localStorage.getItem("roundingIncrement"));
+}
+
 /**
  * sets the form content from json from local storage or then from server file
  */
@@ -403,6 +411,10 @@ function updateStateFromProjectSelector(form){
 }
 
 $(document).ready(function(){
+    $('div.roundingDiv select#timeRounding').on('change',function(){
+       storeRounding();
+    });
+
     $('.forms').on('change', 'form input, form select', function(){
         var form = $(this).closest('form');
         $(form).find('.buttonsWrapper .timertoggle').each(function () {
@@ -572,5 +584,6 @@ $(document).ready(function(){
     $('.forms').on('change', '.stateselector', function(){
         ajaxSubmitState(this);
     });
+    populateRounding();
     populateFromJson();
 });
