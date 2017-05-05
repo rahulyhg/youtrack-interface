@@ -8,8 +8,8 @@ included
 - cache
 
 #### requirements
-Composer
-PHP5+
+- Composer
+- PHP5+
 
 #### installation
 * composer install 
