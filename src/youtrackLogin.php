@@ -2,11 +2,9 @@
 
 namespace  Youtrackinterfacer;
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . 'getCustomSettings.php';
-use getDataFromYoutrack;
-use authenticationAndSecurity;
+require_once __DIR__ . '/getCustomSettings.php';
 
-class youtrackLogin{
+class youtrackLogin {
 
     public $authenticationAndSecurity;
     public $getDataFromYoutrack;
@@ -41,7 +39,7 @@ class youtrackLogin{
                 $this->authenticationAndSecurity->setCookie('Set-Cookie'.$key, $singleCookie, 0, '/');
             }
             $reporterCookieName = 'myCookie';
-            $this->authenticationAndSecurity->setCookie($reporterCookieName, $authenticationAndSecurity->getPost('user'), 0, '/');
+            $this->authenticationAndSecurity->setCookie($reporterCookieName, $this->authenticationAndSecurity->getPost('user'), 0, '/');
 
             return true;
         } else {

@@ -2,9 +2,9 @@
 
 namespace  Youtrackinterfacer;
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . 'getCustomSettings.php';
+require_once __DIR__ . '/getCustomSettings.php';
 
-use getDataFromYoutrack;
+
 
 /**
  * Class timeJsonGetAjax get most recent timer data from this server for this user.

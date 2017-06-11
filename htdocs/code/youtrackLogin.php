@@ -1,9 +1,6 @@
 <?php
-
-namespace  Youtrackinterfacer;
-require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . 'getCustomSettings.php';
-use youtrackLogin;
+require_once __DIR__ . '/../../vendor/autoload.php';
+use Youtrackinterfacer\youtrackLogin;
 
 $youtrackLogin = new youtrackLogin;
 $youtrackLogin->execute();

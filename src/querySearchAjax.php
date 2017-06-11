@@ -6,7 +6,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 /**
  * ticket search on time tracker page.
  */
-use getDataFromYoutrack;
+
 
 class querySearchAjax{
     function execute()

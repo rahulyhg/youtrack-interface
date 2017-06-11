@@ -1,8 +1,8 @@
 <?php
 
-namespace  Youtrackinterfacer;
+
 require_once __DIR__ . '/../../vendor/autoload.php';
-use createByForm;
+use Youtrackinterfacer\createByForm;
 
 $createByForm = new createByForm;
 $variables = $createByForm->execute();

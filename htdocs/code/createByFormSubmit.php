@@ -1,8 +1,8 @@
 <?php
 
-namespace  Youtrackinterfacer;
+
 require_once __DIR__ . '/../../vendor/autoload.php';
-use createByFormSubmit;
+use Youtrackinterfacer\createByFormSubmit;
 
 $createByFormSubmit = new createByFormSubmit();
 $createByFormSubmit->submit();

@@ -1,8 +1,8 @@
 <?php
 
-namespace  Youtrackinterfacer;
-require_once __DIR__ . '/../vendor/autoload.php';
-use timeJsonSaveAjax;
+
+require_once __DIR__ . '/../../vendor/autoload.php';
+use Youtrackinterfacer\timeJsonSaveAjax;
 
 $timeJsonSaveAjax = new timeJsonSaveAjax();
 $timeJsonSaveAjax->execute();

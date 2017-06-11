@@ -2,7 +2,7 @@
 
 namespace  Youtrackinterfacer;
 require_once __DIR__ . '/../vendor/autoload.php';
-use getDataFromYoutrack;
+
 
 /**
  * Class timeJsonSaveAjax save timer data ont server.

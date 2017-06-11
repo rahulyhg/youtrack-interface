@@ -2,8 +2,7 @@
 
 namespace  Youtrackinterfacer;
 require_once __DIR__ . '/../vendor/autoload.php';
-use getDataFromYoutrack;
-use authenticationAndSecurity;
+
 use Ddeboer\DataImport\Writer\WriterInterface;
 
 class ApiWriter implements WriterInterface

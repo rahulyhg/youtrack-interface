@@ -1,8 +1,8 @@
 <?php
 
-namespace  Youtrackinterfacer;
+
 require_once __DIR__ . '/../../vendor/autoload.php';
-use cache;
+use Youtrackinterfacer\cache;
 
 $cache = new cache();
 $cache->clearCache();

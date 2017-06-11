@@ -3,7 +3,7 @@
  * clear login cookie.
  */
 namespace  Youtrackinterfacer;
-use authenticationAndSecurity;
+
 
 class youtrackLogout {
     function execute()

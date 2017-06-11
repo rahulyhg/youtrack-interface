@@ -4,8 +4,8 @@
  */
 namespace  Youtrackinterfacer;
 require_once __DIR__ . '/../../vendor/autoload.php';
-use getCustomSettings;
-use getDataFromYoutrack;
+
+
 
 class createByFormAjax{
     function execute()

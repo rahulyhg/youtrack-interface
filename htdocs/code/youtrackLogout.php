@@ -2,8 +2,7 @@
 /**
  * clear login cookie.
  */
-namespace  Youtrackinterfacer;
-use youtrackLogout;
+use Youtrackinterfacer\youtrackLogout;
 
 $youtrackLogout = new youtrackLogout;
 $youtrackLogout->execute();

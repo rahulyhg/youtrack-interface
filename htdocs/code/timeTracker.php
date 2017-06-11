@@ -2,9 +2,9 @@
 /**
  *  return list of projects for rendering the time tracker page.
  */
-namespace  Youtrackinterfacer;
-require_once __DIR__ . '/../vendor/autoload.php';
-use timeTracker;
+
+require_once __DIR__ . '/../../vendor/autoload.php';
+use Youtrackinterfacer\timeTracker;
 
 $timeTracker = new timeTracker;
 $getProjectsList = $timeTracker->getProjectsList();

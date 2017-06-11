@@ -4,9 +4,9 @@
  */
 namespace  Youtrackinterfacer;
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . 'getCustomSettings.php';
-use getDataFromYoutrack;
-use authenticationAndSecurity;
+require_once __DIR__ . '/getCustomSettings.php';
+
+
 
 class downloadProjectIssuesSubmit{
     function execute()
