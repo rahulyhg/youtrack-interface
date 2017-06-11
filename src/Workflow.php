@@ -1,6 +1,8 @@
 <?php
 
-namespace Juno;
+namespace  Youtrackinterfacer;
+
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Ddeboer\DataImport\Workflow as BaseWorkflow;
 

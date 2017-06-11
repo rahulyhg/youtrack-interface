@@ -2,7 +2,9 @@
 /**
  * clear login cookie.
  */
-require_once __DIR__.'/authenticationAndSecurity.php';
+namespace  Youtrackinterfacer;
+use authenticationAndSecurity;
+
 $authenticationAndSecurity = new authenticationAndSecurity();
 
 $authenticationAndSecurity->removeCookies();

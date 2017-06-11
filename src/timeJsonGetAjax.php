@@ -1,7 +1,10 @@
 <?php
 
-require_once __DIR__.'/getCustomSettings.php';
-require_once __DIR__.'/getDataFromYoutrack.php';
+namespace  Youtrackinterfacer;
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use getCustomSettings;
+use getDataFromYoutrack;
 
 /**
  * Class timeJsonGetAjax get most recent timer data from this server for this user.
@@ -11,7 +14,7 @@ class timeJsonGetAjax
     private $timeJsonFolder;
     public function __construct()
     {
-        $this->timeJsonFolder = __DIR__.'/../../timings';
+        $this->timeJsonFolder = __DIR__ . '/../../timings';
     }
 
     /**

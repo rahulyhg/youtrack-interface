@@ -1,5 +1,5 @@
 {
-    "name": "junomedia/youtrack-csv",
+    "name": "paulmillband/youtrack-csv",
     "description": "CSV Import tool for YouTrack Issues",
     "require": {
         "ddeboer/data-import": "0.16",
@@ -20,6 +20,6 @@
 
     ],
     "autoload": {
-        "psr-4" : {"Juno\\" : "htdocs/code/"}
+        "psr-4" : {"Youtrackinterfacer\\" : "src/"}
     }
 }

@@ -1,8 +1,9 @@
 <?php
 
-require_once __DIR__.'/../../vendor/autoload.php';
-require_once __DIR__.'/getDataFromYoutrack.php';
-require_once __DIR__.'/authenticationAndSecurity.php';
+namespace  Youtrackinterfacer;
+require_once __DIR__ . '/../vendor/autoload.php';
+use getDataFromYoutrack;
+use authenticationAndSecurity;
 use Ddeboer\DataImport\Writer\WriterInterface;
 
 class ApiWriter implements WriterInterface

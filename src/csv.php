@@ -1,9 +1,9 @@
 <?php
 
+namespace  Youtrackinterfacer;
+require_once __DIR__ . '/../vendor/autoload.php';
 use Ddeboer\DataImport\Writer\CsvWriter;
-
-require_once __DIR__.'/authenticationAndSecurity.php';
-require_once __DIR__.'/../../vendor/autoload.php';
+use authenticationAndSecurity;
 
 class csvClass
 {

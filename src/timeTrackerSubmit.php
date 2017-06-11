@@ -1,11 +1,11 @@
 <?php
 
-require_once __DIR__.'/authenticationAndSecurity.php';
-require_once __DIR__.'/getDataFromYoutrack.php';
-require_once __DIR__.'/bootstrap.php';
+namespace  Youtrackinterfacer;
+require_once __DIR__ . '/../vendor/autoload.php';
+use authenticationAndSecurity;
+use getDataFromYoutrack;
+use bootstrap;
 
-// --delete me : used for testing guzzle --
-require_once __DIR__.'/../../vendor/autoload.php';
 
 /**
  * submit data from the time tracker page to youtrack.

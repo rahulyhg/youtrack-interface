@@ -1,4 +1,8 @@
 <?php
+
+namespace  Youtrackinterfacer;
+require_once __DIR__ . '/../vendor/autoload.php';
+
 /**
  * gets data for the createByForm page.
  */

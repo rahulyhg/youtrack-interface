@@ -2,14 +2,17 @@
 /**
  * download a csv with field options.
  */
-require_once __DIR__.'/../../vendor/autoload.php';
-require_once __DIR__.'/getCustomSettings.php';
-require_once __DIR__.'/getDataFromYoutrack.php';
-require_once __DIR__.'/authenticationAndSecurity.php';
+namespace  Youtrackinterfacer;
+require_once __DIR__ . '/../vendor/autoload.php';
+use getCustomSettings;
+use getDataFromYoutrack;
+use authenticationAndSecurity;
+use csv;
+
 $getYoutrackData = new getDataFromYoutrack();
 $authenticationAndSecurity = new authenticationAndSecurity();
 
-require_once __DIR__.'/csv.php';
+
 $csvClass = new csvClass();
 
 $youtrackFields = [];

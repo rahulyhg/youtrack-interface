@@ -1,5 +1,5 @@
-<?php require_once __DIR__.'/code/getCustomSettings.php'; ?>
-<?php require_once __DIR__.'/code/authenticationAndSecurity.php'; ?>
+<?php require_once __DIR__ . '/code/getCustomSettings.php'; ?>
+<?php require_once __DIR__ . '/code/authenticationAndSecurity.php'; ?>
 <?php $authenticationAndSecurity = new authenticationAndSecurity(); ?>
 <?php $cookies = $authenticationAndSecurity->getBrowserCookies(); ?>
 <!DOCTYPE html>
@@ -17,7 +17,7 @@
         </header>
     <?php else: ?>
         <?php if ($cookies === null) : ?>
-            <form action="code/youtrackLogin.php" method="post" enctype="multipart/form-data">
+            <form action="../src/youtrackLogin.php" method="post" enctype="multipart/form-data">
                     <h1>Login</h1>
                     <div>login user: <input type="text" name="user"></div><br>
                     <div>login password: <input type="password" name="password"></div><br>

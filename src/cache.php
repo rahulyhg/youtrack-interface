@@ -1,5 +1,8 @@
 <?php
 
+namespace  Youtrackinterfacer;
+require_once __DIR__ . '/../vendor/autoload.php';
+
 /**
  * Class cache caching responses from youtrack api.
  */
@@ -8,7 +11,7 @@ class cache
     private $cacheFolder;
     public function __construct()
     {
-        $this->cacheFolder = realpath(__DIR__.'/../../cache');
+        $this->cacheFolder = realpath(__DIR__ . '/../../cache');
     }
 
     /**

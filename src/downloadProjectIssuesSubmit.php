@@ -2,10 +2,11 @@
 /**
  * download all issues in a project in a csv.
  */
-require_once __DIR__.'/../../vendor/autoload.php';
-require_once __DIR__.'/getCustomSettings.php';
-require_once __DIR__.'/getDataFromYoutrack.php';
-require_once __DIR__.'/authenticationAndSecurity.php';
+namespace  Youtrackinterfacer;
+require_once __DIR__ . '/../vendor/autoload.php';
+use getCustomSettings;
+use getDataFromYoutrack;
+use authenticationAndSecurity;
 $getDataFromYoutrack = new getDataFromYoutrack();
 $authenticationAndSecurity = new authenticationAndSecurity();
 

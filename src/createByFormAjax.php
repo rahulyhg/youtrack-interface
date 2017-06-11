@@ -2,8 +2,11 @@
 /**
  * returns field options for createByForm page.
  */
-require_once __DIR__.'/getCustomSettings.php';
-require_once __DIR__.'/getDataFromYoutrack.php';
+namespace  Youtrackinterfacer;
+require_once __DIR__ . '/../vendor/autoload.php';
+use getCustomSettings;
+use getDataFromYoutrack;
+
 $getDataFromYoutrack = new getDataFromYoutrack();
 $authenticationAndSecurity = new authenticationAndSecurity();
 

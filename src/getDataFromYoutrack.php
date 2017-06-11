@@ -1,9 +1,11 @@
 <?php
 
-require_once __DIR__.'/../../vendor/autoload.php';
-require_once __DIR__.'/authenticationAndSecurity.php';
-require_once __DIR__.'/cache.php';
-require_once __DIR__.'/getCustomSettings.php';
+namespace  Youtrackinterfacer;
+require_once __DIR__ . '/../vendor/autoload.php';
+use authenticationAndSecurity;
+use cache;
+use getCustomSettings;
+use Guzzle\Http\Client;
 
 /**
  * Class getDataFromYoutrack get/post data from Youtrack api.
@@ -23,7 +25,7 @@ class getDataFromYoutrack
      */
     public function restResponse($url, $postOrGet = 'get', $headers = null, $body = null, $options = null)
     {
-        $client = new \Guzzle\Http\Client();
+        $client = new Client();
         $authenticationAndSecurity = new authenticationAndSecurity();
         $authentication = $authenticationAndSecurity->getAuthentication();
         if ($authentication['type'] !== 'password' && $authentication['type'] !== 'cookie' && $authentication['type'] !== 'file') {

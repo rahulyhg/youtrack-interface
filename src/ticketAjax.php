@@ -1,9 +1,13 @@
 <?php
+
+namespace  Youtrackinterfacer;
+require_once __DIR__ . '/../vendor/autoload.php';
+
 /**
  *  time tracker ticket details ajax code.
  */
-require_once __DIR__.'/getCustomSettings.php';
-require_once __DIR__.'/getDataFromYoutrack.php';
+use getCustomSettings;
+use getDataFromYoutrack;
 $getDataFromYoutrack = new getDataFromYoutrack();
 $authenticationAndSecurity = new authenticationAndSecurity();
 

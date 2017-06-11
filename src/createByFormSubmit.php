@@ -1,9 +1,11 @@
 <?php
 
-require_once __DIR__.'/getCustomSettings.php';
-require_once __DIR__.'/bootstrap.php';
-require_once __DIR__.'/csv.php';
-require_once __DIR__.'/authenticationAndSecurity.php';
+namespace  Youtrackinterfacer;
+require_once __DIR__ . '/../vendor/autoload.php';
+use getCustomSettings;
+use bootstrap;
+use csv;
+use authenticationAndSecurity;
 
 /**
  * Class createByFormSubmit create tickets from form data.
