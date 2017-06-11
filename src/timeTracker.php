@@ -4,11 +4,14 @@
  */
 namespace  Youtrackinterfacer;
 require_once __DIR__ . '/../vendor/autoload.php';
-
-use getCustomSettings;
 use authenticationAndSecurity;
 use getDataFromYoutrack;
 
-$getDataFromYoutrack = new getDataFromYoutrack();
+class timeTracker{
+    function getProjectsList()
+    {
+        $getDataFromYoutrack = new getDataFromYoutrack();
+        return $getDataFromYoutrack->getProjectsList();
+    }
+}
 
-$projectList = $getDataFromYoutrack->getProjectsList();

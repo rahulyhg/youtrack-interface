@@ -2,8 +2,6 @@
 
 namespace  Youtrackinterfacer;
 require_once __DIR__ . '/../vendor/autoload.php';
-
-use getCustomSettings;
 use getDataFromYoutrack;
 
 /**
@@ -136,12 +134,15 @@ class timeJsonSaveAjax
             return false;
         }
     }
-}
-$timeJsonSaveAjax = new timeJsonSaveAjax();
-$authenticationAndSecurity = new authenticationAndSecurity();
-$json = $authenticationAndSecurity->getPost('json');
-if ($timeJsonSaveAjax->saveJson($json)) {
-    return 'successful server file creation';
-} else {
-    return 'failed';
+
+    function execute()
+    {
+        $authenticationAndSecurity = new authenticationAndSecurity();
+        $json = $authenticationAndSecurity->getPost('json');
+        if ($this->saveJson($json)) {
+            return 'successful server file creation';
+        } else {
+            return 'failed';
+        }
+    }
 }

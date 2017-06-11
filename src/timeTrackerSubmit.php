@@ -173,8 +173,11 @@ class timeTrackerSubmit
 
         return $organisedPosts;
     }
+
+    function execute()
+    {
+        $response = $this->submit();
+        echo json_encode($response);
+    }
 }
 
-$timeTrackerSubmit = new timeTrackerSubmit();
-$response = $timeTrackerSubmit->submit();
-echo json_encode($response);

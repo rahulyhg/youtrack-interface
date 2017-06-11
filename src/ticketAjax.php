@@ -2,24 +2,29 @@
 
 namespace  Youtrackinterfacer;
 require_once __DIR__ . '/../vendor/autoload.php';
-
-/**
- *  time tracker ticket details ajax code.
- */
-use getCustomSettings;
 use getDataFromYoutrack;
-$getDataFromYoutrack = new getDataFromYoutrack();
-$authenticationAndSecurity = new authenticationAndSecurity();
 
-$response = [];
+class ticketAjax{
+    function execute()
+    {
+        /**
+         *  time tracker ticket details ajax code.
+         */
+        $getDataFromYoutrack = new getDataFromYoutrack();
+        $authenticationAndSecurity = new authenticationAndSecurity();
 
-$ticket = htmlspecialchars($authenticationAndSecurity->getGet('ticket'));
+        $response = [];
 
-$response['ticketRef'] = $ticket;
-$response['summary'] = $getDataFromYoutrack->getTicketSummary($ticket);
-$response['ticketUrl'] = $GLOBALS['youtrackUrl'].'/issue/'.$ticket;
+        $ticket = htmlspecialchars($authenticationAndSecurity->getGet('ticket'));
 
-$project = explode('-', $ticket)[0];
-$response['workTypes'] = $getDataFromYoutrack->getTicketWorkTypes($project);
+        $response['ticketRef'] = $ticket;
+        $response['summary'] = $getDataFromYoutrack->getTicketSummary($ticket);
+        $response['ticketUrl'] = $GLOBALS['youtrackUrl'].'/issue/'.$ticket;
 
-echo json_encode($response);
+        $project = explode('-', $ticket)[0];
+        $response['workTypes'] = $getDataFromYoutrack->getTicketWorkTypes($project);
+
+        echo json_encode($response);
+    }
+}
+

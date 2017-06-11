@@ -3,15 +3,15 @@
 // <p>          Error: Please allow phtml files to run php     </p>
 // <p>---------------------------------------------------------</p>
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
 $GLOBALS['newline'] = '<br>'; // keep at the top needed by getCustomSettings
-require_once __DIR__ . '/code/getCustomSettings.php';
+//require_once __DIR__ . '/code/getCustomSettings.php';
 
 // redirect to index.html if cookie not set and not using password verification
-require_once __DIR__ . '/code/authenticationAndSecurity.php';
+use authenticationAndSecurity;
 $authenticationAndSecurity = new authenticationAndSecurity;
 $authenticationAndSecurity->redirectIfNotLoggedIn();
-
-require_once __DIR__ . '/code/getDataFromYoutrack.php';
 require_once __DIR__ . '/code/createByForm.php';
 
 ?>            

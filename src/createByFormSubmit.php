@@ -2,7 +2,7 @@
 
 namespace  Youtrackinterfacer;
 require_once __DIR__ . '/../vendor/autoload.php';
-use getCustomSettings;
+require_once __DIR__ . 'getCustomSettings.php';
 use bootstrap;
 use csv;
 use authenticationAndSecurity;
@@ -201,5 +201,3 @@ class createByFormSubmit
         }
     }
 }
-$createByFormSubmit = new createByFormSubmit();
-$createByFormSubmit->submit();

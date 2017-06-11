@@ -2,9 +2,9 @@
 
 namespace  Youtrackinterfacer;
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . 'getCustomSettings.php';
 use authenticationAndSecurity;
 use cache;
-use getCustomSettings;
 use Guzzle\Http\Client;
 
 /**

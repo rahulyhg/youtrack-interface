@@ -5,7 +5,11 @@
 namespace  Youtrackinterfacer;
 use authenticationAndSecurity;
 
-$authenticationAndSecurity = new authenticationAndSecurity();
-
-$authenticationAndSecurity->removeCookies();
-$authenticationAndSecurity->redirectBackToIndex();
+class youtrackLogout {
+    function execute()
+    {
+        $authenticationAndSecurity = new authenticationAndSecurity();
+        $authenticationAndSecurity->removeCookies();
+        $authenticationAndSecurity->redirectBackToIndex();
+    }
+}
