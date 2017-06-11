@@ -1,14 +1,26 @@
 <?php
 
 namespace  Youtrackinterfacer;
-$GLOBALS['newline'] = '\n'; // keep at the top needed by getCustomSettings
-
 require_once __DIR__ . '/../vendor/autoload.php';
+
+$GLOBALS['newline'] = '\n'; // keep at the top needed by getCustomSettings
 
 /**
  * get the custom settings from customsettings.php.
  */
-require_once __DIR__ . '/authenticationAndSecurity.php';
+//require_once __DIR__ . '/authenticationAndSecurity.php';
+
+global $youtrackUrl;
+global $user;
+global $password;
+global $cache;
+global $authenticationType;
+global $cookieEncryptionKey;
+global $folderPermissions;
+global $filePermissions;
+global $createByFormTransferLog;
+global $createByFormTransferErrorLog;
+global $timeTrackerKeptEdits;
 
 if (!file_exists(__DIR__ . '/../customSettings.php')) {
     die('custom settings file missing: please copy customSettings.php.example to customSettings.php and update it with your settings');
@@ -16,7 +28,7 @@ if (!file_exists(__DIR__ . '/../customSettings.php')) {
 
 require_once __DIR__ . '/../customSettings.php';
 $die = false;
-if ($youtrackUrl === 'http://example.com') {
+if (strlen($youtrackUrl) && $youtrackUrl === 'http://example.com') {
     die('please fill in the customSettings.php file with your details');
 }
 
