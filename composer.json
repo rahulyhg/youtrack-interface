@@ -1,6 +1,6 @@
 {
-    "name": "paulmillband/youtrack-csv",
-    "description": "CSV Import tool for YouTrack Issues",
+    "name": "paulmillband/Youtrackinterfacer",
+    "description": "A tool for better mass creation of tickets and time tracking with YouTrack",
     "require": {
         "ddeboer/data-import": "0.16",
         "guzzle/guzzle": "3.9",
@@ -15,7 +15,7 @@
     "authors": [
         {
             "name": "Paul Millband",
-            "email": "paul@junowebdesign.com"
+            "email": "millband_paul@hotmail.co.uk"
         }
 
     ],
