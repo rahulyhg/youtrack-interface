@@ -4,7 +4,7 @@
 // <p>---------------------------------------------------------</p>
 
 // redirect to index.html if cookie not set and not using password verification
-require_once __DIR__ . '/code/authenticationAndSecurity.php';
+use Youtrackinterfacer\authenticationAndSecurity as authenticationAndSecurity;
 $authenticationAndSecurity = new authenticationAndSecurity;
 $authenticationAndSecurity->redirectIfNotLoggedIn();
 
