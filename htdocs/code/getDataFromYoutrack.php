@@ -28,7 +28,6 @@ class getDataFromYoutrack
         $authentication = $authenticationAndSecurity->getAuthentication();
         if ($authentication['type'] !== 'password' && $authentication['type'] !== 'cookie' && $authentication['type'] !== 'file') {
             echo 'authentication type unknown. please check its set in the customSettings.php file';
-
             return;
         }
         if (!isset($options)) {
@@ -44,12 +43,10 @@ class getDataFromYoutrack
             $request = $client->post($url, $headers, $body, $options);
         } elseif ($postOrGet === 'put') {
             $request = $client->put($url, $headers, $body, $options);
+        }else{
+            error_log("Caught exception: rest request type not allowed ".__FILE__.': '.__LINE__, 0);
+            return;
         }
-//        if( $postOrGet === 'put' && isset($headers) ){
-//            foreach($headers as $key => $value){
-//                $request->addHeader($key,$value);
-//            }
-//        }
         if ($authentication['type'] === 'cookie' && $authentication['details']) {
             foreach ($authentication['details'] as $singleCookie) {
                 foreach ($singleCookie as $cookieName => $cookieValue) {
@@ -57,7 +54,12 @@ class getDataFromYoutrack
                 }
             }
         }
-        $request->send();
+        try {
+            $request->send();
+        }  catch (Exception $e) {
+            error_log("Caught exception: error sending request, ".$e->getMessage(), 0);
+            return;
+        }
 
         return $request;
     }
@@ -87,12 +89,14 @@ class getDataFromYoutrack
         }
         if (!$cached) {
             $res = $this->restResponse($url, $postOrGet, $headers, $body, $options);
+            if (!$res) {
+                return;
+            }
             $res = $res->getResponse();
             $response = trim($res->getBody());
-            if ($cachable && $GLOBALS['cache'] && $postOrGet == 'get') {
+            if ($cachable && isset($cacheClass)) {
                 $cacheClass->createCache($url, $response);
             }
-
             return $response;
         } else {
             return $cached;

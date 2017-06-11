@@ -19,9 +19,17 @@ function LoginToYouTrack()
     global $authenticationAndSecurity;
 
     $url = $youtrackUrl.'/rest/user/login';
-    $response = $getDataFromYoutrack->restResponse($url, 'post', null, ['login' => $authenticationAndSecurity->getPost('user'), 'password' => $authenticationAndSecurity->getPost('password')], array());
-    $response = $response->getResponse();
-    if ($response->getStatusCode() == 200) {
+    $response = $getDataFromYoutrack->rest(
+        $url,
+        'post',
+        null,
+        [
+            'login' => $authenticationAndSecurity->getPost('user'),
+            'password' => $authenticationAndSecurity->getPost('password')
+        ],
+        array(),
+        false);
+    if ($response && $response->getStatusCode() == 200) {
         $cookies = $response->getHeader('set-cookie');
         foreach ($cookies as $key => $singleCookie) {
             $authenticationAndSecurity->setCookie('Set-Cookie'.$key, $singleCookie, 0, '/');
