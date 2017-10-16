@@ -1,8 +1,11 @@
-<?php require_once __DIR__ . '/../vendor/autoload.php'; ?>
-<?php require_once __DIR__ . '/../src/getCustomSettings.php'; ?>
-<?php use Youtrackinterfacer\authenticationAndSecurity as authenticationAndSecurity; ?>
-<?php $authenticationAndSecurity = new authenticationAndSecurity; ?>
-<?php $cookies = $authenticationAndSecurity->getBrowserCookies(); ?>
+<?php
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../src/getCustomSettings.php';
+use Youtrackinterfacer\authenticationAndSecurity as authenticationAndSecurity;
+
+$authenticationAndSecurity = new authenticationAndSecurity;
+$cookies = $authenticationAndSecurity->getBrowserCookies();
+?>
 <!DOCTYPE html>
 <head>
     <script src='js/jquery-1.10.2.min.js'></script>

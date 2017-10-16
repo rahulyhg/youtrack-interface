@@ -23,7 +23,7 @@ class youtrackLogin {
         global $youtrackUrl;
 
         $url = $youtrackUrl.'/rest/user/login';
-        $response = $this->getDataFromYoutrack->rest(
+        $response = $this->getDataFromYoutrack->restResponse(
             $url,
             'post',
             null,
@@ -31,8 +31,8 @@ class youtrackLogin {
                 'login' => $this->authenticationAndSecurity->getPost('user'),
                 'password' => $this->authenticationAndSecurity->getPost('password')
             ],
-            array(),
-            false);
+            array()
+        )->getResponse();
         if ($response && $response->getStatusCode() == 200) {
             $cookies = $response->getHeader('set-cookie');
             foreach ($cookies as $key => $singleCookie) {
