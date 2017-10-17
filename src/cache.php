@@ -11,7 +11,7 @@ class cache
     private $cacheFolder;
     public function __construct()
     {
-        $this->cacheFolder = realpath(__DIR__ . '/../../cache');
+        $this->cacheFolder = realpath(__DIR__ . '/../cache');
     }
 
     /**
@@ -74,26 +74,23 @@ class cache
         $fileName = $this->getFilename($ref);
         if (file_exists($fileName)) {
             error_log('cache '.$fileName.' file exists. possible cache corruption');
-
             return false;
-        } else {
-            if (file_exists($this->cacheFolder)) {
-                if (is_writable($this->cacheFolder)) {
-                    file_put_contents($fileName, $content);
-                    chmod($fileName, 0775);
-
-                    return true;
-                } else {
-                    error_log($this->cacheFolder.' folder is not writable');
-
-                    return false;
-                }
-            } else {
-                error_log($this->cacheFolder." folder dosen't exists");
-
-                return false;
-            }
         }
+        if (!$this->cacheFolder) {
+            error_log($this->cacheFolder." folder dosen't exists");
+            return false;
+        }
+        if (!file_exists($this->cacheFolder)) {
+            error_log($this->cacheFolder." folder dosen't exists");
+            return false;
+        }
+        if (!is_writable($this->cacheFolder)) {
+            error_log($this->cacheFolder.' folder is not writable');
+            return false;
+        }
+        file_put_contents($fileName, $content);
+        chmod($fileName, 0775);
+        return true;
     }
     /**
      * get cached content.

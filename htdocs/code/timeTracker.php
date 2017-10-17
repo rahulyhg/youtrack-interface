@@ -7,4 +7,4 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 use Youtrackinterfacer\timeTracker;
 
 $timeTracker = new timeTracker;
-$getProjectsList = $timeTracker->getProjectsList();
+$projectList = $timeTracker->getProjectsList();

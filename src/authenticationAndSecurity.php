@@ -134,11 +134,13 @@ class authenticationAndSecurity
         foreach ($stringComponents as $value) {
             $exploded = explode('=', $value);
             $exploded[0] = trim($exploded[0]);
-            if ($exploded[0] != 'Path' && $exploded[0] != 'Expires' && $exploded[0] != 'HttpOnly') {
+            if (isset($exploded[1])
+            && $exploded[0] != 'Path'
+            && $exploded[0] != 'Expires'
+            && $exploded[0] != 'HttpOnly') {
                 $cookieData[ $exploded[0] ] = $exploded[1];
             }
         }
-
         return $cookieData;
     }
     /**

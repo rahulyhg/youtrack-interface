@@ -65,6 +65,26 @@ class getDataFromYoutrack
 
         return $request;
     }
+
+    /**
+     * @param $url string
+     * @param $postOrGet string
+     * @param $cachable bool
+     * @return bool|string
+     */
+    function getCached($url, $postOrGet = 'get', $cachable = true){
+        if ($cachable == true) {
+            if ($GLOBALS['cache'] && $postOrGet == 'get') {
+                $cacheClass = new cache();
+               return $cacheClass->getCached($url);
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     /**
      * returns response from Youtrack api or from cache if cache-able abd available.
      *
@@ -75,34 +95,24 @@ class getDataFromYoutrack
      * @param null   $options
      * @param bool   $cachable  should the response be cached
      *
-     * @return string response from request
+     * @return string|false response from request
      */
     public function rest($url, $postOrGet = 'get', $headers = null, $body = null, $options = null, $cachable = true)
     {
-        if ($cachable == true) {
-            if ($GLOBALS['cache'] && $postOrGet == 'get') {
-                $cacheClass = new cache();
-                $cached = $cacheClass->getCached($url);
-            } else {
-                $cached = false;
-            }
-        } else {
-            $cached = false;
-        }
-        if (!$cached) {
-            $res = $this->restResponse($url, $postOrGet, $headers, $body, $options);
-            if (!$res) {
-                return;
-            }
-            $res = $res->getResponse();
-            $response = trim($res->getBody());
-            if ($cachable && isset($cacheClass)) {
-                $cacheClass->createCache($url, $response);
-            }
-            return $response;
-        } else {
+        $cached = $this->getCached($url, $postOrGet, $cachable);
+        if ($cached) {
             return $cached;
         }
+        $res = $this->restResponse($url, $postOrGet, $headers, $body, $options);
+        if (!$res) {
+            return false;
+        }
+        $res = $res->getResponse();
+        $response = trim($res->getBody());
+        if ($cachable && isset($cacheClass)) {
+            $cacheClass->createCache($url, $response);
+        }
+        return $response;
     }
 
     /**
@@ -118,10 +128,10 @@ class getDataFromYoutrack
     public function extractDataXml($xml, $node, $attribute = '', $whereAttr = [])
     {
         $returnData = [];
-        $reader = new XMLReader();
+        $reader = new \XMLReader();
         $reader->xml($xml);
         while ($reader->read()) {
-            if ($reader->nodeType == XMLReader::ELEMENT) {
+            if ($reader->nodeType == \XMLReader::ELEMENT) {
                 $exp = $reader->expand();
                 if ($exp->nodeName == $node) {
                     $data = $this->extractDataXmlUseNode($exp, $attribute, $whereAttr);
@@ -224,7 +234,7 @@ class getDataFromYoutrack
             }
         }
 
-        return $customFieldSettings;
+        return (isset($customFieldSettings)) ? $customFieldSettings : [];
     }
     /*
      * $customFieldTypeAndBundle array from getCustomFieldTypeAndBundle
@@ -388,12 +398,14 @@ class getDataFromYoutrack
     public function getTicketWorkTypes($project)
     {
         global $youtrackUrl;
-        $worktypes = '';
+        $workTypes = [];
 
         $url = $youtrackUrl.'/rest/admin/project/'.$project.'/timetracking/worktype';
         try {
-            $workTypeXml = $this->rest($url, 'get');
-            $workTypes = $this->extractDataXml($workTypeXml, 'name');
+            $workTypesData= json_decode($this->rest($url, 'get'));
+            for ($i=0; $i<count($workTypesData); $i++){
+                $workTypes[] = $workTypesData[$i]->name;
+            }
         } catch (Exception $e) {
            error_log($e);
         }
