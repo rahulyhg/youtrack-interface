@@ -14,7 +14,7 @@ included
 #### installation
 * composer install 
 * make sure the 'timings', 'cache', 'uploads' and 'export' folders have apache/nginx read & write permissions
-* fill in the details in customSettings.php, its important change the cookie encryption key for security reasons.
+* fill in the details in customSettings.php, its important change the cookie encryption key for security reasons. We use a subdomain that we own for our youtrack and this was causing me issues. I had to use the one youtrack provided  https://******.myjetbrains.com for ouir youtrackUrl.
 * aim you web site url at the htdocs folder
 
 #### csv ticket importer
