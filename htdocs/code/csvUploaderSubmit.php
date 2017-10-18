@@ -4,7 +4,7 @@
  */
 
 require_once __DIR__.'/../../vendor/autoload.php';
-use  csvUploaderSubmit;
+use  Youtrackinterfacer\csvUploaderSubmit;
 
 $csvUploaderSubmit = new csvUploaderSubmit;
 $csvUploaderSubmit->execute();
