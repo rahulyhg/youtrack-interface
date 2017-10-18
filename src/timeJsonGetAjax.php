@@ -14,7 +14,7 @@ class timeJsonGetAjax
     private $timeJsonFolder;
     public function __construct()
     {
-        $this->timeJsonFolder = __DIR__ . '/../../timings';
+        $this->timeJsonFolder = __DIR__ . '/../timings';
     }
 
     /**

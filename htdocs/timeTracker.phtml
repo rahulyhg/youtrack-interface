@@ -37,7 +37,7 @@ require_once __DIR__ . '/code/timeTracker.php';
     </header>
     <div id="wrapper">
         <h1 style="text-align:center">Time Tracker</h1>
-        <form id="ticketSearch" action="../src/querySearchAjax.php" method="post" enctype="multipart/form-data">
+        <form id="ticketSearch" action="code/querySearchAjax.php" method="post" enctype="multipart/form-data">
             <select class="projectselector" name="project" >
                 <option value="">select a project</option>
                 <?php foreach ($projectList as $project) : ?>

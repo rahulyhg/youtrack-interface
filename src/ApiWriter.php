@@ -48,7 +48,7 @@ class ApiWriter implements WriterInterface
         // THIS IS ABSOLUTELY ESSENTIAL - DO NOT FORGET TO SET THIS
         @date_default_timezone_set('GMT');
 
-        $this->xml = new XMLWriter();
+        $this->xml = new \XMLWriter();
         $this->xml->openMemory();
         // Output directly to the user
         $this->xml->startDocument('1.0');
@@ -233,6 +233,7 @@ class ApiWriter implements WriterInterface
      *
      * @param array $item      ticket item
      * @param int   $ticketRow ticket row no. added to data array
+     * @return bool success
      */
     public function stdUserUpdateTracker(array $item, $ticketRow)
     {
@@ -240,10 +241,10 @@ class ApiWriter implements WriterInterface
             $issueRef = $this->stdUserCreateIssue($item, $ticketRow);
             $this->stdUserUpdateIssue($issueRef, $item);
             $this->stdUserUpdateAttachments($issueRef, $item);
+            return true;
         } catch (Exception $e) {
             error_log($e);
             echo 'IMPORT ISSUE FAILED:: unable to import ticket to '.$item['project'].' with summary "'.$item['summary'].'"'.$GLOBALS['newline'];
-            $posts[$postskey] = array_merge(['upload success' => 'failed'], $posts[$postskey]);
         }
     }
 

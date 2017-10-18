@@ -23,7 +23,7 @@ require_once __DIR__ . '/code/getCustomSettings.php';
     <header>
         <?php require_once(__DIR__ . '/header.phtml'); ?>
     </header>
-    <form action="../src/downloadFieldsSubmit.php" method="post" enctype="multipart/form-data">
+    <form action="code/downloadFieldsSubmit.php" method="post" enctype="multipart/form-data">
         <h1 style="text-align:center">Youtrack custom field options and users csv</h1>
         <div>filename: <input type="text" name="filename"></div><br>
             <?php if ($authenticationType === 'password') : ?>
