@@ -9,7 +9,7 @@ use Youtrackinterfacer\authenticationAndSecurity as authenticationAndSecurity;
 $authenticationAndSecurity = new authenticationAndSecurity;
 $authenticationAndSecurity->redirectIfNotLoggedIn();
 
-require_once __DIR__ . '/code/getCustomSettings.php';
+require_once __DIR__ . '/../src/getCustomSettings.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -31,8 +31,8 @@ require_once __DIR__ . '/code/getCustomSettings.php';
             <p>For open office see below image</p>
              <img src="openoffice.png"><br>
             <div>
-                <a href="../csvtemplates/basic.csv">Basic example csv</a><br>
-                <a href="../csvtemplates/extended.csv">Extended example csv</a><br>
+                <a href="csvtemplates/basic.csv">Basic example csv</a><br>
+                <a href="csvtemplates/extended.csv">Extended example csv</a><br>
             </div><br>
             <?php if ($authenticationType === 'password') : ?>
                 <div>login user: <input type="text" name="user"></div><br>

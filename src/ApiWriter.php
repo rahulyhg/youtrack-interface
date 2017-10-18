@@ -17,7 +17,7 @@ class ApiWriter implements WriterInterface
         $getDataFromYoutrack = new getDataFromYoutrack();
 
         if (!isset($item['project']) || !isset($item['summary']) || !isset($item['reporterName'])) {
-            echo 'required columns missing, please read <a href="../uploads/test.csv">minimum required csv</a>';
+            echo 'required columns missing, please read <a href="csvtemplates/basic.csv">minimum required csv</a>';
             exit();
         }
 
@@ -75,9 +75,9 @@ class ApiWriter implements WriterInterface
                     $valueSplit = explode(',', $value);
                 }
 
-                foreach ($valueSplit as $value) {
+                foreach ($valueSplit as $val) {
                     $this->xml->startElement('value');
-                    $this->xml->text(trim($value));
+                    $this->xml->text(trim($val));
                     $this->xml->endElement();
                 }
                 $this->xml->endElement();
@@ -95,7 +95,6 @@ class ApiWriter implements WriterInterface
     public function sendToTracker($Myxml, $item)
     {
         global $youtrackUrl;
-        $authenticationAndSecurity = new authenticationAndSecurity();
         $getDataFromYoutrack = new getDataFromYoutrack();
         $project = $item['project'];
         $url = $youtrackUrl.'/rest/import/'
@@ -242,7 +241,7 @@ class ApiWriter implements WriterInterface
             $this->stdUserUpdateIssue($issueRef, $item);
             $this->stdUserUpdateAttachments($issueRef, $item);
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             error_log($e);
             echo 'IMPORT ISSUE FAILED:: unable to import ticket to '.$item['project'].' with summary "'.$item['summary'].'"'.$GLOBALS['newline'];
         }
@@ -251,7 +250,7 @@ class ApiWriter implements WriterInterface
     /**
      * send attachment files to the youtrack.
      *
-     * @global type $youtrackUrl
+     * @global string $youtrackUrl
      *
      * @param string $issueRef
      * @param array  $item
