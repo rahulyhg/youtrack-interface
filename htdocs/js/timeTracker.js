@@ -110,12 +110,28 @@ function storeFormDataOnServer(jsonString){
         }
     });
 }
+
 /**
  * saves form's data into local storage for later retrieval
  */
-function storeFormData(){
-    var array = createDataArray();
-    var jsonString = JSON.stringify(array);
+function storeFormData() {
+    var json = localStorage.getItem("json");
+    if (typeof json !== 'undefined' && json !== '' && json !== null) {
+        var jsonData = JSON.parse(json);
+        storeFormDataCallback(jsonData);
+    } else {
+        $.ajax({
+            url: "code/timeJsonGetAjax.php", dataType: "json",
+            success: function (result) {
+                storeFormDataCallback(result);
+            }
+        });
+    }
+}
+
+function storeFormDataCallback(originalData) {
+    var NewDataArray = createDataArray(originalData);
+    var jsonString = JSON.stringify(NewDataArray);
     // Store
     if (typeof (Storage) !== "undefined") {
         localStorage.setItem("json", jsonString);
@@ -123,36 +139,68 @@ function storeFormData(){
     storeFormDataOnServer(jsonString);
 }
 
-
 /**
  * create data array of the timing from all forms
  * @returns {{}}
  */
-function createDataArray(){
-    var dataArray = {};
+function createDataArray(dataArray){
+    dataArray['current'] = {};
     var i = 0;
     $('.forms form').each(function(){
         i++;
         // if one or more timeRow not submitted
         if($(this).find('tr [name]').length>0){
             var ticketRef = $(this).find('.projectselector').val() + '-' + $(this).find('.ticketnumber').val();
-            dataArray[i] = {};
-            dataArray[i]['ticketRef'] = ticketRef;
+            dataArray['current'][i] = {};
+            dataArray['current'][i]['ticketRef'] = ticketRef;
             var rows = $(this).find('table tr');
             var noOfTiming = rows.length;
             rows.each(function(n){
                 // if this timeRow not submitted
                 if( $(this).find('.date[name]').length > 0 ){
                     var j = noOfTiming - n;
-                    dataArray[i][j] = {};
-                    dataArray[i][j]['date'] = $(this).find('.date[name]').val();
-                    dataArray[i][j]['start'] = $(this).find('.start[name]').val();
-                    dataArray[i][j]['end'] = $(this).find('.end[name]').val();
-                    dataArray[i][j]['duration'] = $(this).find('.duration[name]').val();
-                    dataArray[i][j]['description'] = $(this).find('.description[name]').val();
-                    dataArray[i][j]['type'] = $(this).find('.type[name]').val();
+                    dataArray['current'][i][j] = {};
+                    dataArray['current'][i][j]['ticketRef'] = ticketRef;
+                    dataArray['current'][i][j]['date'] = $(this).find('.date[name]').val();
+                    dataArray['current'][i][j]['start'] = $(this).find('.start[name]').val();
+                    dataArray['current'][i][j]['end'] = $(this).find('.end[name]').val();
+                    dataArray['current'][i][j]['duration'] = $(this).find('.duration[name]').val();
+                    dataArray['current'][i][j]['description'] = $(this).find('.description[name]').val();
+                    dataArray['current'][i][j]['type'] = $(this).find('.type[name]').val();
                 }
             });
+        }
+    });
+    dataArray = createHistoryDataArray(dataArray);
+    return dataArray;
+}
+
+
+function createHistoryDataArray(dataArray){
+    dataArray = dataArrayRemoveUnsubmitted(dataArray);
+    $.each(dataArray['current'], function(index, ticket) {
+        $.each(ticket, function(index, time) {
+            var timestamp = new Date(
+                    time['date']+' '+time['start']
+                ).getTime();
+            dataArray['history'][timestamp] = ticket;
+            dataArray['history'][timestamp]['current'] = true;
+        });
+    });
+    return dataArray;
+}
+
+/**
+ * remove nodes from the history section of the data array which were not submitted
+ * @param dataArray array
+ * @returns array
+ * @constructor
+ */
+function dataArrayRemoveUnsubmitted(dataArray){
+    $.each(dataArray['history'], function(index, time) {
+        if(typeof dataArray['history'][index]['current'] !== 'undefined'
+        && dataArray['history'][index]['current']){
+            delete dataArray['history'][index];
         }
     });
     return dataArray;
@@ -284,16 +332,16 @@ function removeTicketForm(form){
 
 /**
  * recover stored form data
- * @param data {array}
+ * @param dataArray {array}
  * {"test-1":
      *   {"0":
      *     {"date":"17 Nov, 15","start":"10:10","end":"10:20","duration":"0h 10m","description":"test description","type":"Development"}
      *   }
      *  }
  */
-function dataIntoForm(data){
+function dataIntoForm(dataArray){
     var i = 0;
-    $.each(data, function(index, ticket) {
+    $.each(dataArray['current'], function(index, ticket) {
         var ticketRef = ticket.ticketRef.split('-');
         delete ticket.ticketRef;
         var project = ticketRef[0];
@@ -318,7 +366,7 @@ function dataIntoForm(data){
                 form.find('table tr:first td .duration').val(timeRow.duration);
                 form.find('table tr:first td .description').val(timeRow.description);
                 form.find('table tr:first td .type').val(timeRow.type);
-            };
+            }
             j++;
         }
         if (form.find('table tr:first td .start').val() && form.find('table tr:first td .end').val() === "") {
@@ -326,7 +374,7 @@ function dataIntoForm(data){
                 .removeClass('play')
                 .addClass('stop');
         }
-        updateProject(form);
+        updateProject(form,function(){});
         i++;
     });
 }
@@ -562,7 +610,7 @@ $(document).ready(function(){
                     });
                     console.log(data);
                     // backup old storage
-                    var jsonString = localStorage.getItem("json", jsonString);
+                    var jsonString = localStorage.getItem("json");
                     localStorage.setItem("BACKUP-json", jsonString);
                     // create new json
                     storeFormData();
