@@ -78,6 +78,9 @@ class timeJsonGetAjax
     public function getTimeJsonFile($reporterName)
     {
         $folderName = $this->getFolderName($reporterName);
+        if(!is_readable($folderName)){
+            return '{}';
+        }
         $fileName = $this->getNewestFileFromFolder($folderName);
         $json = $this->getFileContents($folderName.'/'.$fileName);
 

@@ -1,3 +1,8 @@
+function UserException(message) {
+    this.message = message;
+    this.name = 'UserException';
+}
+
 /**
  * add new ticket form, for adding timing for new ticket
  */
@@ -178,16 +183,44 @@ function createDataArray(dataArray){
 
 function createHistoryDataArray(dataArray){
     dataArray = dataArrayRemoveUnsubmitted(dataArray);
+    if(typeof dataArray['current'] === 'undefined'){
+        return dataArray;
+    }
+    if(typeof dataArray['history'] === 'undefined'){
+        dataArray['history'] = {};
+    }
     $.each(dataArray['current'], function(index, ticket) {
         $.each(ticket, function(index, time) {
+            if (typeof time['date'] === 'undefined'
+            || typeof time['start'] === 'undefined') {
+                return;
+            }
             var timestamp = new Date(
                     time['date']+' '+time['start']
                 ).getTime();
-            dataArray['history'][timestamp] = ticket;
+            timestamp = findFreeTimeSlot(dataArray['history'],timestamp);
+            dataArray['history'][timestamp] = time;
             dataArray['history'][timestamp]['current'] = true;
         });
     });
     return dataArray;
+}
+
+function findFreeTimeSlot(historyArray,timestamp){
+    var i =  0;
+    var loop = true;
+    // var timestamp = parseInt(timestamp);
+    while (loop === true){
+        if(typeof historyArray[timestamp]  === 'undefined'){
+            loop = false;
+            return timestamp;
+        }
+        if(i>100){
+            throw new UserException( 'too many iterations in findFreeTimeSlot');
+        }
+        i++;
+        timestamp++;
+    }
 }
 
 /**
@@ -197,6 +230,9 @@ function createHistoryDataArray(dataArray){
  * @constructor
  */
 function dataArrayRemoveUnsubmitted(dataArray){
+    if(typeof dataArray['history'] === 'undefined'){
+        return dataArray;
+    }
     $.each(dataArray['history'], function(index, time) {
         if(typeof dataArray['history'][index]['current'] !== 'undefined'
         && dataArray['history'][index]['current']){
