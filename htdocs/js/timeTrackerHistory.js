@@ -45,7 +45,6 @@ function updateHistoryDiv(dataArray){
         $('#history').hide();
         return false;
     }
-    var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     var html = "";
     $.each(dataArray['history'], function(index, ticket) {
         if(typeof ticket.start === 'undefined'){
