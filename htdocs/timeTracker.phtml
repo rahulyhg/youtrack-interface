@@ -5,6 +5,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Youtrackinterfacer\authenticationAndSecurity as authenticationAndSecurity;
+
 $authenticationAndSecurity = new authenticationAndSecurity;
 // redirect to index.html if cookie not set and not using password verification
 $authenticationAndSecurity->redirectIfNotLoggedIn();
@@ -13,6 +14,9 @@ require_once __DIR__ . '/code/timeTracker.php';
 <!DOCTYPE html>
 <html>
 <head>
+    <script>
+        var youtrackUrl = "<?= $GLOBALS['youtrackUrl']; ?>";
+    </script>
     <script src='js/jquery-1.10.2.min.js'></script>
     <script src="js/1.12.0jquery-ui.js"></script>
     <script src='js/timeTracker.js'></script>
@@ -32,42 +36,56 @@ require_once __DIR__ . '/code/timeTracker.php';
     </style>
 </head>
 <body>
-    <header>
-        <?php require_once(__DIR__ . '/header.phtml'); ?>
-    </header>
-    <div id="wrapper">
-        <h1 style="text-align:center">Time Tracker</h1>
-        <form id="ticketSearch" action="code/querySearchAjax.php" method="post" enctype="multipart/form-data">
-            <select class="projectselector" name="project" >
-                <option value="">select a project</option>
-                <?php foreach ($projectList as $project) : ?>
-                    <option value="<?php echo $project ?>"><?php echo $project ?></option>
-                <?php endforeach; ?>
-            </select>
-            <input type="text" class="query" name="query"/>
-            <button class="ajaxSubmit" >search</button>
-            <div id="searchResponse"></div>
-        </form>
-        <div class="roundingDiv">
-            Round up to nearest multiple of
-            <select id="timeRounding">
-                <option value="">Duration Rounding</option>
-                <option value="5">5m</option>
-                <option value="10">10m</option>
-                <option value="15">15m</option>
-                <option value="30">30m</option>
-                <option value="60">60m</option>
-            </select>
-        </div>
-        <button class="addTicketForm" type="button">Add Ticket</button>
-
-        <?php $hidden = true; ?>
-        <?php require __DIR__ . '/timeTrackerForm.phtml'; ?>
-
-        <div class="forms">
-            <?php $hidden = false; ?>
-            <?php require __DIR__ . '/timeTrackerForm.phtml'; ?>
-        </div>
+<header>
+    <?php require_once(__DIR__ . '/header.phtml'); ?>
+</header>
+<div id="wrapper">
+    <h1 style="text-align:center">Time Tracker</h1>
+    <section id="history">
+        <table>
+            <thead>
+                <th>date</th>
+                <th>start</th>
+                <th>duration</th>
+                <th>ticket reference</th>
+                <th>description</th>
+                <th>type</th>
+                <th>current</th>
+            </thead>
+            <tbody class="list"></tbody>
+        </table>
+    </section>
+    <form id="ticketSearch" action="code/querySearchAjax.php" method="post" enctype="multipart/form-data">
+        <select class="projectselector" name="project">
+            <option value="">select a project</option>
+            <?php foreach ($projectList as $project) : ?>
+                <option value="<?php echo $project ?>"><?php echo $project ?></option>
+            <?php endforeach; ?>
+        </select>
+        <input type="text" class="query" name="query"/>
+        <button class="ajaxSubmit">search</button>
+        <div id="searchResponse"></div>
+    </form>
+    <div class="roundingDiv">
+        Round up to nearest multiple of
+        <select id="timeRounding">
+            <option value="">Duration Rounding</option>
+            <option value="5">5m</option>
+            <option value="10">10m</option>
+            <option value="15">15m</option>
+            <option value="30">30m</option>
+            <option value="60">60m</option>
+        </select>
     </div>
+    <button class="addTicketForm" type="button">Add Ticket</button>
+
+    <?php $hidden = true; ?>
+    <?php require __DIR__ . '/timeTrackerForm.phtml'; ?>
+
+    <div class="forms">
+        <?php $hidden = false; ?>
+        <?php require __DIR__ . '/timeTrackerForm.phtml'; ?>
+    </div>
+</div>
 </body>
 </html>

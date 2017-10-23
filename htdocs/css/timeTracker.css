@@ -40,3 +40,7 @@
 .roundingDiv{
     margin: 20px 0;
 }
+#history td,
+#history th {
+    padding: 5px;
+}

@@ -177,6 +177,7 @@ function createDataArray(dataArray){
         }
     });
     dataArray = createHistoryDataArray(dataArray);
+    updateHistoryDiv(dataArray);
     return dataArray;
 }
 
@@ -222,6 +223,31 @@ function findFreeTimeSlot(historyArray,timestamp){
         timestamp++;
     }
 }
+ function updateHistoryDiv(dataArray){
+     if(typeof dataArray['history'] === 'undefined'){
+         $('#history').hide();
+         return false;
+     }
+     var html = "";
+     $.each(dataArray['history'], function(index, ticket) {
+         if(typeof ticket.start === 'undefined'){
+             return;
+         }
+         html += '<tr>'
+             +'<td>'+ticket.date+'</td>'
+             +'<td>'+ticket.start+'</td>'
+             +'<td>'+ticket.duration+'</td>'
+             +'<td><a href="'+youtrackUrl+'/issue/'+ticket.ticketRef+'" target="_blank" >'+ticket.ticketRef+'</a></td>'
+             +'<td>'+ticket.description+'</td>'
+             +'<td>'+ticket.type+'</td>'
+             +'<td>'+ticket.current+'</td>'
+         + '</tr>';
+     });
+     $('#history .list').html(html);
+     $('#history').show();
+ }
+
+
 
 /**
  * remove nodes from the history section of the data array which were not submitted
@@ -670,4 +696,20 @@ $(document).ready(function(){
     });
     populateRounding();
     populateFromJson();
+
+    function onloadUpdateHistoryDiv() {
+        var json = localStorage.getItem("json");
+        if (typeof json !== 'undefined' && json !== '' && json !== null) {
+            var jsonData = JSON.parse(json);
+            updateHistoryDiv(jsonData);
+        } else {
+            $.ajax({
+                url: "code/timeJsonGetAjax.php", dataType: "json",
+                success: function (result) {
+                    updateHistoryDiv(result);
+                }
+            });
+        }
+    }
+    onloadUpdateHistoryDiv();
 });
