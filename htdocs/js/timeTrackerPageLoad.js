@@ -192,4 +192,8 @@ $(document).ready(function(){
         }
     }
     onloadUpdateHistoryDiv();
+
+    $('#history').accordion({
+        collapsible: true
+    });
 });

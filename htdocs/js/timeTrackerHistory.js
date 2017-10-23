@@ -45,13 +45,18 @@ function updateHistoryDiv(dataArray){
         $('#history').hide();
         return false;
     }
+    var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     var html = "";
     $.each(dataArray['history'], function(index, ticket) {
         if(typeof ticket.start === 'undefined'){
             return;
         }
+
+        var date = ticket.date.split(' ');
+        var day = new Date(date[0]+' '+date[1]+' '+20+date[2])
+            .toLocaleString(window.navigator.language, {weekday: 'long'});
         html += '<tr>'
-            +'<td>'+ticket.date+'</td>'
+            +'<td><strong>'+ day+'</strong> '+ ticket.date+'</td>'
             +'<td>'+ticket.start+'</td>'
             +'<td>'+ticket.duration+'</td>'
             +'<td><a href="'+youtrackUrl+'/issue/'+ticket.ticketRef+'" target="_blank" >'+ticket.ticketRef+'</a></td>'

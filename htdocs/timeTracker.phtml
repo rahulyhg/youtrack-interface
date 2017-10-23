@@ -44,8 +44,10 @@ require_once __DIR__ . '/code/timeTracker.php';
 <div id="wrapper">
     <h1 style="text-align:center">Time Tracker</h1>
     <section id="history">
-        <table>
-            <thead>
+        <h1>history</h1>
+        <div>
+            <table>
+                <thead>
                 <th>date</th>
                 <th>start</th>
                 <th>duration</th>
@@ -53,9 +55,10 @@ require_once __DIR__ . '/code/timeTracker.php';
                 <th>description</th>
                 <th>type</th>
                 <th>current</th>
-            </thead>
-            <tbody class="list"></tbody>
-        </table>
+                </thead>
+                <tbody class="list"></tbody>
+            </table>
+        </div>
     </section>
     <form id="ticketSearch" action="code/querySearchAjax.php" method="post" enctype="multipart/form-data">
         <select class="projectselector" name="project">
