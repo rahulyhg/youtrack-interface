@@ -1,9 +1,11 @@
 $(document).ready(function(){
+    var formsElement = $('.forms');
+
     $('div.roundingDiv select#timeRounding').on('change',function(){
         storeRounding();
     });
 
-    $('.forms').on('change', 'form input, form select', function(){
+   formsElement.on('change', 'form input, form select', function(){
         var form = $(this).closest('form');
         $(form).find('.buttonsWrapper .timertoggle').each(function () {
             timerToggleButtonUpdate(this);
@@ -21,7 +23,7 @@ $(document).ready(function(){
         }
     });
 
-    $('.forms').on('change', 'form table tr td .clockpicker', function(){
+   formsElement.on('change', 'form table tr td .clockpicker', function(){
         var inputField = $(this).find('input');
         var timeArray = inputField.val().split(":");
         if (timeArray.length > 2) {
@@ -32,14 +34,14 @@ $(document).ready(function(){
         updateDifference(timeRow);
     });
 
-    $('.forms').on('click', 'form .projectheader .timertoggle', function(){
+   formsElement.on('click', 'form .projectheader .timertoggle', function(){
         timertoggle(this);
     });
 
     /**
      * add clock face time picker
      */
-    $('.forms').on('focus','.clockpicker', function(){
+   formsElement.on('focus','.clockpicker', function(){
         $(this).clockpicker({
             placement: 'bottom', // clock popover placement
             align: 'left',       // popover arrow align
@@ -52,7 +54,7 @@ $(document).ready(function(){
     /**
      * add date picker
      */
-    $('.forms').on('focus','form table tr td input.datepicker', function(){
+   formsElement.on('focus','form table tr td input.datepicker', function(){
         $(this).datepicker({
             "dateFormat": 'd M y'
         });
@@ -61,12 +63,12 @@ $(document).ready(function(){
     /**
      * update form when ticket ref changed
      */
-    $('.forms').on('change', 'form .projectheader .projectselector', function(){
+   formsElement.on('change', 'form .projectheader .projectselector', function(){
         var form = $(this).closest('form');
         updateProject(form);
         updateStateFromProjectSelector(form);
     });
-    $('.forms').on('change', '.ticketnumber', function(){
+   formsElement.on('change', '.ticketnumber', function(){
         var form = $(this).closest('form');
         var firstLetter  = $(this).val().charAt(0);
         if (firstLetter.length === 1 && firstLetter.match(/[a-zA-Z]/i)) {
@@ -81,12 +83,12 @@ $(document).ready(function(){
     });
 
 
-    $('.forms').on('click', 'form .addTimeRow', function(){
+   formsElement.on('click', 'form .addTimeRow', function(){
         var form = $(this).closest('form');
         addTimeRow(form);
     });
 
-    $('.forms').on('click', '.deleteTimeRow', function() {
+   formsElement.on('click', '.deleteTimeRow', function() {
         var row = $(this).closest('tr');
         removeTimeRow(row);
         storeFormData()
@@ -99,7 +101,7 @@ $(document).ready(function(){
         addTicketForm();
     });
 
-    $('.forms').on('click', '.deleteTimeForm', function() {
+   formsElement.on('click', '.deleteTimeForm', function() {
         var form = $(this).closest('form');
         removeTicketForm(form);
         storeFormData();
@@ -108,7 +110,7 @@ $(document).ready(function(){
     /**
      * ajax submit & standard submit
      */
-    $('.forms').on('click', '.ajaxSubmit', function() {
+   formsElement.on('click', '.ajaxSubmit', function() {
         $(this).prop('disabled', true);
         var form = $(this).closest('form');
         form.submit(function (e) {
@@ -169,7 +171,7 @@ $(document).ready(function(){
         $(this).prop('disabled', false);
     });
 
-    $('.forms').on('change', '.stateselector', function(){
+   formsElement.on('change', '.stateselector', function(){
         ajaxSubmitState(this);
     });
     populateRounding();
