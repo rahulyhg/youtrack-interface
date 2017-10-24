@@ -43,4 +43,10 @@
 #history td,
 #history th {
     padding: 5px;
+    border-left: 1px solid #E3E3E3;
+    border-right: 1px solid #E3E3E3;
+}
+#history tbody td,
+#history tbody th {
+    border-top: 1px solid #E3E3E3;
 }

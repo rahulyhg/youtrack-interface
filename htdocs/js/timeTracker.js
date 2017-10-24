@@ -115,7 +115,9 @@ function storeFormDataOnServer(jsonString){
  */
 function storeFormData() {
     var json = localStorage.getItem("json");
-    if (typeof json !== 'undefined' && json !== '' && json !== null) {
+    if (typeof json !== 'undefined'
+    && json !== ''
+    && json !== null) {
         var jsonData = JSON.parse(json);
         storeFormDataCallback(jsonData);
     } else {

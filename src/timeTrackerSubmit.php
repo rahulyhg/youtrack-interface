@@ -73,6 +73,9 @@ class timeTrackerSubmit
         }
         $date .= '000';
         $duration = $this->convertDuration($timeRow['duration']);
+        if($duration == 0){
+            return false;
+        }
         $xml .= '<workItem>'.
             '<date>'.$date.'</date>'.
             '<duration>'.$duration.'</duration>'.
@@ -155,8 +158,13 @@ class timeTrackerSubmit
         $ticketId = $posts['project'].'-'.$posts['ticketnumber'];
         $organisedPosts = $this->organisePosts($posts);
         foreach ($organisedPosts as $key => $timeRow) {
-            if ($timeRow['duration']) {
+            if ($timeRow['duration']
+            && trim($timeRow['duration']) != "0h 0m") {
                 $xml = $this->createXml($timeRow);
+                if(!$xml){
+                    $organisedPosts[$key]['success'] = false;
+                    continue;
+                }
                 $organisedPosts[$key]['success'] = $this->postData($xml, $ticketId);
             }
         }

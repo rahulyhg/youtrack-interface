@@ -36,8 +36,6 @@ $(document).ready(function(){
         }
     });
 
-
-
    formsElement.on('click', 'form .projectheader .timertoggle', function(){
         timertoggle(this);
     });
@@ -198,6 +196,7 @@ $(document).ready(function(){
     onloadUpdateHistoryDiv();
 
     $('#history').accordion({
-        collapsible: true
+        collapsible: true,
+        heightStyle: "content"
     });
 });
