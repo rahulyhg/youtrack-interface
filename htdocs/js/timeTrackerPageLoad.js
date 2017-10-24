@@ -5,8 +5,21 @@ $(document).ready(function(){
         storeRounding();
     });
 
+    formsElement.on('change', 'form table tr td .clockpicker', function(){
+        var inputField = $(this).find('input');
+        var timeArray = inputField.val().split(":");
+        if (timeArray.length > 2) {
+            timeArray.pop();
+            inputField.val(timeArray.join(":"));
+        }
+        var timeRow = $(this).closest('tr');
+        updateDifference(timeRow);
+    });
+
    formsElement.on('change', 'form input, form select', function(){
         var form = $(this).closest('form');
+        var timerRow = $(this).closest('tr');
+        updateDifference(timerRow);
         $(form).find('.buttonsWrapper .timertoggle').each(function () {
             timerToggleButtonUpdate(this);
         });
@@ -23,16 +36,7 @@ $(document).ready(function(){
         }
     });
 
-   formsElement.on('change', 'form table tr td .clockpicker', function(){
-        var inputField = $(this).find('input');
-        var timeArray = inputField.val().split(":");
-        if (timeArray.length > 2) {
-            timeArray.pop();
-            inputField.val(timeArray.join(":"));
-        }
-        var timeRow = $(this).closest('tr');
-        updateDifference(timeRow);
-    });
+
 
    formsElement.on('click', 'form .projectheader .timertoggle', function(){
         timertoggle(this);
