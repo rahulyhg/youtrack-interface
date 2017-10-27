@@ -9,24 +9,29 @@ function createHistoryDataArray(dataArray){
     }
     $.each(dataArray['current'], function(index, ticket) {
         $.each(ticket, function(index, time) {
-            if (typeof time['date'] === 'undefined'
-            || typeof time['start'] === 'undefined'
-            || time['date'].length === 0
-            || time['start'].length === 0 ) {
-                return;
-            }
-            var timestamp = new Date(
-                time['date']+' '+time['start']
-            ).getTime();
-            if(timestamp === 'NaN'
-            || timestamp === false){
-                return;
-            }
-            timestamp = findFreeTimeSlot(dataArray['history'],timestamp);
-            dataArray['history'][timestamp] = time;
-            dataArray['history'][timestamp]['current'] = true;
+            dataArray = addTimeToHistory(dataArray,time); //----- test me -------
         });
     });
+    return dataArray;
+}
+
+function addTimeToHistory(dataArray,time){
+    if (typeof time['date'] === 'undefined'
+        || typeof time['start'] === 'undefined'
+        || time['date'].length === 0
+        || time['start'].length === 0 ) {
+        return;
+    }
+    var timestamp = new Date(
+        time['date']+' '+time['start']
+    ).getTime();
+    if(timestamp === 'NaN'
+        || timestamp === false){
+        return;
+    }
+    timestamp = findFreeTimeSlot(dataArray['history'],timestamp);
+    dataArray['history'][timestamp] = time;
+    dataArray['history'][timestamp]['current'] = true;
     return dataArray;
 }
 

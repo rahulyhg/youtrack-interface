@@ -140,6 +140,18 @@ function storeFormDataCallback(originalData) {
     storeFormDataOnServer(jsonString);
 }
 
+function getTimeRowData(timeRow){
+    var data = {};
+    data['ticketRef'] = ticketRef;
+    data['date'] = $(timeRow).find('.date[name]').val();
+    data['start'] = $(timeRow).find('.start[name]').val();
+    data['end'] = $(timeRow).find('.end[name]').val();
+    data['duration'] = $(timeRow).find('.duration[name]').val();
+    data['description'] = $(timeRow).find('.description[name]').val();
+    data['type'] = $(timeRow).find('.type[name]').val()
+    return data;
+}
+
 /**
  * create data array of the timing from all forms
  * @returns {{}}
@@ -160,15 +172,16 @@ function createDataArray(dataArray){
                 // if this timeRow not submitted
                 if( $(this).find('.date[name]').length > 0 ){
                     var j = noOfTiming - n;
-                    dataArray['current'][i][j] = {};
+                    dataArray['current'][i][j] = getTimeRowData(this);
                     dataArray['current'][i][j]['ticketRef'] = ticketRef;
-                    dataArray['current'][i][j]['date'] = $(this).find('.date[name]').val();
-                    dataArray['current'][i][j]['start'] = $(this).find('.start[name]').val();
-                    dataArray['current'][i][j]['end'] = $(this).find('.end[name]').val();
-                    dataArray['current'][i][j]['duration'] = $(this).find('.duration[name]').val();
-                    dataArray['current'][i][j]['description'] = $(this).find('.description[name]').val();
-                    dataArray['current'][i][j]['type'] = $(this).find('.type[name]').val();
+                } else if($(this).find('.history[value=true]')) {
+                    if($(this).hasClass('inHistory')){
+                        return;
+                    }
+                    dataArray = addTimeToHistory(dataArray,time); //----- test me -------
+                    $(this).addClass('inHistory');
                 }
+
             });
         }
     });
