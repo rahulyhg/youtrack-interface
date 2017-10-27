@@ -142,7 +142,6 @@ function storeFormDataCallback(originalData) {
 
 function getTimeRowData(timeRow){
     var data = {};
-    data['ticketRef'] = ticketRef;
     data['date'] = $(timeRow).find('.date[name]').val();
     data['start'] = $(timeRow).find('.start[name]').val();
     data['end'] = $(timeRow).find('.end[name]').val();
