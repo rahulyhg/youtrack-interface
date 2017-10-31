@@ -20,14 +20,14 @@ function addTimeToHistory(dataArray,time){
         || typeof time['start'] === 'undefined'
         || time['date'].length === 0
         || time['start'].length === 0 ) {
-        return;
+        return dataArray;
     }
     var timestamp = new Date(
         time['date']+' '+time['start']
     ).getTime();
     if(timestamp === 'NaN'
         || timestamp === false){
-        return;
+        return dataArray;
     }
     timestamp = findFreeTimeSlot(dataArray['history'],timestamp);
     dataArray['history'][timestamp] = time;
