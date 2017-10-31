@@ -147,7 +147,7 @@ function getTimeRowData(timeRow){
     data['end'] = $(timeRow).find('.end[name]').val();
     data['duration'] = $(timeRow).find('.duration[name]').val();
     data['description'] = $(timeRow).find('.description[name]').val();
-    data['type'] = $(timeRow).find('.type[name]').val()
+    data['type'] = $(timeRow).find('.type[name]').val();
     return data;
 }
 
@@ -242,7 +242,11 @@ function convertMinutesIntoHours(minutes){
 function updateDifference(timeRow){
     var startTime = $(timeRow).find('td input.start').val();
     var endTime = $(timeRow).find('td input.end').val();
-
+    if(typeof startTime === 'undefined'
+    || typeof endTime === 'undefined'){
+        $(timeRow).css("background:red");
+        return;
+    }
     var durationInMinutes = differenceInMinutes(startTime,endTime);
     durationInMinutes = roundDuration(durationInMinutes);
     var duration = convertMinutesIntoHours(durationInMinutes);
@@ -424,19 +428,20 @@ function ajaxSubmitState(stateField){
 /**
  * update the project row for the new project given
  * @param projectSelector {string} project selector
+ * @param form jquery object
  */
 function updateStateFromProjectSelector(form){
     var project = $(form).find('.projectselector').val();
     var stateSelector = $(form).find('.stateselector');
     stateSelector.html('<option value="">state...</option>');
-    if(project!=''){
+    if(project !== ''){
         $.ajax({url: "code/createByFormAjax.php?project="+project, dataType: "json",
             success: function(result){
                 stateSelector.html(result['State']['innerHtml']);
             },
             error: function(result){
-                console.log('state selector update error')
-                console.log(result)
+                console.log('state selector update error');
+                console.log(result);
             }
         });
     }
