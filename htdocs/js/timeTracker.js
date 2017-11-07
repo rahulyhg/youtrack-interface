@@ -249,6 +249,7 @@ function updateDifference(timeRow){
     }
     var durationInMinutes = differenceInMinutes(startTime,endTime);
     durationInMinutes = roundDuration(durationInMinutes);
+    durationInMinutes = minDuration(durationInMinutes);
     var duration = convertMinutesIntoHours(durationInMinutes);
     $(timeRow).find('td input.duration')
         .val(duration['hours'] +'h '+ duration['minutes']+'m');
@@ -265,6 +266,16 @@ function roundDuration(duration){
         return duration;
     }
     return Math.ceil(duration / roundedTo ) * roundedTo ;
+}
+
+/**
+ * set to min value if below it.
+ * @param duration
+ * @returns {number}
+ */
+function minDuration(duration){
+    var minTime =  $('#minDuration').val();
+    return  (duration<minTime) ? minTime : duration ;
 }
 
 /**
@@ -373,6 +384,14 @@ function storeRounding(){
 
 function populateRounding(){
     $('div.roundingDiv select#timeRounding').val(localStorage.getItem("roundingIncrement"));
+}
+
+function storeMinDuration(){
+    localStorage.setItem("minDuration", $('div.minDurationDiv select#minDuration').val());
+}
+
+function populateMinDuration(){
+    $('div.minDurationDiv select#minDuration').val(localStorage.getItem("minDuration"));
 }
 
 /**

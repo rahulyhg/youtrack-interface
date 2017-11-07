@@ -3,6 +3,7 @@ $(document).ready(function(){
 
     $('div.roundingDiv select#timeRounding').on('change',function(){
         storeRounding();
+        storeMinDuration();
     });
 
     formsElement.on('change', 'form table tr td .clockpicker', function(){
@@ -177,6 +178,7 @@ $(document).ready(function(){
         ajaxSubmitState(this);
     });
     populateRounding();
+    populateMinDuration();
     populateFromJson();
 
     function onloadUpdateHistoryDiv() {
