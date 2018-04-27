@@ -1,5 +1,5 @@
 # Youtrack Interface
-NO LONGER SUPPORTED BECAUSE I NO LONGER USE YOUTRACK
+NO LONGER WORKED ON BY ME BECAUSE I NO LONGER USE YOUTRACK
 
 "A simple to use web based interface for speeding up tasks for youtrack"
 
